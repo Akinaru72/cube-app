@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build --base=/cube.app/",
+    "build": "vite build --base=/cube-app/",
     "preview": "vite preview"
   },
   "devDependencies": {
