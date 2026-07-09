@@ -1,4 +1,4 @@
-// main.js
+// index.js
 import * as THREE from 'three';
 import { RubiksCube } from './js/RubiksCube.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
