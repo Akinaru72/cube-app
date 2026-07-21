@@ -23,11 +23,11 @@ export async function solveCube(cubeState) {
   // --------------------solution1-----------------------
   // scramble
   // cubeState.applyAlgorithm("R'");
-  // cubeState.applyAlgorithm("U R B' R' D2 F2 D' R' B");
+  cubeState.applyAlgorithm("U R B' R' D2 F2 D' R' B");
   // cubeState.applyAlgorithm("R2 U F2 D2 L2 U' B2 R2 D' B2 U L F U2 L' B'");
-  cubeState.applyAlgorithm(
-    "R U2 F' L2 D B U' R2 F2 D' L U B2 R' U2 L2 D' F R B'"
-  );
+  // cubeState.applyAlgorithm(
+  //   "R U2 F' L2 D B U' R2 F2 D' L U B2 R' U2 L2 D' F R B'"
+  // );
 
   // Phase 1
   const solution1 = solver.solve(cubeState);
@@ -136,10 +136,10 @@ export async function solveCube(cubeState) {
 
   console.log('FINAL BEST =', bestLength);
   console.log(bestPhase1.concat(bestPhase2));
+  const solution = bestPhase1.concat(bestPhase2);
+
   return {
     solution,
-    phase1,
-    phase2,
-    length,
+    bestLength,
   };
 }

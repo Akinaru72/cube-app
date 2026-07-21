@@ -33,9 +33,7 @@ renderer.setSize(cubeContainer.clientWidth, cubeContainer.clientHeight);
 
 window.addEventListener('resize', () => {
   camera.aspect = cubeContainer.clientWidth / cubeContainer.clientHeight;
-
   camera.updateProjectionMatrix();
-
   renderer.setSize(cubeContainer.clientWidth, cubeContainer.clientHeight);
 });
 // document.body.appendChild(renderer.domElement);
@@ -57,24 +55,84 @@ controls.enableDamping = true;
 camera.position.set(4, 4, 6);
 camera.lookAt(0, 0, 0);
 
+window.addEventListener('mousemove', onUserActivity);
+window.addEventListener('mousedown', onUserActivity);
+window.addEventListener('keydown', onUserActivity);
+const headerEls = document.querySelector('.header');
+const navEls = document.querySelector('.cube-controls');
+const scrambleBtn = document.querySelector('#scramble-btn');
+const solveBtn = document.querySelector('#solve-btn');
+const undoBtn = document.querySelector('#undo-btn');
+const redoBtn = document.querySelector('#redo-btn');
+
+scrambleBtn.disabled = true;
+solveBtn.disabled = true;
+undoBtn.disabled = true;
+redoBtn.disabled = true;
+
 // const axesHelper = new THREE.AxesHelper(5);
 // scene.add(axesHelper);
 
 // const gridHelper = new THREE.GridHelper(10, 10);
 // scene.add(gridHelper);
 
-// initMouseControls({
-//   renderer,
-//   camera,
-//   scene,
-//   controls,
-//   cube,
-// });
-
+initMouseControls({
+  renderer,
+  camera,
+  scene,
+  controls,
+  cube,
+});
+let screenSaverTimer;
 cube.create();
-// ----------------------------------------
-// startDemo;
+resetScreenSaverTimer();
+// ---------------------Вход в приложение-------------------
+
+const resetBtn = document.querySelector('#reset-btn');
+
+function startScramble() {
+  cube.scramble();
+}
+
+function startApplication() {
+  // console.log('Helloooo');
+  cube.reset();
+
+  resetBtn.textContent = 'RESET';
+}
 cube.startDemo();
+
+resetBtn.addEventListener('click', startApplication);
+
+scrambleBtn.addEventListener('click', startScramble);
+
+// --------------------Заставка-------------------------,
+
+function onUserActivity() {
+  if (cube.screenSaver) {
+    cube.stopScreenSaver();
+  }
+
+  resetScreenSaverTimer();
+}
+
+function resetScreenSaverTimer() {
+  clearTimeout(screenSaverTimer);
+
+  screenSaverTimer = setTimeout(
+    () => {
+      console.log('WOW');
+      cube.startScreenSaver();
+      // navEl.classList.add('is-hidden');
+      // cube - controls;
+    },
+    // 10000
+    10 * 60 * 1000
+  ); // 10 минут
+}
+
+console.log('SOLVED_MAIN', cubeState.isSolved());
+
 // ---------------------------------
 // const scramble = cube.scramble();
 // console.log(scramble);
@@ -86,20 +144,70 @@ cube.startDemo();
 // const scrambleText = scramble(20).join(' ');
 
 // console.log(scrambleText);
+// ----проверка-----------------
 
+// const state = new CubeState();
+
+// console.log('START');
+// console.log(state.isSolved());
+
+// state.move('R');
+// console.log('AFTER R');
+// console.log({
+//   CO: state.encodeCO(),
+//   EO: state.encodeEO(),
+//   UDS: state.encodeUDSlice(),
+//   CP: state.encodeCP(),
+//   EP: state.encodeEP(),
+//   EPerm: state.encodeEPerm(),
+//   solved: state.isSolved(),
+// });
+
+// state.move("R'");
+// console.log("AFTER R'");
+// console.log({
+//   CO: state.encodeCO(),
+//   EO: state.encodeEO(),
+//   UDS: state.encodeUDSlice(),
+//   CP: state.encodeCP(),
+//   EP: state.encodeEP(),
+//   EPerm: state.encodeEPerm(),
+//   solved: state.isSolved(),
+// });
+// // CP: 36177;
+// // EP: 21024;
 // ----------------------Solve-----------------------------
 // const result = await solveCube(cubeState);
 
-// console.log(result.solution);
+// console.log(result);
+// console.log(result.phase1);
+// console.log(result.phase2);
+// console.log(result.length);
 // -------------------------test--------
 initKeyboard(cube);
 
 function animate() {
   requestAnimationFrame(animate);
+
   controls.update();
   cube.update();
-  cube.rotateY(0.01);
-  cube.rotateX(0.01);
+
+  if (cube.screenSaver) {
+    cube.rotateY(0.01);
+
+    cube.rotateX(0.01);
+    navEls.classList.add('is-hidden');
+    headerEls.classList.add('is-hidden');
+  } else {
+    navEls.classList.remove('is-hidden');
+    headerEls.classList.remove('is-hidden');
+  }
+
+  if (cube.demo) {
+    cube.rotateY(0.01);
+    cube.rotateX(0.01);
+  }
+
   renderer.render(scene, camera);
 }
 

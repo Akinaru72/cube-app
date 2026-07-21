@@ -1,4 +1,5 @@
 // RubiksCube.js
+const scrambleBtn = document.querySelector('#scramble-btn');
 
 import * as THREE from 'three';
 
@@ -19,6 +20,16 @@ export class RubiksCube {
     this.moves = MOVES;
     this.parser = new AlgorithmParser();
     this.cubeState = new CubeState();
+    this.screenSaver = false;
+    this.updateButtons;
+  }
+
+  updateButtons() {
+    console.log('updateButtons');
+    const solved = this.cubeState.isSolved();
+
+    scrambleBtn.disabled = !solved;
+    // solveBtn.disabled = solved;
   }
 
   createCubie(x, y, z) {
@@ -122,7 +133,7 @@ export class RubiksCube {
   }
 
   updateCubieCoords(cubie) {
-    console.log(cubie.position.x, cubie.position.y, cubie.position.z);
+    // console.log(cubie.position.x, cubie.position.y, cubie.position.z);
 
     cubie.userData.coord.x = Math.round(cubie.position.x);
     cubie.userData.coord.y = Math.round(cubie.position.y);
@@ -170,20 +181,74 @@ export class RubiksCube {
     if (Math.abs(rotation.currentAngle) >= Math.abs(rotation.angle)) {
       rotation.face.forEach(cubie => {
         this.group.attach(cubie);
+        cubie.position.set(
+          Math.round(cubie.position.x),
+          Math.round(cubie.position.y),
+          Math.round(cubie.position.z)
+        );
+
+        // Защёлкиваем вращение
+        const q = Math.PI / 2;
+
+        cubie.rotation.set(
+          Math.round(cubie.rotation.x / q) * q,
+          Math.round(cubie.rotation.y / q) * q,
+          Math.round(cubie.rotation.z / q) * q
+        );
+
+        cubie.updateMatrix();
+        cubie.updateMatrixWorld(true);
         this.updateCubieCoords(cubie);
       });
-
+      // console.table('BEFORE', this.cubeState.corners);
       this.group.remove(rotation.faceGroup);
       const reverse = rotation.name.endsWith('Prime');
       const moveName = reverse
         ? rotation.name.replace('Prime', '')
         : rotation.name;
 
-      this.cubeState.move(moveName, reverse);
+      // console.count('CubeState.move');
+      // console.log('MOVE:', moveName, reverse);
+
+      console.log('Before', {
+        CO: this.cubeState.encodeCO(),
+        EO: this.cubeState.encodeEO(),
+        UDS: this.cubeState.encodeUDSlice(),
+        CP: this.cubeState.encodeCP(),
+        EP: this.cubeState.encodeEP(),
+        EPerm: this.cubeState.encodeEPerm(),
+        solved: this.cubeState.isSolved(),
+      });
+      console.log('Move', moveName, reverse);
+
+      let newMoveName = moveName;
+      !reverse ? newMoveName : (newMoveName = newMoveName + "'");
+      console.log('NewMoveName', newMoveName);
+
+      this.cubeState.move(newMoveName, false);
+
+      console.dir('CS.move', this.cubeState.move);
+
+      this.updateButtons();
+      // console.table('AFTER', this.cubeState.corners);
       this.currentRotation = null;
       if (this.moveQueue.length === 0 && this.cubeState.isSolved()) {
         console.log('🎉 Cube solved!');
       }
+      // console.table(this.cubeState.corners);
+      // console.table(this.cubeState.edges);
+
+      console.log('SOLVED_RubicCube', this.cubeState.isSolved());
+
+      console.log('After', {
+        CO: this.cubeState.encodeCO(),
+        EO: this.cubeState.encodeEO(),
+        UDS: this.cubeState.encodeUDSlice(),
+        CP: this.cubeState.encodeCP(),
+        EP: this.cubeState.encodeEP(),
+        EPerm: this.cubeState.encodeEPerm(),
+        solved: this.cubeState.isSolved(),
+      });
     }
   }
 
@@ -191,10 +256,13 @@ export class RubiksCube {
     const reverse = name.endsWith('Prime');
     const moveName = reverse ? name.replace('Prime', '') : name;
 
-    console.log('enqueue:', name);
-    console.log(this.moves[name]);
+    // const reverse = name.endsWith('Prime');
+
+    // console.log('enqueue:', name);
+    // console.log(this.moves[name]);
 
     // this.cubeState.move(moveName, reverse);
+    // console.log('MOVE ENTRY', this.moves[name]);
     this.moveQueue.push({
       name,
       ...this.moves[name],
@@ -397,7 +465,7 @@ export class RubiksCube {
       lastFace = face;
       lastAxis = axis;
     }
-
+    this.updateButtons();
     return sequence.join(' ');
   }
 
@@ -430,5 +498,68 @@ export class RubiksCube {
     // this.cubies.forEach(cubie => {
     //   cubie.userData.outline.material.opacity = 0;
     // });
+  }
+
+  stopDemo() {
+    this.demo = false;
+    this.group.rotation.set(0, 0, 0);
+  }
+
+  reset() {
+    this.stopDemo();
+
+    this.moveQueue = [];
+
+    if (this.currentRotation) {
+      this.currentRotation = null;
+    }
+
+    this.group.clear();
+    this.cubies = [];
+    this.cubeState = new CubeState(); // <-- сброс логического куба
+
+    this.create();
+    this.updateButtons();
+  }
+
+  startScreenSaver() {
+    this.screenSaver = true;
+  }
+
+  stopScreenSaver() {
+    console.log('EndWoW');
+    this.screenSaver = false;
+    this.group.rotation.set(0, 0, 0);
+  }
+
+  executeMove(face, direction) {
+    const map = {
+      F: {
+        RIGHT: () => this.F(),
+        LEFT: () => this.FPrime(),
+      },
+      B: {
+        RIGHT: () => this.BPrime(),
+        LEFT: () => this.B(),
+      },
+      R: {
+        RIGHT: () => this.RPrime(),
+        LEFT: () => this.R(),
+      },
+      L: {
+        RIGHT: () => this.L(),
+        LEFT: () => this.LPrime(),
+      },
+      U: {
+        RIGHT: () => this.UPrime(),
+        LEFT: () => this.U(),
+      },
+      D: {
+        RIGHT: () => this.D(),
+        LEFT: () => this.DPrime(),
+      },
+    };
+
+    map[face]?.[direction]?.();
   }
 }

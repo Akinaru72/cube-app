@@ -196,22 +196,32 @@ export class CubeState {
   rotate(move) {}
 
   isSolved() {
-    const cornersSolved = this.corners.every((corner, index) => {
-      return (
-        corner.id === SOLVED_CORNERS[index].id &&
-        corner.orientation === SOLVED_CORNERS[index].orientation
-      );
-    });
-
-    const edgesSolved = this.edges.every((edge, index) => {
-      return (
-        edge.id === SOLVED_EDGES[index].id &&
-        edge.orientation === SOLVED_EDGES[index].orientation
-      );
-    });
-
-    return cornersSolved && edgesSolved;
+    return (
+      this.encodeCO() === 0 &&
+      this.encodeEO() === 0 &&
+      this.encodeUDSlice() === 0 &&
+      this.encodeCP() === 0 &&
+      this.encodeEP() === 0 &&
+      this.encodeEPerm() === 0
+    );
   }
+  // isSolved() {
+  //   const cornersSolved = this.corners.every((corner, index) => {
+  //     return (
+  //       corner.id === SOLVED_CORNERS[index].id &&
+  //       corner.orientation === SOLVED_CORNERS[index].orientation
+  //     );
+  //   });
+
+  //   const edgesSolved = this.edges.every((edge, index) => {
+  //     return (
+  //       edge.id === SOLVED_EDGES[index].id &&
+  //       edge.orientation === SOLVED_EDGES[index].orientation
+  //     );
+  //   });
+
+  //   return cornersSolved && edgesSolved;
+  // }
 
   updateOrientation(move) {
     for (const index of move.corners) {
