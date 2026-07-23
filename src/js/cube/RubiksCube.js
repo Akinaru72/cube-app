@@ -1,11 +1,17 @@
 // RubiksCube.js
-const scrambleBtn = document.querySelector('#scramble-btn');
 
 import * as THREE from 'three';
+
+import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 
 import { COLORS, MOVES, CUBE_SIZE, ROTATION_SPEED } from './constantsCube.js';
 import { AlgorithmParser } from './AlgorithmParser.js';
 import { CubeState } from '../solver/CubeState.js';
+
+const scrambleBtn = document.querySelector('#scramble-btn');
+const solveBtn = document.querySelector('#solve-btn');
+const prevBtn = document.querySelector('#undo-btn');
+const nextBtn = document.querySelector('#redo-btn');
 
 export class RubiksCube {
   constructor(scene) {
@@ -14,19 +20,37 @@ export class RubiksCube {
     this.scene.add(this.group);
     this.cubies = [];
     this.colors = COLORS;
-    this.geometry = new THREE.BoxGeometry(CUBE_SIZE, CUBE_SIZE, CUBE_SIZE);
+    this.geometry = new RoundedBoxGeometry(
+      CUBE_SIZE,
+      CUBE_SIZE,
+      CUBE_SIZE,
+      6, // сегменты
+      0.05 // радиус
+    );
+    // this.geometry = new THREE.BoxGeometry(CUBE_SIZE, CUBE_SIZE, CUBE_SIZE);
     this.currentRotation = null;
     this.moveQueue = [];
     this.moves = MOVES;
     this.parser = new AlgorithmParser();
     this.cubeState = new CubeState();
     this.screenSaver = false;
-    this.updateButtons;
+    // this.updateButtons;
+    this.isBusyScramble = false;
+    this.isScrambling = false;
+    this.rotationSpeed = 0.1;
+    this.scrambleLength = 20;
+
+    this.soundEnabled = true;
+
+    this.turnSound = new Audio('/turn.mp3');
+
+    this.turnSound.volume = 0.3;
   }
 
-  updateButtons() {
-    console.log('updateButtons');
+  updateResetButtons() {
+    console.log('updateResetButtons');
     const solved = this.cubeState.isSolved();
+    console.log('solved', solved);
 
     scrambleBtn.disabled = !solved;
     // solveBtn.disabled = solved;
@@ -34,34 +58,77 @@ export class RubiksCube {
 
   createCubie(x, y, z) {
     const materials = [
-      new THREE.MeshStandardMaterial({
-        color: x === 1 ? this.colors.right : this.colors.inner,
+      new THREE.MeshPhysicalMaterial({
+        color: this.colors.inner,
+        // color: x === 1 ? this.colors.right : this.colors.inner,
+        // roughness: 0.38,
+        // metalness: 0.02,
+
+        // clearcoat: 0.45,
+        // clearcoatRoughness: 0.18,
+        roughness: 0.15,
+        metalness: 0,
+
+        clearcoat: 0.9,
+        clearcoatRoughness: 0.08,
         emissive: 0x000000,
       }),
-      new THREE.MeshStandardMaterial({
-        color: x === -1 ? this.colors.left : this.colors.inner,
+      new THREE.MeshPhysicalMaterial({
+        color: this.colors.inner,
+        // color: x === -1 ? this.colors.left : this.colors.inner,
+        roughness: 0.38,
+        metalness: 0.02,
+
+        clearcoat: 0.45,
+        clearcoatRoughness: 0.18,
         emissive: 0x000000,
       }),
-      new THREE.MeshStandardMaterial({
-        color: y === 1 ? this.colors.top : this.colors.inner,
+      new THREE.MeshPhysicalMaterial({
+        color: this.colors.inner,
+        // color: y === 1 ? this.colors.top : this.colors.inner,
+        roughness: 0.38,
+        metalness: 0.02,
+
+        clearcoat: 0.45,
+        clearcoatRoughness: 0.18,
         emissive: 0x000000,
       }),
-      new THREE.MeshStandardMaterial({
-        color: y === -1 ? this.colors.bottom : this.colors.inner,
+      new THREE.MeshPhysicalMaterial({
+        color: this.colors.inner,
+        // color: y === -1 ? this.colors.bottom : this.colors.inner,
+        roughness: 0.38,
+        metalness: 0.02,
+
+        clearcoat: 0.45,
+        clearcoatRoughness: 0.18,
         emissive: 0x000000,
       }),
-      new THREE.MeshStandardMaterial({
-        color: z === 1 ? this.colors.front : this.colors.inner,
+      new THREE.MeshPhysicalMaterial({
+        color: this.colors.inner,
+        // color: z === 1 ? this.colors.front : this.colors.inner,
+        roughness: 0.38,
+        metalness: 0.02,
+
+        clearcoat: 0.45,
+        clearcoatRoughness: 0.18,
         emissive: 0x000000,
       }),
-      new THREE.MeshStandardMaterial({
-        color: z === -1 ? this.colors.back : this.colors.inner,
+      new THREE.MeshPhysicalMaterial({
+        color: this.colors.inner,
+        // color: z === -1 ? this.colors.back : this.colors.inner,
+        roughness: 0.38,
+        metalness: 0.02,
+
+        clearcoat: 0.45,
+        clearcoatRoughness: 0.18,
         emissive: 0x000000,
       }),
     ];
 
     const cubie = new THREE.Mesh(this.geometry, materials);
-    cubie.position.set(x, y, z);
+    const spacing = 0.98;
+    cubie.position.set(x * spacing, y * spacing, z * spacing);
+    // cubie.position.set(x, y, z);
     cubie.userData = {
       isCubie: true,
       coord: {
@@ -70,6 +137,8 @@ export class RubiksCube {
         z,
       },
     };
+
+    this.addStickers(cubie, x, y, z);
     const edges = new THREE.EdgesGeometry(this.geometry);
 
     const outline = new THREE.LineSegments(
@@ -85,6 +154,68 @@ export class RubiksCube {
     cubie.add(outline);
     cubie.userData.outline = outline;
     return cubie;
+  }
+
+  createSticker(color) {
+    // const geometry = new THREE.PlaneGeometry(0.78, 0.78);
+    const geometry = new THREE.BoxGeometry(0.78, 0.78, 0.02);
+
+    const material = new THREE.MeshStandardMaterial({
+      color,
+      roughness: 0.18,
+      metalness: 0,
+
+      polygonOffset: true,
+      polygonOffsetFactor: -1,
+      polygonOffsetUnits: -1,
+    });
+
+    return new THREE.Mesh(geometry, material);
+  }
+
+  addStickers(cubie, x, y, z) {
+    const offset = 0.486;
+
+    if (x === 1) {
+      const sticker = this.createSticker(this.colors.right);
+      sticker.position.x = offset;
+      sticker.rotation.y = Math.PI / 2;
+      cubie.add(sticker);
+    }
+
+    if (x === -1) {
+      const sticker = this.createSticker(this.colors.left);
+      sticker.position.x = -offset;
+      sticker.rotation.y = -Math.PI / 2;
+      cubie.add(sticker);
+    }
+
+    if (y === 1) {
+      const sticker = this.createSticker(this.colors.top);
+      sticker.position.y = offset;
+      sticker.rotation.x = -Math.PI / 2;
+      cubie.add(sticker);
+    }
+
+    if (y === -1) {
+      const sticker = this.createSticker(this.colors.bottom);
+      sticker.position.y = -offset;
+      sticker.rotation.x = Math.PI / 2;
+      cubie.add(sticker);
+    }
+
+    if (z === 1) {
+      const sticker = this.createSticker(this.colors.front);
+      sticker.position.z = offset;
+      cubie.add(sticker);
+    }
+
+    if (z === -1) {
+      const sticker = this.createSticker(this.colors.back);
+      sticker.position.z = -offset;
+      sticker.rotation.y = Math.PI;
+      cubie.add(sticker);
+    }
   }
 
   create() {
@@ -142,9 +273,9 @@ export class RubiksCube {
 
   startRotation(move) {
     if (this.currentRotation) return;
+    this.playTurnSound();
 
     const face = this.getFace(move.axis, move.value);
-
     const faceGroup = new THREE.Group();
     this.group.add(faceGroup);
 
@@ -166,9 +297,19 @@ export class RubiksCube {
       this.startRotation(move);
     }
 
+    // console.log(this.isScrambling);
+    // if (
+    //   this.isScrambling &&
+    //   !this.currentRotation &&
+    //   this.moveQueue.length === 0
+    // ) {
+    //   this.isScrambling = false;
+    //   this.unlockCubeScramble();
+    // }
+
     if (!this.currentRotation) return;
 
-    const speed = ROTATION_SPEED;
+    const speed = this.rotationSpeed;
     const rotation = this.currentRotation;
     const direction = Math.sign(rotation.angle);
     const remaining =
@@ -210,45 +351,46 @@ export class RubiksCube {
       // console.count('CubeState.move');
       // console.log('MOVE:', moveName, reverse);
 
-      console.log('Before', {
-        CO: this.cubeState.encodeCO(),
-        EO: this.cubeState.encodeEO(),
-        UDS: this.cubeState.encodeUDSlice(),
-        CP: this.cubeState.encodeCP(),
-        EP: this.cubeState.encodeEP(),
-        EPerm: this.cubeState.encodeEPerm(),
-        solved: this.cubeState.isSolved(),
-      });
-      console.log('Move', moveName, reverse);
+      // console.log('Before', {
+      //   CO: this.cubeState.encodeCO(),
+      //   EO: this.cubeState.encodeEO(),
+      //   UDS: this.cubeState.encodeUDSlice(),
+      //   CP: this.cubeState.encodeCP(),
+      //   EP: this.cubeState.encodeEP(),
+      //   EPerm: this.cubeState.encodeEPerm(),
+      //   solved: this.cubeState.isSolved(),
+      // });
+      // console.log('Move', moveName, reverse);
 
       let newMoveName = moveName;
       !reverse ? newMoveName : (newMoveName = newMoveName + "'");
-      console.log('NewMoveName', newMoveName);
+      // console.log('NewMoveName', newMoveName);
 
       this.cubeState.move(newMoveName, false);
+      this.updateResetButtons();
+      // console.dir('CS.move', this.cubeState.move);
 
-      console.dir('CS.move', this.cubeState.move);
-
-      this.updateButtons();
+      // this.updateButtons();
       // console.table('AFTER', this.cubeState.corners);
       this.currentRotation = null;
       if (this.moveQueue.length === 0 && this.cubeState.isSolved()) {
+        this.updateResetButtons();
         console.log('🎉 Cube solved!');
       }
       // console.table(this.cubeState.corners);
       // console.table(this.cubeState.edges);
 
-      console.log('SOLVED_RubicCube', this.cubeState.isSolved());
+      // console.log('SOLVED_RubicCube', this.cubeState.isSolved());
 
-      console.log('After', {
-        CO: this.cubeState.encodeCO(),
-        EO: this.cubeState.encodeEO(),
-        UDS: this.cubeState.encodeUDSlice(),
-        CP: this.cubeState.encodeCP(),
-        EP: this.cubeState.encodeEP(),
-        EPerm: this.cubeState.encodeEPerm(),
-        solved: this.cubeState.isSolved(),
-      });
+      // console.log('After', {
+      //   CO: this.cubeState.encodeCO(),
+      //   EO: this.cubeState.encodeEO(),
+      //   UDS: this.cubeState.encodeUDSlice(),
+      //   CP: this.cubeState.encodeCP(),
+      //   EP: this.cubeState.encodeEP(),
+      //   EPerm: this.cubeState.encodeEPerm(),
+      //   solved: this.cubeState.isSolved(),
+      // });
     }
   }
 
@@ -417,7 +559,8 @@ export class RubiksCube {
     demoLoop();
   }
 
-  scramble(count = 30) {
+  scramble(count = this.scrambleLength) {
+    this.isScrambling = true;
     const faces = ['R', 'L', 'U', 'D', 'F', 'B'];
     const suffixes = ['', 'Prime', '2'];
 
@@ -465,7 +608,8 @@ export class RubiksCube {
       lastFace = face;
       lastAxis = axis;
     }
-    this.updateButtons();
+    this.updateResetButtons();
+
     return sequence.join(' ');
   }
 
@@ -519,7 +663,7 @@ export class RubiksCube {
     this.cubeState = new CubeState(); // <-- сброс логического куба
 
     this.create();
-    this.updateButtons();
+    this.updateResetButtons();
   }
 
   startScreenSaver() {
@@ -561,5 +705,26 @@ export class RubiksCube {
     };
 
     map[face]?.[direction]?.();
+  }
+
+  unlockCubeScramble() {
+    this.isBusyScramble = false;
+
+    console.log('UNLock');
+    // scrambleBtn.disabled = false;
+    // solveBtn.disabled = false;
+    // prevBtn.disabled = false;
+    // nextBtn.disabled = false;
+  }
+
+  playTurnSound() {
+    console.log('PLAY');
+    if (!this.soundEnabled) return;
+
+    const sound = this.turnSound.cloneNode();
+
+    sound.volume = this.turnSound.volume;
+
+    sound.play().catch(() => {});
   }
 }

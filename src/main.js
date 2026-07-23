@@ -7,12 +7,16 @@ import { initKeyboard } from './js/controls/keyboardControls.js';
 import { CubeState } from './js/solver/CubeState.js';
 import { createTables } from './js/createTables';
 import { solveCube } from './js/solver/solveCube.js';
+import { initMouseControls } from './js/controls/mouseControls.js';
+import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
+import { PMREMGenerator } from 'three';
 
 // import { scramble } from './js/cube/scrambler.js';
 
 const cubeState = new CubeState();
 
 const scene = new THREE.Scene();
+
 const cube = new RubiksCube(scene);
 
 const camera = new THREE.PerspectiveCamera(
@@ -24,6 +28,13 @@ const camera = new THREE.PerspectiveCamera(
 const renderer = new THREE.WebGLRenderer({
   antialias: true,
 });
+
+const pmremGenerator = new THREE.PMREMGenerator(renderer);
+
+// scene.environment = pmremGenerator.fromScene(
+//   new RoomEnvironment(),
+//   0.05
+// ).texture;
 // renderer.setSize(window.innerWidth, window.innerHeight);
 const cubeContainer = document.querySelector('#cube-container');
 
@@ -38,16 +49,24 @@ window.addEventListener('resize', () => {
 });
 // document.body.appendChild(renderer.domElement);
 
-import { initMouseControls } from './js/controls/mouseControls.js';
-
-const ambientLight = new THREE.AmbientLight(0xffffff, 2);
-scene.add(ambientLight);
-
+// const ambientLight = new THREE.AmbientLight(0xffffff, 2);
+// scene.add(ambientLight);
+// -----------------------Light-----------------------
 const directionalLight = new THREE.DirectionalLight(0xffffff, 4);
 directionalLight.position.set(5, 5, 5);
 scene.add(directionalLight);
-
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.35);
+scene.add(ambientLight);
+const hemiLight = new THREE.HemisphereLight(0xffffff, 0x404040, 1.2);
+scene.add(hemiLight);
+const keyLight = new THREE.DirectionalLight(0xffffff, 2);
+keyLight.position.set(5, 8, 7);
+scene.add(keyLight);
+const rimLight = new THREE.DirectionalLight(0xffffff, 0.8);
+rimLight.position.set(-6, 4, -6);
+scene.add(rimLight);
 scene.background = new THREE.Color(0x444444);
+// ------------------------End Light-----------------------
 
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
@@ -55,6 +74,7 @@ controls.enableDamping = true;
 camera.position.set(4, 4, 6);
 camera.lookAt(0, 0, 0);
 
+// ------------------------------------------
 window.addEventListener('mousemove', onUserActivity);
 window.addEventListener('mousedown', onUserActivity);
 window.addEventListener('keydown', onUserActivity);
@@ -62,13 +82,70 @@ const headerEls = document.querySelector('.header');
 const navEls = document.querySelector('.cube-controls');
 const scrambleBtn = document.querySelector('#scramble-btn');
 const solveBtn = document.querySelector('#solve-btn');
-const undoBtn = document.querySelector('#undo-btn');
-const redoBtn = document.querySelector('#redo-btn');
+const prevBtn = document.querySelector('#undo-btn');
+const nextBtn = document.querySelector('#redo-btn');
+const helpBtn = document.querySelector('#help-btn');
+const descriptionBtn = document.querySelector('#description-btn');
+const settingsBtn = document.querySelector('#settings-btn');
 
+// modal - settings;
+const modalOverlayEl = document.querySelector('.modal-overlay');
+
+const modalHelpEl = document.querySelector('.modal-help');
+const modalDescriptionEl = document.querySelector('.modal-description');
+const modalSettingsEl = document.querySelector('.modal-settings');
+
+const modalHelpBtnClose = document.querySelector('.modal-help-close');
+const modalDescriptionBtnClose = document.querySelector(
+  '.modal-description-close'
+);
+const modalSettingsBtnClose = document.querySelector('.modal-settings-close');
+
+helpBtn.addEventListener('click', () => {
+  modalOverlayEl.classList.add('is-open');
+  modalHelpEl.classList.remove('is-hidden');
+});
+
+modalHelpBtnClose.addEventListener('click', () => {
+  modalOverlayEl.classList.remove('is-open');
+  modalHelpEl.classList.add('is-hidden');
+});
+
+descriptionBtn.addEventListener('click', () => {
+  modalOverlayEl.classList.add('is-open');
+  modalDescriptionEl.classList.remove('is-hidden');
+});
+
+modalDescriptionBtnClose.addEventListener('click', () => {
+  modalOverlayEl.classList.remove('is-open');
+  modalDescriptionEl.classList.add('is-hidden');
+});
+
+settingsBtn.addEventListener('click', () => {
+  modalOverlayEl.classList.add('is-open');
+  modalSettingsEl.classList.remove('is-hidden');
+});
+
+modalSettingsBtnClose.addEventListener('click', () => {
+  modalOverlayEl.classList.remove('is-open');
+  modalSettingsEl.classList.add('is-hidden');
+});
+
+modalOverlayEl.addEventListener('click', e => {
+  if (e.target === modalOverlayEl) {
+    modalOverlayEl.classList.remove('is-open');
+
+    modalHelpEl.classList.add('is-hidden');
+    modalDescriptionEl.classList.add('is-hidden');
+    modalSettingsEl.classList.add('is-hidden');
+  }
+});
+
+// modal - settings;
 scrambleBtn.disabled = true;
 solveBtn.disabled = true;
-undoBtn.disabled = true;
-redoBtn.disabled = true;
+prevBtn.disabled = true;
+nextBtn.disabled = true;
 
 // const axesHelper = new THREE.AxesHelper(5);
 // scene.add(axesHelper);
@@ -84,15 +161,24 @@ initMouseControls({
   cube,
 });
 let screenSaverTimer;
+
+let idleAnimation = 10;
+const settingsForm = document.querySelector('.settings-form');
+let formData = {
+  speed: '',
+  scramble: '',
+  idle: '',
+  sound: '',
+};
+
+onOutputSettingsFromLs();
+applySettingsToForm();
+console.log('After LS:', cube.rotationSpeed, cube.soundEnabled);
 cube.create();
-resetScreenSaverTimer();
+console.log('After create:', cube.rotationSpeed, cube.soundEnabled);
 // ---------------------Вход в приложение-------------------
-
+resetScreenSaverTimer();
 const resetBtn = document.querySelector('#reset-btn');
-
-function startScramble() {
-  cube.scramble();
-}
 
 function startApplication() {
   // console.log('Helloooo');
@@ -121,19 +207,128 @@ function resetScreenSaverTimer() {
 
   screenSaverTimer = setTimeout(
     () => {
-      console.log('WOW');
+      // console.log('WOW');
       cube.startScreenSaver();
       // navEl.classList.add('is-hidden');
       // cube - controls;
     },
     // 10000
-    10 * 60 * 1000
+    idleAnimation * 60 * 1000
   ); // 10 минут
 }
 
 console.log('SOLVED_MAIN', cubeState.isSolved());
 
-// ---------------------------------
+// ---------------------Scramble------------
+let isBusyScramble = false;
+
+function startScramble() {
+  // lockCubeScramble();
+
+  // scrambleBtn.disabled = true;
+
+  cube.scramble();
+}
+
+function lockCubeScramble() {
+  console.log('Lock');
+  isBusyScramble = true;
+
+  // scrambleBtn.disabled = true;
+  // solveBtn.disabled = true;
+  // prevBtn.disabled = true;
+  // nextBtn.disabled = true;
+}
+
+function unlockCubeScramble() {
+  isBusy = false;
+
+  scrambleBtn.disabled = false;
+  solveBtn.disabled = false;
+  prevBtn.disabled = false;
+  nextBtn.disabled = false;
+}
+// --------------------------Settings--------------------------
+// cube.soundEnabled = false;
+
+// console.log('Cube', cube);
+settingsForm.addEventListener('change', e => {
+  if (e.target.name === 'speed') {
+    console.log('speed', Number(e.target.value) / 50);
+    cube.rotationSpeed = Number(e.target.value) / 50;
+  }
+
+  if (e.target.name === 'scramble') {
+    console.log('scramble', Number(e.target.value));
+    cube.scrambleLength = Number(e.target.value);
+  }
+
+  if (e.target.name === 'sound') {
+    console.log('sound', e.target.checked);
+    cube.soundEnabled = e.target.checked;
+  }
+
+  if (e.target.name === 'idle') {
+    console.log('idle', Number(e.target.value));
+    idleAnimation = Number(e.target.value);
+  }
+  onInputSettingsToLS();
+});
+
+function onOutputSettingsFromLs() {
+  try {
+    const forDataFromLS = JSON.parse(localStorage.getItem('dataSetting'));
+
+    if (forDataFromLS === null) {
+      console.log('NULL');
+      formData.speed = cube.rotationSpeed;
+      formData.scramble = cube.scrambleLength;
+      formData.idle = idleAnimation;
+      formData.sound = cube.soundEnabled;
+      console.log('formDataNUll', formData);
+    } else {
+      formData = forDataFromLS;
+      console.log('formData', formData);
+    }
+
+    cube.rotationSpeed = formData.speed;
+    cube.scrambleLength = formData.scramble;
+    cube.soundEnabled = formData.sound;
+    idleAnimation = formData.idle;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function applySettingsToForm() {
+  // speed
+  document.querySelector(
+    `input[name="speed"][value="${formData.speed * 50}"]`
+  ).checked = true;
+
+  // scramble
+  document.querySelector(
+    `input[name="scramble"][value="${formData.scramble}"]`
+  ).checked = true;
+
+  // idle
+  document.querySelector(
+    `input[name="idle"][value="${formData.idle}"]`
+  ).checked = true;
+
+  // sound
+  document.querySelector(`input[name="sound"]`).checked = formData.sound;
+}
+
+function onInputSettingsToLS() {
+  formData.speed = cube.rotationSpeed;
+  formData.scramble = cube.scrambleLength;
+  formData.idle = idleAnimation;
+  formData.sound = cube.soundEnabled;
+  localStorage.setItem('dataSetting', JSON.stringify(formData));
+}
+
+// ------------------------------------
 // const scramble = cube.scramble();
 // console.log(scramble);
 

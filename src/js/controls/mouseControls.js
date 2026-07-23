@@ -45,12 +45,20 @@ export function initMouseControls({
 }
 
 function onPointerHover(event) {
+  if (isDragging) return;
+  // if (cube.isBusy) return;
   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
   raycaster.setFromCamera(mouse, camera);
 
   const intersects = raycaster.intersectObjects(scene.children, true);
+
+  if (intersects.length > 0) {
+    renderer.domElement.style.cursor = 'grab';
+  } else {
+    renderer.domElement.style.cursor = 'default';
+  }
 
   const hit = intersects.find(i => i.object.userData.isCubie);
   // console.log('UV', hit.uv);
@@ -118,8 +126,9 @@ function getFaceName(normal) {
   return null;
 }
 function onPointerUp() {
+  isDragging = false;
   controls.enabled = true;
-
+  renderer.domElement.style.cursor = 'grab';
   if (!dragStart) return;
 
   if (Math.abs(projectionSum) < 0.02) {
@@ -177,6 +186,7 @@ let projectionSum = 0;
 let previousPoint = null;
 
 function onPointerDown(event) {
+  // if (cube.isBusy) return;
   dragDirection = null;
   moveDetected = false;
 
@@ -218,6 +228,7 @@ function onPointerDown(event) {
   };
 
   isDragging = true;
+  renderer.domElement.style.cursor = 'grabbing';
 }
 
 function onPointerMove(event) {
@@ -290,7 +301,7 @@ function onPointerMove(event) {
 
   if (distance < DRAG_THRESHOLD) return;
 
-  isDragging = false;
+  // isDragging = false;
   moveDetected = true;
 }
 
