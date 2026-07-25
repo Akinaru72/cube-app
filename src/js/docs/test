@@ -1,0 +1,135 @@
+
+<section class="guide-page">
+
+  <h1 class="guide-title">🤍 Step 1</h1>
+
+<h2 class="guide-subtitle">Build the White Cross</h2>
+
+<div class="guide-card guide-goal">
+  <h3>🎯 Goal</h3>
+  <div class="cube-guide">
+${createCube(
+  'R',
+  {
+    1: 'Y',
+    4: 'Y',
+    7: 'Y',
+  },
+  {
+    1: 'Y',
+    4: 'Y',
+    7: 'Y',
+  }
+)}
+
+</div>
+  <p>
+    Find the <strong>white center</strong>.
+  </p>
+
+  <p>
+    The white cross will be built around it.
+  </p>
+
+  <div class="cross-preview">
+    <div></div>
+    <div class="white"></div>
+    <div></div>
+
+    <div class="white"></div>
+    <div class="white center"></div>
+    <div class="white"></div>
+
+    <div></div>
+    <div class="white"></div>
+    <div></div>
+  </div>
+</div>
+
+<div class="guide-card">
+  <h3>🔍 Step 1</h3>
+
+  <p>Find any white edge.</p>
+
+  <ul>
+    <li>⬜🟩</li>
+    <li>⬜🟥</li>
+    <li>⬜🟦</li>
+    <li>⬜🟧</li>
+  </ul>
+</div>
+
+<div class="guide-card">
+  <h3>🔄 Step 2</h3>
+
+  <p>
+    Move the white edge closer to the white center.
+  </p>
+
+  <p>
+    Don't worry if another piece moves.
+  </p>
+
+  <p>
+    That's completely normal.
+  </p>
+</div>
+
+<div class="guide-card">
+  <h3>⭐ Step 3</h3>
+
+  <p>
+    Check the second color.
+  </p>
+
+  <p>
+    It must match its center.
+  </p>
+
+  <div class="example-block">
+    <span>⬜🟩</span>
+    <span>⬇</span>
+    <span>🤍 + 🟩</span>
+  </div>
+</div>
+
+<div class="guide-card">
+  <h3>🔁 Step 4</h3>
+
+  <p>
+    Repeat the same steps
+    for the other three white edges.
+  </p>
+</div>
+
+<div class="guide-card guide-check">
+  <h3>✅ Check Yourself</h3>
+
+  <ul class="check-list">
+    <li>☑ White cross completed</li>
+    <li>☑ Green matches green center</li>
+    <li>☑ Red matches red center</li>
+    <li>☑ Blue matches blue center</li>
+    <li>☑ Orange matches orange center</li>
+  </ul>
+</div>
+
+<div class="guide-card guide-success">
+  <h3>🎉 Great!</h3>
+
+  <p>
+    Your white cross is finished!
+  </p>
+
+  <p>
+    Now you're ready for
+    <strong>Step 2 – First Layer.</strong>
+  </p>
+</div>
+
+<div class="guide-footer">
+  <span class="page-number">2</span>
+</div>
+
+
+</section>

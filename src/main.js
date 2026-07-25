@@ -10,6 +10,9 @@ import { solveCube } from './js/solver/solveCube.js';
 import { initMouseControls } from './js/controls/mouseControls.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { PMREMGenerator } from 'three';
+import { guidePagesEN } from './js/docs/guidePagesEN.js';
+import { guidePagesUA } from './js/docs/guidePagesUA.js';
+import { cubePages } from './js/docs/cubePages.js';
 
 // import { scramble } from './js/cube/scrambler.js';
 
@@ -87,6 +90,7 @@ const nextBtn = document.querySelector('#redo-btn');
 const helpBtn = document.querySelector('#help-btn');
 const descriptionBtn = document.querySelector('#description-btn');
 const settingsBtn = document.querySelector('#settings-btn');
+const guideBtn = document.querySelector('#guide-btn');
 
 // modal - settings;
 const modalOverlayEl = document.querySelector('.modal-overlay');
@@ -94,12 +98,16 @@ const modalOverlayEl = document.querySelector('.modal-overlay');
 const modalHelpEl = document.querySelector('.modal-help');
 const modalDescriptionEl = document.querySelector('.modal-description');
 const modalSettingsEl = document.querySelector('.modal-settings');
+const modalGuideEl = document.querySelector('.modal-guide');
+console.log(modalGuideEl);
 
-const modalHelpBtnClose = document.querySelector('.modal-help-close');
+const modalHelpBtnClose = document.querySelector('#modal-help-close');
 const modalDescriptionBtnClose = document.querySelector(
-  '.modal-description-close'
+  '#modal-description-close'
 );
-const modalSettingsBtnClose = document.querySelector('.modal-settings-close');
+const modalSettingsBtnClose = document.querySelector('#modal-settings-close');
+const modalGuideBtnClose = document.querySelector('#modal-guide-close');
+console.log(modalGuideBtnClose);
 
 helpBtn.addEventListener('click', () => {
   modalOverlayEl.classList.add('is-open');
@@ -131,6 +139,17 @@ modalSettingsBtnClose.addEventListener('click', () => {
   modalSettingsEl.classList.add('is-hidden');
 });
 
+guideBtn.addEventListener('click', () => {
+  modalOverlayEl.classList.add('is-open');
+  modalGuideEl.classList.remove('is-hidden');
+});
+
+modalGuideBtnClose.addEventListener('click', () => {
+  modalOverlayEl.classList.remove('is-open');
+  modalGuideEl.classList.add('is-hidden');
+  console.log(modalGuideEl);
+});
+
 modalOverlayEl.addEventListener('click', e => {
   if (e.target === modalOverlayEl) {
     modalOverlayEl.classList.remove('is-open');
@@ -138,6 +157,7 @@ modalOverlayEl.addEventListener('click', e => {
     modalHelpEl.classList.add('is-hidden');
     modalDescriptionEl.classList.add('is-hidden');
     modalSettingsEl.classList.add('is-hidden');
+    modalGuideEl.classList.add('is-hidden');
   }
 });
 
@@ -328,6 +348,99 @@ function onInputSettingsToLS() {
   localStorage.setItem('dataSetting', JSON.stringify(formData));
 }
 
+// -----------------How to solve------------------------?
+let currentPage = 0;
+let guidePages = guidePagesEN;
+const prevGuidElBtn = document.querySelector('#guide-prev');
+const nextGuidElBtn = document.querySelector('#guide-next');
+const guideContent = document.querySelector('.guide-content');
+const guideCounter = document.querySelector('#guide-counter');
+
+console.log(nextGuidElBtn);
+
+async function renderGuide() {
+  try {
+    const response = await fetch(guidePages[currentPage]);
+
+    if (!response.ok) {
+      throw new Error(`Cannot load ${guidePages[currentPage]}`);
+    }
+
+    guideContent.innerHTML = await response.text();
+    console.log(guideContent.innerHTML);
+
+    const page = cubePages[currentPage];
+    console.log('Last', cubePages[0]['row-1']);
+    Object.entries(page).forEach(([rowId, cubes]) => {
+      console.log('rowId =', rowId);
+      const row = guideContent.querySelector(`#${rowId}`);
+      console.log('row =', row);
+      if (row) {
+        row.innerHTML = cubes.join('');
+      }
+    });
+
+    guideCounter.textContent = `${currentPage + 1} / ${guidePages.length}`;
+
+    prevGuidElBtn.disabled = currentPage === 0;
+    nextGuidElBtn.disabled = currentPage === guidePages.length - 1;
+  } catch (err) {
+    guideContent.innerHTML = `<p>Guide page not found.</p>`;
+    console.error(err);
+  }
+}
+
+// async function renderGuide() {
+//   // console.log('WOW');
+//   const response = await fetch(guidePages[currentPage]);
+//   console.log('response', response);
+//   guideContent.innerHTML = await response.text();
+
+//   guideCounter.textContent = `${currentPage + 1} / ${guidePages.length}`;
+//   prevGuidElBtn.disabled = currentPage === 0;
+//   nextGuidElBtn.disabled = currentPage === guidePages.length - 1;
+// }
+// function renderGuide() {
+//   guideContent.innerHTML = guidePages[currentPage];
+//   console.log('currentPage', currentPage);
+
+//   guideCounter.textContent = `${currentPage + 1} / ${guidePages.length}`;
+
+//   prevGuidElBtn.disabled = currentPage === 0;
+//   nextGuidElBtn.disabled = currentPage === guidePages.length - 1;
+// }
+
+renderGuide();
+function nextPage() {
+  if (currentPage >= guidePages.length - 1) return;
+
+  currentPage++;
+  renderGuide();
+}
+
+function prevPage() {
+  if (currentPage <= 0) return;
+
+  currentPage--;
+  renderGuide();
+}
+
+const langBtn = document.querySelector('#lang-btn');
+
+langBtn.addEventListener('click', () => {
+  if (guidePages === guidePagesEN) {
+    guidePages = guidePagesUA;
+    langBtn.textContent = '🇬🇧';
+  } else {
+    guidePages = guidePagesEN;
+    langBtn.textContent = '🇺🇦';
+  }
+
+  renderGuide();
+});
+
+nextGuidElBtn.addEventListener('click', nextPage);
+prevGuidElBtn.addEventListener('click', prevPage);
 // ------------------------------------
 // const scramble = cube.scramble();
 // console.log(scramble);

@@ -2,10 +2,22 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <!-- <link rel="icon" type="image/svg+xml" href="/favicon.svg"> -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cube-app</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/3.0.1/modern-normalize.min.css"
+      integrity="sha512-q6WgHqiHlKyOqslT/lgBgodhd03Wp4BEqKeW6nNtlOY4quzyG3VoQKFrieaCeSnuVseNKRGpGeDU3qPmabCANg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="./css/styles.css" />
   </head>
   <body>
@@ -20,6 +32,7 @@
         />
         <span>CubeSolver3D</span>
       </a>
+
       <!-- <a href="#" class="logo" id="logo"> 🧊 CubeSolver3D </a> -->
 
       <nav class="main-nav">
@@ -27,11 +40,13 @@
           Description
         </button>
 
+        <button type="button" class="menu-btn" id="guide-btn">
+          How to solve
+        </button>
+
         <button type="button" class="menu-btn" id="settings-btn">
           Settings
         </button>
-
-        <button type="button" class="menu-btn" id="guide-btn">Guide</button>
 
         <button type="button" class="menu-btn" id="help-btn">Help</button>
       </nav>
@@ -58,59 +73,73 @@
 
     <div class="modal-overlay">
       <div class="modal-help is-hidden">
-        <button class="modal-help-close">✕</button>
+        <button class="modal-close-btn" id="modal-help-close">✕</button>
 
-        <h2>❓ Help</h2>
+        <h2 class="title-second">❓ Help</h2>
 
         <div class="help-section">
-          <h3>Mouse</h3>
-          <p>🖱 Drag background — Rotate camera</p>
-          <p>🖱 Drag face — Rotate layer</p>
+          <h3 class="title-third">Mouse</h3>
+          <p class="main-text">🖱 Drag background — Rotate camera</p>
+          <p class="main-text">🖱 Drag face — Rotate layer</p>
         </div>
 
         <div class="help-section">
-          <h3>Keyboard</h3>
+          <h3 class="title-third">Keyboard</h3>
           <ul>
-            <li><span>R</span> Right</li>
-            <li><span>L</span> Left</li>
-            <li><span>U</span> Up</li>
-            <li><span>D</span> Down</li>
-            <li><span>F</span> Front</li>
-            <li><span>B</span> Back</li>
-            <li><span>Shift + key</span> Counter-clockwise</li>
+            <li class="help-item"><span class="span">R</span> Right</li>
+            <li class="help-item"><span class="span">L</span> Left</li>
+            <li class="help-item"><span class="span">U</span> Up</li>
+            <li class="help-item"><span class="span">D</span> Down</li>
+            <li class="help-item"><span class="span">F</span> Front</li>
+            <li class="help-item"><span class="span">B</span> Back</li>
+            <li class="help-item">
+              <span class="span">Shift + key</span> Counter-clockwise
+            </li>
           </ul>
         </div>
 
         <div class="help-section">
-          <h3>Buttons</h3>
+          <h3 class="title-third">Buttons</h3>
           <ul>
-            <li><span>Start</span> New session</li>
-            <li><span>Reset</span> Solved cube</li>
-            <li><span>Scramble</span> Random scramble</li>
-            <li><span>Find Solution</span> Search solution</li>
-            <li><span>Solve</span> Play solution</li>
-            <li><span>Prev</span> Undo move</li>
-            <li><span>Next</span> Redo move</li>
+            <li class="help-item">
+              <span class="span">Start</span> New session
+            </li>
+            <li class="help-item">
+              <span class="span">Reset</span> Solved cube
+            </li>
+            <li class="help-item">
+              <span class="span">Scramble</span> Random scramble
+            </li>
+            <li class="help-item">
+              <span class="span">Find Solution</span> Search solution
+            </li>
+            <li class="help-item">
+              <span class="span">Solve</span> Play solution
+            </li>
+            <li class="help-item"><span class="span">Prev</span> Undo move</li>
+            <li class="help-item"><span class="span">Next</span> Redo move</li>
           </ul>
         </div>
       </div>
-      <div class="modal-description is-hidden">
-        <button class="modal-description-close">✕</button>
 
-        <h2>🧩 Rubik's Cube Simulator</h2>
-        <p>Welcome!</p>
-        <p>
+      <div class="modal-description is-hidden">
+        <button class="modal-close-btn" id="modal-description-close">✕</button>
+
+        <h2 class="title-second">🧩 Rubik's Cube Simulator</h2>
+        <p class="main-text">Welcome!</p>
+        <p class="main-text">
           This project is an interactive 3D Rubik's Cube simulator built with
-          <strong>JavaScript</strong> and <strong>Three.js</strong>.
+          <span class="span">JavaScript</span> and
+          <span class="span">Three.js</span>.
         </p>
-        <p>
+        <p class="main-text">
           Its main goal is to combine realistic 3D graphics, intuitive controls,
           and an efficient solving algorithm in a single web application.
         </p>
 
-        <h3>Features</h3>
+        <h3 class="title-third">Features</h3>
 
-        <ul>
+        <ul class="modal-description-list">
           <li>🎲 Interactive 3D Rubik's Cube.</li>
           <li>🖱 Mouse and keyboard controls.</li>
           <li>🔀 Random scramble generator.</li>
@@ -120,41 +149,42 @@
           <li>💾 Accurate cube state tracking.</li>
         </ul>
 
-        <h3>Solving Algorithm</h3>
+        <h3 class="title-third">Solving Algorithm</h3>
 
-        <p>
+        <p class="main-text">
           The simulator is based on
-          <strong>Herbert Kociemba's Two-Phase Algorithm</strong>, one of the
-          fastest and most widely used methods for solving the Rubik's Cube.
+          <span class="span">Herbert Kociemba's Two-Phase Algorithm</span>, one
+          of the fastest and most widely used methods for solving the Rubik's
+          Cube.
         </p>
 
-        <p>
+        <p class="main-text">
           In addition, a custom optimization layer has been implemented. The
           solver evaluates up to
-          <strong>20 of the most promising candidate solutions</strong>
+          <span class="span">20 of the most promising candidate solutions</span>
           and automatically selects the shortest valid solution.
         </p>
 
-        <h3>Technologies</h3>
+        <h3 class="title-third">Technologies</h3>
 
-        <ul>
+        <ul class="modal-description-list">
           <li>JavaScript (ES Modules)</li>
           <li>Three.js</li>
           <li>Vite</li>
           <li>HTML5 / CSS3</li>
         </ul>
 
-        <h3>Contacts</h3>
+        <h3 class="title-third">Contacts</h3>
 
-        <p>
-          <strong>GitHub</strong><br />
+        <p class="main-text">
+          <span class="span">GitHub</span><br />
           <a href="https://github.com/Akinaru72/cube-app" target="_blank">
             github.com/Akinaru72/cube-app
           </a>
         </p>
 
-        <p>
-          <strong>E-mail</strong><br />
+        <p class="main-text">
+          <span class="span">E-mail</span><br />
           <a href="mailto:akinaru3@gmail.com"> akinaru3@gmail.com </a>
         </p>
 
@@ -164,21 +194,28 @@
         </p> -->
         <div class="description-footer">
           ❤️ This project is dedicated to my beloved grandchildren —
-          <strong>Mark, Eva and Daniil.</strong>
+          <span class="span" strong>Mark, Eva and Daniil.</span>
           <br /><br />
           May this project inspire your curiosity, strengthen your logical
           thinking, and encourage your passion for programming.
           <br /><br />
-          <strong>With love, Grandpa.</strong>
+          <span class="span">With love, Grandpa.</span>
         </div>
 
         <p class="description-version">Version 1.0 © 2026 AKINARU</p>
       </div>
+
       <div class="modal-settings is-hidden">
         <form class="settings-form">
-          <button class="modal-settings-close" type="button">✕</button>
+          <button
+            class="modal-close-btn"
+            id="modal-settings-close"
+            type="button"
+          >
+            ✕
+          </button>
 
-          <h2>🛠️ Settings</h2>
+          <h2 class="title-second">🛠️ Settings</h2>
 
           <!-- Animation Speed -->
           <fieldset class="settings-group">
@@ -288,6 +325,26 @@
             </label>
           </fieldset>
         </form>
+      </div>
+
+      <div class="modal-guide is-hidden">
+        <h2 class="title-second">💡 How to Solve</h2>
+        <div class="guide-header-tools">
+          <button id="lang-btn">🇺🇦</button>
+          <button class="modal-guide-close-btn" id="modal-guide-close">
+            ✕
+          </button>
+        </div>
+
+        <div class="guide-content"></div>
+
+        <div class="guide-navigation">
+          <button id="guide-prev">◀ Previous</button>
+
+          <span id="guide-counter"> 1 / 8 </span>
+
+          <button id="guide-next">Next ▶</button>
+        </div>
       </div>
     </div>
     <script src="./main.js" type="module" defer></script>
