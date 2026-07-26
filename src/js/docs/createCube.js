@@ -13,7 +13,7 @@ function color(face, i, cfg) {
   return COLORS[cfg?.[i] ?? 'X'];
 }
 
-export function createCube(U = {}, F = {}, R = {}, Name) {
+export function createCube(U = {}, F = {}, R = {}, Name = '') {
   return `
       <div class="cube-guide">
         <div class="face up">

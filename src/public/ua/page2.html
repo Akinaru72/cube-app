@@ -4,12 +4,193 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Page2</title>
+    <title>Page3</title>
     <link rel="stylesheet" href="./css/common.css" />
   </head>
   <body>
-    <!-- <div class="formula-arrow">
-      <span>R U R' U'</span>
-    </div> -->
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Page2</title>
+        <link rel="stylesheet" href="./css/common.css" />
+      </head>
+      <body>
+        <section class="guide-page">
+          <h2 class="title-third">Збирання кутів</h2>
+
+          <p class="main-text">
+            Після збирання <span class="span">хреста</span> переходимо до
+            збирання
+            <span class="span">кутів першого шару.</span>
+          </p>
+
+          <p class="main-text">
+            Кожен кут складається з
+            <span class="span">трьох кольорів.</span>.У нашому випадку один із
+            них має бути <span class="span">синім</span>, а два інші повинні
+            відповідати кольорам бічних граней. Необхідно встановити
+            <span class="span">синьо-жовто-червоний</span> кут між відповідними
+            центральними елементами. Знайдіть потрібний кут і поверніть
+            <span class="span">нижню грань</span> так, щоб цей кут знаходився
+            безпосередньо під місцем, куди він має стати. На ілюстрації нижче
+            показано
+            <span class="span">три можливі варіанти</span> розташування.
+          </p>
+
+          <div class="cube-row-arrow">
+            <div data-cube="faceCornerPos2"></div>
+            <div data-cube="faceCornerPos1"></div>
+            <div data-cube="faceCornerPos3"></div>
+          </div>
+
+          <p class="main-text">
+            Перший варіант можна перетворити на два інші за допомогою формул
+            <span class="span">R F' R' F</span> або
+            <span class="span">F' R F R'</span>.
+          </p>
+
+          <p class="main-text">
+            1. &nbsp Формула &nbsp <span class="span"> R F' R' F</span>
+          </p>
+
+          <div class="cube-row-arrow">
+            <div data-cube="faceCornerPos2"></div>
+            <div class="formula-arrow">
+              <span>R F' R' F</span>
+            </div>
+            <div data-cube="faceCornerPos5"></div>
+            <div class="formula-arrow">
+              <span>R F' R' F</span>
+            </div>
+            <div data-cube="faceCornerPos1"></div>
+          </div>
+
+          <p class="main-text">
+            Завдяки просторовому мисленню та логіці цей варіант можна розв'язати
+            всього чотирма ходами, без використання формул.
+            <span class="span">F D' F' D2</span>
+          </p>
+
+          <div class="cube-row-arrow">
+            <div data-cube="faceCornerPos2"></div>
+            <div class="formula-arrow">
+              <span>F D' F' D2</span>
+            </div>
+            <div data-cube="faceCornerPos1"></div>
+          </div>
+
+          <p class="main-text">
+            2. &nbsp Формула &nbsp<span class="span"> F' R F R'</span>
+          </p>
+
+          <div class="cube-row-arrow">
+            <div data-cube="faceCornerPos2"></div>
+            <div class="formula-arrow">
+              <span>F' R F R'</span>
+            </div>
+            <div data-cube="faceCornerPos4"></div>
+            <div class="formula-arrow">
+              <span>F' R F R'</span>
+            </div>
+            <div data-cube="faceCornerPos3"></div>
+          </div>
+
+          <p class="main-text">
+            Так само і в цьому випадку <span class="span">R' D R D2.</span>
+          </p>
+
+          <div class="cube-row-arrow">
+            <div data-cube="faceCornerPos2"></div>
+            <div class="formula-arrow">
+              <span>R' D R D2</span>
+            </div>
+            <div data-cube="faceCornerPos3"></div>
+          </div>
+          <p class="main-text">
+            І нарешті встановіть кут у потрібне положення.
+          </p>
+          <p class="main-text">
+            1. &nbsp Формула &nbsp <span class="span"> R F' R' F</span>
+          </p>
+
+          <div class="cube-row-arrow">
+            <div data-cube="faceCornerPos1"></div>
+            <div class="formula-arrow">
+              <span>R F' R' F</span>
+            </div>
+            <div data-cube="faceCornerPos6"></div>
+          </div>
+          <p class="main-text">
+            Альтернативний варіант із трьох ходів
+            <span class="span">F D F'</span>
+          </p>
+
+          <div class="cube-row-arrow">
+            <div data-cube="faceCornerPos1"></div>
+            <div class="formula-arrow">
+              <span>F D F'</span>
+            </div>
+            <div data-cube="faceCornerPos6"></div>
+          </div>
+
+          <p class="main-text">
+            2. &nbsp Формула &nbsp <span class="span"> F' R F R'</span>
+          </p>
+
+          <div class="cube-row-arrow">
+            <div data-cube="faceCornerPos3"></div>
+            <div class="formula-arrow">
+              <span>F' R F R'</span>
+            </div>
+            <div data-cube="faceCornerPos6"></div>
+          </div>
+
+          <p class="main-text">Альтернативний варіант із трьох ходів</p>
+
+          <div class="cube-row-arrow">
+            <div data-cube="faceCornerPos3"></div>
+            <div class="formula-arrow">
+              <span>R' D' R</span>
+            </div>
+            <div data-cube="faceCornerPos6"></div>
+          </div>
+
+          <p class="main-text">
+            Після встановлення одного кута переходьте до наступного та
+            <span class="span">повторюйте</span> цю саму процедуру.
+          </p>
+          <h3 class="title-third">Важливо</h3>
+
+          <p class="main-text">
+            Якщо виконати формулу
+            <span class="span">F' R F R'</span> або
+            <span class="span">R F' R' F</span>
+            <span class="span">шість разів поспіль</span>, куб повернеться у
+            вихідний стан. Будь-який із трьох варіантів розташування кута
+            розв’язується <span class="span">однією</span> з цих двох формул.
+          </p>
+
+          <h3 class="title-third">Висновок</h3>
+
+          <p class="main-text">
+            Чотири послідовності
+            <span class="span">F' R F R'</span> еквівалентні двом послідовностям
+            <span class="span">R F' R' F</span>. І навпаки, чотири послідовності
+            <span class="span">R F' R' F</span>
+            еквівалентні двом
+            <span class="span">F' R F R'</span>.
+          </p>
+
+          <p class="main-text">
+            Тому для збирання достатньо добре запам’ятати
+            <span class="span">лише одну</span> з цих формул — цього буде цілком
+            достатньо.
+          </p>
+        </section>
+      </body>
+    </html>
   </body>
 </html>

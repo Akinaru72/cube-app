@@ -7,5 +7,180 @@
     <title>Page2</title>
     <link rel="stylesheet" href="./css/common.css" />
   </head>
-  <body></body>
+  <body>
+    <section class="guide-page">
+      <h2 class="title-third">Solving the Corners</h2>
+
+      <p class="main-text">
+        After completing the <span class="span">cross</span>, we move on to
+        solving the <span class="span">corners of the first layer.</span>
+      </p>
+
+      <p class="main-text">
+        Each corner consists of
+        <span class="span">three colors.</span> In our case, one of them must be
+        <span class="span">blue</span>, while the other two must match the
+        colors of the side faces. We need to place the
+        <span class="span">blue-yellow-red</span> corner between the
+        corresponding center pieces. Find the required corner and rotate the
+        <span class="span">bottom face</span> so that the corner is positioned
+        directly underneath the place where it belongs. The illustration below
+        shows <span class="span">three possible positions</span>.
+      </p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="faceCornerPos2"></div>
+        <div data-cube="faceCornerPos1"></div>
+        <div data-cube="faceCornerPos3"></div>
+      </div>
+
+      <p class="main-text">
+        The first position can be transformed into the other two using the
+        algorithms <span class="span">R F' R' F</span> or
+        <span class="span">F' R F R'</span>.
+      </p>
+
+      <p class="main-text">
+        1.&nbsp; Algorithm &nbsp;<span class="span">R F' R' F</span>
+      </p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="faceCornerPos2"></div>
+        <div class="formula-arrow">
+          <span>R F' R' F</span>
+        </div>
+        <div data-cube="faceCornerPos5"></div>
+        <div class="formula-arrow">
+          <span>R F' R' F</span>
+        </div>
+        <div data-cube="faceCornerPos1"></div>
+      </div>
+
+      <p class="main-text">
+        Using spatial thinking and logic, this position can also be solved in
+        only four moves without using the algorithm.
+        <span class="span">F D' F' D2</span>
+      </p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="faceCornerPos2"></div>
+        <div class="formula-arrow">
+          <span>F D' F' D2</span>
+        </div>
+        <div data-cube="faceCornerPos1"></div>
+      </div>
+
+      <p class="main-text">
+        2.&nbsp; Algorithm &nbsp;<span class="span">F' R F R'</span>
+      </p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="faceCornerPos2"></div>
+        <div class="formula-arrow">
+          <span>F' R F R'</span>
+        </div>
+        <div data-cube="faceCornerPos4"></div>
+        <div class="formula-arrow">
+          <span>F' R F R'</span>
+        </div>
+        <div data-cube="faceCornerPos3"></div>
+      </div>
+
+      <p class="main-text">
+        The same applies in this case.
+        <span class="span">R' D R D2</span>
+      </p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="faceCornerPos2"></div>
+        <div class="formula-arrow">
+          <span>R' D R D2</span>
+        </div>
+        <div data-cube="faceCornerPos3"></div>
+      </div>
+
+      <p class="main-text">
+        And finally, place the corner into its correct position.
+      </p>
+
+      <p class="main-text">
+        1.&nbsp; Algorithm &nbsp;<span class="span">R F' R' F</span>
+      </p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="faceCornerPos1"></div>
+        <div class="formula-arrow">
+          <span>R F' R' F</span>
+        </div>
+        <div data-cube="faceCornerPos6"></div>
+      </div>
+
+      <p class="main-text">
+        Alternative solution in three moves
+        <span class="span">F D F'</span>
+      </p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="faceCornerPos1"></div>
+        <div class="formula-arrow">
+          <span>F D F'</span>
+        </div>
+        <div data-cube="faceCornerPos6"></div>
+      </div>
+
+      <p class="main-text">
+        2.&nbsp; Algorithm &nbsp;<span class="span">F' R F R'</span>
+      </p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="faceCornerPos3"></div>
+        <div class="formula-arrow">
+          <span>F' R F R'</span>
+        </div>
+        <div data-cube="faceCornerPos6"></div>
+      </div>
+
+      <p class="main-text">Alternative solution in three moves</p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="faceCornerPos3"></div>
+        <div class="formula-arrow">
+          <span>R' D' R</span>
+        </div>
+        <div data-cube="faceCornerPos6"></div>
+      </div>
+
+      <p class="main-text">
+        After placing one corner, move on to the next one and
+        <span class="span">repeat</span> the same procedure.
+      </p>
+
+      <h3 class="title-third">Important</h3>
+
+      <p class="main-text">
+        If you perform the algorithm
+        <span class="span">F' R F R'</span> or
+        <span class="span">R F' R' F</span>
+        <span class="span">six times in a row</span>, the cube will return to
+        its original state. Any of the three corner positions can be solved
+        using <span class="span">one</span> of these two algorithms.
+      </p>
+
+      <h3 class="title-third">Conclusion</h3>
+
+      <p class="main-text">
+        Four repetitions of
+        <span class="span">F' R F R'</span> are equivalent to two repetitions of
+        <span class="span">R F' R' F</span>. Likewise, four repetitions of
+        <span class="span">R F' R' F</span> are equivalent to two repetitions of
+        <span class="span">F' R F R'</span>.
+      </p>
+
+      <p class="main-text">
+        Therefore, it is enough to memorize
+        <span class="span">just one</span> of these algorithms — that will be
+        completely sufficient.
+      </p>
+    </section>
+  </body>
 </html>

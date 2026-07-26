@@ -4,7 +4,7 @@ console.log(createCube('R', 'G', 'W'));
 export const cubePages = [
   // PAGE 1
   {
-    'row-1': [
+    facesGuide: [
       createCube(
         'G',
         {
@@ -96,7 +96,7 @@ export const cubePages = [
       ),
     ],
 
-    'row-2': [
+    faceWithCentralCubes: [
       createCube(
         {
           5: 'B',
@@ -105,12 +105,11 @@ export const cubePages = [
           5: 'R',
         },
         {
-          5: 'W',
-        },
-        'UP'
+          5: 'Y',
+        }
       ),
     ],
-    'row-3': [
+    faceWithCross: [
       createCube(
         {
           2: 'B',
@@ -124,14 +123,143 @@ export const cubePages = [
           5: 'R',
         },
         {
-          2: 'W',
-          5: 'W',
-        },
-        'UP'
+          2: 'Y',
+          5: 'Y',
+        }
       ),
     ],
   },
 
   // PAGE 2
-  {},
+  {
+    faceCornerPos1: [
+      createCube(
+        {
+          2: 'B',
+          4: 'B',
+          5: 'B',
+          6: 'B',
+          8: 'B',
+        },
+        {
+          2: 'R',
+          5: 'R',
+          9: 'B',
+        },
+        {
+          2: 'Y',
+          5: 'Y',
+          7: 'Y',
+        }
+      ),
+    ],
+    faceCornerPos2: [
+      createCube(
+        {
+          2: 'B',
+          4: 'B',
+          5: 'B',
+          6: 'B',
+          8: 'B',
+        },
+        {
+          2: 'R',
+          5: 'R',
+          9: 'Y',
+        },
+        {
+          2: 'Y',
+          5: 'Y',
+          7: 'R',
+        }
+      ),
+    ],
+    faceCornerPos3: [
+      createCube(
+        {
+          2: 'B',
+          4: 'B',
+          5: 'B',
+          6: 'B',
+          8: 'B',
+        },
+        {
+          2: 'R',
+          5: 'R',
+          9: 'R',
+        },
+        {
+          2: 'Y',
+          5: 'Y',
+          7: 'B',
+        }
+      ),
+    ],
+    faceCornerPos4: [
+      createCube(
+        {
+          2: 'B',
+          4: 'B',
+          5: 'B',
+          6: 'B',
+          8: 'B',
+          9: 'R',
+        },
+        {
+          2: 'R',
+          3: 'Y',
+          5: 'R',
+        },
+        {
+          1: 'B',
+          2: 'Y',
+          5: 'Y',
+        }
+      ),
+    ],
+    faceCornerPos5: [
+      createCube(
+        {
+          2: 'B',
+          4: 'B',
+          5: 'B',
+          6: 'B',
+          8: 'B',
+          9: 'Y',
+        },
+        {
+          2: 'R',
+          3: 'B',
+          5: 'R',
+        },
+        {
+          2: 'Y',
+          1: 'R',
+          5: 'Y',
+        }
+      ),
+    ],
+    faceCornerPos6: [
+      createCube(
+        {
+          2: 'B',
+          4: 'B',
+          5: 'B',
+          6: 'B',
+          8: 'B',
+          9: 'B',
+        },
+        {
+          2: 'R',
+          3: 'R',
+          5: 'R',
+        },
+        {
+          2: 'Y',
+          1: 'Y',
+          5: 'Y',
+        }
+      ),
+    ],
+  },
 ];

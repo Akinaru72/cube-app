@@ -370,14 +370,23 @@ async function renderGuide() {
     console.log(guideContent.innerHTML);
 
     const page = cubePages[currentPage];
-    console.log('Last', cubePages[0]['row-1']);
-    Object.entries(page).forEach(([rowId, cubes]) => {
-      console.log('rowId =', rowId);
-      const row = guideContent.querySelector(`#${rowId}`);
-      console.log('row =', row);
-      if (row) {
-        row.innerHTML = cubes.join('');
-      }
+
+    // Object.entries(page).forEach(([rowId, cubes]) => {
+    //   const row = guideContent.querySelector(`#${rowId}`);
+
+    //   if (row) {
+    //     row.innerHTML = cubes.join('');
+    //   }
+    // });
+
+    console.log(page);
+
+    Object.entries(page).forEach(([name, cubes]) => {
+      console.log(name);
+
+      guideContent.querySelectorAll(`[data-cube="${name}"]`).forEach(el => {
+        el.innerHTML = cubes.join('');
+      });
     });
 
     guideCounter.textContent = `${currentPage + 1} / ${guidePages.length}`;

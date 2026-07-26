@@ -547,7 +547,7 @@ img {
 /* -----------------------Cube------------------------ */
 .cube-guide {
   position: relative;
-  width: 140px;
+  width: 120px;
   height: 230px;
   margin: 0 auto 40px;
 }
@@ -606,7 +606,7 @@ img {
 .cube-row {
   display: flex;
   flex-direction: row;
-  column-gap: 80px;
+  column-gap: 100px;
   row-gap: 0;
   flex-wrap: wrap;
 }
@@ -616,7 +616,7 @@ img {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 180px;
+  min-width: 80px;
   height: 42px;
   padding: 0 30px 0 16px;
   background: #4a90e2;
