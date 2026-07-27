@@ -7,5 +7,268 @@
     <title>Page5</title>
     <link rel="stylesheet" href="./css/common.css" />
   </head>
-  <body></body>
+  <body>
+    <section class="guide-page">
+      <h2 class="title-third">Встановлення кутів на свої місця</h2>
+
+      <p class="main-text">
+        Існують <span class="span">дві формули</span> для переміщення кутів у
+        верхньому шарі.
+      </p>
+
+      <p class="main-text">
+        Перша формула
+        <span class="span">R' F' L' F R F' L F</span>
+        переміщує кути в такому порядку:
+        <span class="span">(B,R) → (U,R) → (U,L).</span>
+        Лівий задній кут
+        <span class="span">(B,L)</span>
+        залишається на своєму місці.
+      </p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="cornerSwapCase1"></div>
+        <div class="formula-arrow">
+          <span>R' F' L' F </span>
+        </div>
+        <div data-cube="cornerSwapCase2"></div>
+        <div class="formula-arrow">
+          <span>R F' L F</span>
+        </div>
+        <div data-cube="cornerSwapCase3"></div>
+      </div>
+
+      <p class="main-text">
+        Друга формула
+        <span class="span">F' L' F R' F' L F R</span>
+        переміщує кути у
+        <span class="span">протилежному напрямку.</span>
+        Лівий задній кут
+        <span class="span">(B,L)</span>
+        також залишається на своєму місці.&nbsp За допомогою цих формул ви без
+        труднощів встановите всі кути на свої правильні місця.
+      </p>
+
+      <h2 class="title-third">Орієнтація кутів</h2>
+
+      <p class="main-text">
+        Щоб остаточно зібрати кубик, потрібно правильно
+        <span class="span">зорієнтувати</span> щонайменше два, а інколи й усі
+        кути останнього шару.
+      </p>
+
+      <p class="main-text">
+        Для цього використовується алгоритм, який ми вже застосовували на
+        початку цієї інструкції:
+        <span class="span">R F' R' F</span>
+        або
+        <span class="span">F' R F R'.</span>
+      </p>
+
+      <p class="main-text">
+        Нагадуємо, що
+        <span class="span">шість повторень</span>
+        будь-якої з цих двох формул повертає кубик у початковий стан. Також
+        <span class="span">чотири виконання</span>
+        однієї формули еквівалентні
+        <span class="span">двом виконанням</span>
+        іншої (див. початок інструкції).
+      </p>
+
+      <h3 class="title-third">Правила застосування</h3>
+
+      <p class="main-text">
+        Поверніть <span class="span">верхню грань</span> так, щоб кут, який
+        потрібно зорієнтувати, знаходився у положенні
+        <span class="span">(F,R)</span>
+        — передній правий кут.
+      </p>
+
+      <p class="main-text">
+        Виконуйте одну з наведених вище формул доти, поки кут не буде
+        зорієнтований правильно.
+      </p>
+
+      <p class="main-text">
+        Потім поверніть <span class="span">верхню грань</span> і перемістіть
+        наступний незорієнтований кут у положення
+        <span class="span">(F,R).</span>
+        Повторюйте процедуру, поки всі кути не займуть правильне положення.
+      </p>
+
+      <p class="main-text">
+        Під час виконання алгоритму може здатися, що кубик
+        <span class="span">розбирається.</span> Не звертайте на це уваги. Після
+        кожного циклу із шести ходів він повертатиметься до правильного стану.
+      </p>
+
+      <p class="title-third">1.&nbsp;Перший кут</p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="cornerSwapCase4"></div>
+        <div class="formula2-arrow">
+          <span>RF'R'F RF'R'F</span>
+        </div>
+        <div data-cube="cornerSwapCase5"></div>
+        <div class="formula2-arrow">
+          <span>RF'R'F RF'R'F</span>
+        </div>
+        <div data-cube="cornerSwapCase6"></div>
+      </div>
+
+      <p class="main-text">
+        альтернативне рішення. <span class="span">F'RFR'&nbsp F'RFR'</span>
+      </p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="cornerSwapCase4"></div>
+        <div class="formula2-arrow">
+          <span>F'RFR' F'RFR'</span>
+        </div>
+        <div data-cube="cornerSwapCase6"></div>
+      </div>
+
+      <p class="main-text">
+        Повертаємо верхню грань <span class="span">U</span>
+      </p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="cornerSwapCase6"></div>
+        <div class="formula-arrow">
+          <span>U</span>
+        </div>
+        <div data-cube="cornerSwapCase7"></div>
+      </div>
+
+      <p class="main-text">Переходимо до наступного кута.</p>
+
+      <p class="title-third">2.&nbsp; Другий кут</p>
+      <div class="cube-row-arrow">
+        <div data-cube="cornerSwapCase7"></div>
+        <div class="formula2-arrow">
+          <span>RF'R'F RF'R'F</span>
+        </div>
+        <div data-cube="cornerSwapCase9"></div>
+      </div>
+
+      <p class="main-text">
+        альтернативне рішення. <span class="span">F'RFR'&nbsp; F'RFR'</span>
+      </p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="cornerSwapCase7"></div>
+        <div class="formula2-arrow">
+          <span>F'RFR' F'RFR'</span>
+        </div>
+        <div data-cube="cornerSwapCase8"></div>
+        <div class="formula2-arrow">
+          <span>F'RFR' F'RFR'</span>
+        </div>
+        <div data-cube="cornerSwapCase9"></div>
+      </div>
+
+      <p class="main-text">
+        Повертаємо верхню грань <span class="span">U</span>
+      </p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="cornerSwapCase9"></div>
+        <div class="formula-arrow">
+          <span>U</span>
+        </div>
+        <div data-cube="cornerSwapCase10"></div>
+      </div>
+
+      <p class="main-text">Переходимо до наступного кута.</p>
+
+      <p class="title-third">2.&nbsp; Третій кут</p>
+      <div class="cube-row-arrow">
+        <div data-cube="cornerSwapCase10"></div>
+        <div class="formula2-arrow">
+          <span>RF'R'F RF'R'F</span>
+        </div>
+        <div data-cube="cornerSwapCase11"></div>
+        <div class="formula2-arrow">
+          <span>RF'R'F RF'R'F</span>
+        </div>
+        <div data-cube="cornerSwapCase12"></div>
+      </div>
+
+      <p class="main-text">
+        альтернативне рішення. <span class="span">F'RFR'&nbsp; F'RFR'</span>
+      </p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="cornerSwapCase10"></div>
+        <div class="formula2-arrow">
+          <span>F'RFR' F'RFR'</span>
+        </div>
+        <div data-cube="cornerSwapCase12"></div>
+      </div>
+
+      <p class="main-text">
+        Повертаємо верхню грань <span class="span">U</span>
+      </p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="cornerSwapCase12"></div>
+        <div class="formula-arrow">
+          <span>U</span>
+        </div>
+        <div data-cube="cornerSwapCase13"></div>
+      </div>
+
+      <p class="main-text">Переходимо до останнього кута.</p>
+      <p class="title-third">2.&nbsp; Останній кут</p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="cornerSwapCase13"></div>
+        <div class="formula2-arrow">
+          <span>RF'R'F RF'R'F</span>
+        </div>
+        <div data-cube="cornerSwapCase15"></div>
+      </div>
+
+      <p class="main-text">
+        альтернативне рішення. <span class="span">F'RFR'&nbsp; F'RFR'</span>
+      </p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="cornerSwapCase13"></div>
+        <div class="formula2-arrow">
+          <span>F'RFR' F'RFR'</span>
+        </div>
+        <div data-cube="cornerSwapCase14"></div>
+        <div class="formula2-arrow">
+          <span>F'RFR' F'RFR'</span>
+        </div>
+        <div data-cube="cornerSwapCase15"></div>
+      </div>
+
+      <p class="main-text">
+        Повертаємо верхню грань <span class="span">U</span>
+      </p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="cornerSwapCase15"></div>
+        <div class="formula-arrow">
+          <span>U</span>
+        </div>
+        <div data-cube="cornerSwapCase16"></div>
+      </div>
+
+      <h2 class="title-third">Вітаємо!</h2>
+
+      <p class="main-text">
+        <span class="span">Кубик повністю зібраний.</span>
+      </p>
+
+      <p class="main-text">
+        Рекомендуємо кілька разів
+        <span class="span">зібрати та розібрати</span>
+        кубик ще раз, щоб закріпити знання й краще зрозуміти, як працюють
+        формули та принципи збирання.
+      </p>
+    </section>
+  </body>
 </html>

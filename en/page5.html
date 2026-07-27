@@ -7,5 +7,267 @@
     <title>Page5</title>
     <link rel="stylesheet" href="./css/common.css" />
   </head>
-  <body></body>
+  <body>
+    <section class="guide-page">
+      <h2 class="title-third">Positioning the Corners</h2>
+
+      <p class="main-text">
+        There are <span class="span">two algorithms</span> for moving the
+        corners of the top layer.
+      </p>
+
+      <p class="main-text">
+        The first algorithm
+        <span class="span">R' F' L' F R F' L F</span>
+        moves the corners in the following order:
+        <span class="span">(B,R) → (U,R) → (U,L).</span>
+        The back-left corner
+        <span class="span">(B,L)</span>
+        remains in its original position.
+      </p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="cornerSwapCase1"></div>
+        <div class="formula-arrow">
+          <span>R' F' L' F</span>
+        </div>
+        <div data-cube="cornerSwapCase2"></div>
+        <div class="formula-arrow">
+          <span>R F' L F</span>
+        </div>
+        <div data-cube="cornerSwapCase3"></div>
+      </div>
+
+      <p class="main-text">
+        The second algorithm
+        <span class="span">F' L' F R' F' L F R</span>
+        moves the corners in the
+        <span class="span">opposite direction.</span>
+        The back-left corner
+        <span class="span">(B,L)</span>
+        also remains in place.&nbsp; Using these two algorithms, you can easily
+        place every corner into its correct position.
+      </p>
+
+      <h2 class="title-third">Orienting the Corners</h2>
+
+      <p class="main-text">
+        To completely solve the cube, you must correctly
+        <span class="span">orient</span>
+        at least two, and sometimes all four corners of the last layer.
+      </p>
+
+      <p class="main-text">
+        For this, use the algorithm we already applied at the beginning of this
+        guide:
+        <span class="span">R F' R' F</span>
+        or
+        <span class="span">F' R F R'.</span>
+      </p>
+
+      <p class="main-text">
+        Remember that performing either of these algorithms
+        <span class="span">six times in a row</span>
+        returns the cube to its original state. Also,
+        <span class="span">four repetitions</span>
+        of one algorithm are equivalent to
+        <span class="span">two repetitions</span>
+        of the other (see the beginning of the guide).
+      </p>
+
+      <h3 class="title-third">How to Apply the Algorithm</h3>
+
+      <p class="main-text">
+        Rotate the <span class="span">top layer</span> until the corner that
+        needs to be oriented is in the
+        <span class="span">(F,R)</span>
+        position — the front-right corner.
+      </p>
+
+      <p class="main-text">
+        Perform one of the algorithms above until the corner is correctly
+        oriented.
+      </p>
+
+      <p class="main-text">
+        Then rotate the <span class="span">top layer</span> again and bring the
+        next unsolved corner into the
+        <span class="span">(F,R)</span>
+        position. Repeat the process until every corner is correctly oriented.
+      </p>
+
+      <p class="main-text">
+        While performing the algorithm, it may seem that the cube is
+        <span class="span">getting scrambled.</span>
+        Ignore this. After each cycle of six moves, it returns to a valid state.
+      </p>
+
+      <p class="title-third">1.&nbsp; First Corner</p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="cornerSwapCase4"></div>
+        <div class="formula2-arrow">
+          <span>RF'R'F RF'R'F</span>
+        </div>
+        <div data-cube="cornerSwapCase5"></div>
+        <div class="formula2-arrow">
+          <span>RF'R'F RF'R'F</span>
+        </div>
+        <div data-cube="cornerSwapCase6"></div>
+      </div>
+
+      <p class="main-text">
+        Alternative solution:
+        <span class="span">F'RFR' F'RFR'</span>
+      </p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="cornerSwapCase4"></div>
+        <div class="formula2-arrow">
+          <span>F'RFR' F'RFR'</span>
+        </div>
+        <div data-cube="cornerSwapCase6"></div>
+      </div>
+
+      <p class="main-text">Rotate the top layer <span class="span">U</span></p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="cornerSwapCase6"></div>
+        <div class="formula-arrow">
+          <span>U</span>
+        </div>
+        <div data-cube="cornerSwapCase7"></div>
+      </div>
+
+      <p class="main-text">Move on to the next corner.</p>
+
+      <p class="title-third">2.&nbsp; Second Corner</p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="cornerSwapCase7"></div>
+        <div class="formula2-arrow">
+          <span>RF'R'F RF'R'F</span>
+        </div>
+        <div data-cube="cornerSwapCase9"></div>
+      </div>
+
+      <p class="main-text">
+        Alternative solution:
+        <span class="span">F'RFR' F'RFR'</span>
+      </p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="cornerSwapCase7"></div>
+        <div class="formula2-arrow">
+          <span>F'RFR' F'RFR'</span>
+        </div>
+        <div data-cube="cornerSwapCase8"></div>
+        <div class="formula2-arrow">
+          <span>F'RFR' F'RFR'</span>
+        </div>
+        <div data-cube="cornerSwapCase9"></div>
+      </div>
+
+      <p class="main-text">Rotate the top layer <span class="span">U</span></p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="cornerSwapCase9"></div>
+        <div class="formula-arrow">
+          <span>U</span>
+        </div>
+        <div data-cube="cornerSwapCase10"></div>
+      </div>
+
+      <p class="main-text">Move on to the next corner.</p>
+
+      <p class="title-third">3.&nbsp; Third Corner</p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="cornerSwapCase10"></div>
+        <div class="formula2-arrow">
+          <span>RF'R'F RF'R'F</span>
+        </div>
+        <div data-cube="cornerSwapCase11"></div>
+        <div class="formula2-arrow">
+          <span>RF'R'F RF'R'F</span>
+        </div>
+        <div data-cube="cornerSwapCase12"></div>
+      </div>
+
+      <p class="main-text">
+        Alternative solution:
+        <span class="span">F'RFR' F'RFR'</span>
+      </p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="cornerSwapCase10"></div>
+        <div class="formula2-arrow">
+          <span>F'RFR' F'RFR'</span>
+        </div>
+        <div data-cube="cornerSwapCase12"></div>
+      </div>
+
+      <p class="main-text">Rotate the top layer <span class="span">U</span></p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="cornerSwapCase12"></div>
+        <div class="formula-arrow">
+          <span>U</span>
+        </div>
+        <div data-cube="cornerSwapCase13"></div>
+      </div>
+
+      <p class="main-text">Move on to the last corner.</p>
+
+      <p class="title-third">4.&nbsp; Last Corner</p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="cornerSwapCase13"></div>
+        <div class="formula2-arrow">
+          <span>RF'R'F RF'R'F</span>
+        </div>
+        <div data-cube="cornerSwapCase15"></div>
+      </div>
+
+      <p class="main-text">
+        Alternative solution:
+        <span class="span">F'RFR' F'RFR'</span>
+      </p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="cornerSwapCase13"></div>
+        <div class="formula2-arrow">
+          <span>F'RFR' F'RFR'</span>
+        </div>
+        <div data-cube="cornerSwapCase14"></div>
+        <div class="formula2-arrow">
+          <span>F'RFR' F'RFR'</span>
+        </div>
+        <div data-cube="cornerSwapCase15"></div>
+      </div>
+
+      <p class="main-text">Rotate the top layer <span class="span">U</span></p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="cornerSwapCase15"></div>
+        <div class="formula-arrow">
+          <span>U</span>
+        </div>
+        <div data-cube="cornerSwapCase16"></div>
+      </div>
+
+      <h2 class="title-third">Congratulations!</h2>
+
+      <p class="main-text">
+        <span class="span">The cube is fully solved.</span>
+      </p>
+
+      <p class="main-text">
+        We recommend solving and scrambling the cube
+        <span class="span">several more times</span>
+        to reinforce your understanding and better learn how the algorithms and
+        solving principles work.
+      </p>
+    </section>
+  </body>
 </html>

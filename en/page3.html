@@ -7,5 +7,79 @@
     <title>Page3</title>
     <link rel="stylesheet" href="./css/common.css" />
   </head>
-  <body></body>
+  <body>
+    <section class="guide-page">
+      <h2 class="title-third">Solving the Middle Layer</h2>
+
+      <p class="main-text">
+        Before starting to solve the
+        <span class="span">second layer</span>, hold the cube with the
+        <span class="span">completed side facing down.</span> In our case, this
+        is the <span class="span">blue face.</span>
+      </p>
+
+      <p class="main-text">
+        Find any edge piece on the <span class="span">top layer</span> that
+        <span class="span">does not contain the green color.</span> In our case,
+        this is the color of the center on the face opposite the blue one.
+      </p>
+
+      <p class="main-text">
+        Turn the <span class="span">top face</span> until the side color of the
+        required edge matches the center of the corresponding side face. Below
+        are <span class="span">three possible cases</span> and their solutions.
+      </p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="middleLayerCase1"></div>
+        <div class="formula-arrow">
+          <span>U R U' R'</span>
+        </div>
+        <div data-cube="middleLayerCase2"></div>
+        <div class="formula-arrow">
+          <span>F R' F' R</span>
+        </div>
+        <div data-cube="middleLayerCase3"></div>
+      </div>
+
+      <div class="cube-row-arrow">
+        <div data-cube="middleLayerCase4"></div>
+        <div class="formula-arrow">
+          <span>U' F' U F</span>
+        </div>
+        <div data-cube="middleLayerCase5"></div>
+        <div class="formula-arrow">
+          <span>R' F R F'</span>
+        </div>
+        <div data-cube="middleLayerCase3"></div>
+      </div>
+
+      <h3 class="title-third">Third Case</h3>
+
+      <p class="main-text">
+        The third case occurs when the
+        <span class="span">edge piece is already in its correct position,</span>
+        but <span class="span">is flipped by 180°.</span>
+      </p>
+
+      <div class="cube-row" data-cube="middleLayerWrongEdge"></div>
+
+      <p class="main-text">
+        In this situation, the required edge must be
+        <span class="span">"knocked out"</span> using any edge that contains the
+        <span class="span">green color.</span>
+      </p>
+
+      <p class="main-text">
+        Choose <span class="span">either</span> of the two algorithms shown
+        above. After that, the required edge will return to the
+        <span class="span">top layer.</span>
+      </p>
+
+      <p class="main-text">
+        Then repeat the same procedure once again, and the edge will move into
+        <span class="span">its correct position.</span>
+      </p>
+    </section>
+  </body>
 </html>
