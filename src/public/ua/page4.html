@@ -7,5 +7,124 @@
     <title>Page4</title>
     <link rel="stylesheet" href="./css/common.css" />
   </head>
-  <body></body>
+  <body>
+    <section class="guide-page">
+      <h2 class="title-third">Збирання хреста верхнього шару</h2>
+
+      <p class="main-text">
+        Перед початком збирання на кубику може виникнути
+        <span class="span">одна з трьох ситуацій</span>, показаних на
+        ілюстраціях нижче. Усі вони поетапно за допомогою формули
+        <span class="span">F R U R' U' F'</span> приводять до збирання хреста.
+      </p>
+
+      <p class="main-text">
+        <span class="span">Важливо!</span> Перед виконанням алгоритму тримайте
+        кубик <span class="span">точно так само</span>, як показано на
+        ілюстраціях.
+      </p>
+
+      <p class="main-text">
+        1.&nbsp; Ситуація.&nbsp;
+        <span class="span">F R U R' U' F'</span>
+      </p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="topCrossCase1"></div>
+        <div class="formula-arrow">
+          <span>F R U R' U' F'</span>
+        </div>
+        <div data-cube="topCrossCase2"></div>
+      </div>
+
+      <p class="main-text">
+        Існує <span class="span">альтернативне рішення</span>, яке дозволяє
+        одразу перейти до <span class="span">третьої ситуації</span>:
+        <span class="span">F U R U' R' F</span>
+      </p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="topCrossCase1"></div>
+        <div class="formula-arrow">
+          <span>F U R U' R' F</span>
+        </div>
+        <div data-cube="topCrossCase4"></div>
+      </div>
+
+      <p class="main-text">
+        2.&nbsp; Ситуація.&nbsp;
+        <span class="span">F R U R' U' F'</span>
+      </p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="topCrossCase2"></div>
+        <div class="formula-arrow">
+          <span>F R U R' U' F'</span>
+        </div>
+        <div data-cube="topCrossCase3"></div>
+      </div>
+
+      <p class="main-text">
+        Існує <span class="span">альтернативне рішення</span>, яке дозволяє
+        <span class="span">одразу зібрати хрест</span>:
+        <span class="span">F U R U' R' F</span>
+      </p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="topCrossCase2"></div>
+        <div class="formula-arrow">
+          <span>F U R U' R' F</span>
+        </div>
+        <div data-cube="topCrossSolved"></div>
+      </div>
+
+      <p class="main-text">
+        3.&nbsp; Ситуація.&nbsp;
+        <span class="span">F R U R' U' F'</span>
+      </p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="topCrossCase3"></div>
+        <div class="formula-arrow">
+          <span>F R U R' U' F'</span>
+        </div>
+        <div data-cube="topCrossSolved"></div>
+      </div>
+
+      <h3 class="title-third">Орієнтація ребер</h3>
+
+      <p class="main-text">
+        Поверніть <span class="span">верхню грань</span> і подивіться, скільки
+        ребер збігаються з центрами бічних граней. В ідеалі повинні збігатися
+        <span class="span">усі чотири кольори.</span> Якщо цього немає, знайдіть
+        положення, у якому збігаються
+        <span class="span">два сусідні ребра.</span>
+      </p>
+
+      <div class="cube-row" data-cube="topCrossEdges"></div>
+
+      <p class="main-text">
+        Якщо збігаються лише
+        <span class="span">два протилежні ребра</span> або взагалі немає збігів,
+        використайте алгоритм <span class="span">R U R' U R U2 R' U</span>, а
+        потім знову перевірте положення ребер.
+      </p>
+
+      <p class="main-text">
+        Якщо збігаються лише
+        <span class="span">два сусідні ребра</span>, розташуйте кубик так, щоб
+        ці ребра знаходилися на гранях <span class="span">BACK</span> і
+        <span class="span">RIGHT</span>. Після цього використайте наведену нижче
+        формулу.
+      </p>
+
+      <div class="cube-row-arrow">
+        <div data-cube="topCrossAdjacent"></div>
+        <div class="formula-arrow">
+          <span>R U R' U R U2 R' U</span>
+        </div>
+        <div data-cube="topCrossOriented"></div>
+      </div>
+    </section>
+  </body>
 </html>

@@ -6,6 +6,4 @@ export const guidePagesEN = [
   './en/page3.html',
   './en/page4.html',
   './en/page5.html',
-  './en/page6.html',
-  './en/page7.html',
 ];
