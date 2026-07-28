@@ -4,7 +4,13 @@ import * as THREE from 'three';
 
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 
-import { COLORS, MOVES, CUBE_SIZE, ROTATION_SPEED } from './constantsCube.js';
+import {
+  COLORS,
+  MOVES,
+  CUBE_SIZE,
+  ROTATION_SPEED,
+  reverseMove,
+} from './constantsCube.js';
 import { AlgorithmParser } from './AlgorithmParser.js';
 import { CubeState } from '../solver/CubeState.js';
 
@@ -39,21 +45,56 @@ export class RubiksCube {
     this.isScrambling = false;
     this.rotationSpeed = 0.1;
     this.scrambleLength = 20;
-
     this.soundEnabled = true;
-
     this.turnSound = new Audio('/turn.mp3');
-
     this.turnSound.volume = 0.3;
+    this.history = [];
+    this.isAnimation = false;
+    this.counter = 1;
   }
 
-  updateResetButtons() {
-    console.log('updateResetButtons');
-    const solved = this.cubeState.isSolved();
-    console.log('solved', solved);
+  // updateResetButtons() {
+  //   // console.log('updateResetButtons');
+  //   const solved = this.cubeState.isSolved();
+  //   // console.log('solved', solved);
 
-    scrambleBtn.disabled = !solved;
-    // solveBtn.disabled = solved;
+  //   scrambleBtn.disabled = !solved;
+  //   // solveBtn.disabled = solved;
+  //   console.log('History', this.history.length);
+  //   if (!this.history.length) {
+  //     prevBtn.disabled = true;
+  //     nextBtn.disabled = true;
+  //   } else {
+  //     prevBtn.disabled = false;
+  //     nextBtn.disabled = false;
+  //   }
+  // }
+  updateResetButtons() {
+    const solved = this.cubeState.isSolved();
+
+    scrambleBtn.disabled = this.isScrambling || !solved;
+
+    //  if (this.history.length === this.counter) {
+    //    console.log('TRUE');
+    //    prevBtn.disabled = true;
+    //  }
+    if (
+      !this.history.length ||
+      this.isScrambling ||
+      this.history.length + 1 === this.counter
+    ) {
+      prevBtn.disabled = true;
+    } else {
+      prevBtn.disabled = false;
+    }
+
+    if (!this.history.length || this.isScrambling || this.counter === 1) {
+      nextBtn.disabled = true;
+    } else {
+      nextBtn.disabled = false;
+    }
+
+    this.isAnimation = false;
   }
 
   createCubie(x, y, z) {
@@ -308,8 +349,12 @@ export class RubiksCube {
     // }
 
     if (!this.currentRotation) return;
-
-    const speed = this.rotationSpeed;
+    let speed;
+    if (!this.demo) {
+      speed = this.rotationSpeed;
+    } else {
+      speed = 0.01;
+    }
     const rotation = this.currentRotation;
     const direction = Math.sign(rotation.angle);
     const remaining =
@@ -366,16 +411,35 @@ export class RubiksCube {
       !reverse ? newMoveName : (newMoveName = newMoveName + "'");
       // console.log('NewMoveName', newMoveName);
 
-      this.cubeState.move(newMoveName, false);
-      this.updateResetButtons();
+      if (!this.demo) {
+        this.cubeState.move(newMoveName, false);
+        let array = this.history.slice(
+          0,
+          this.history.length + 1 - this.counter
+        );
+        if (!this.isAnimation) {
+          this.counter = 1;
+          array.push(newMoveName); // добавляем в новую историю
+          this.history = array;
+        }
+        console.log('History-Update', this.history);
+        console.log('UPTADE_ARRAY', array);
+      }
+
       // console.dir('CS.move', this.cubeState.move);
 
       // this.updateButtons();
       // console.table('AFTER', this.cubeState.corners);
       this.currentRotation = null;
-      if (this.moveQueue.length === 0 && this.cubeState.isSolved()) {
-        this.updateResetButtons();
-        console.log('🎉 Cube solved!');
+      if (this.moveQueue.length === 0) {
+        if (!this.demo) {
+          this.isScrambling = false;
+          this.updateResetButtons();
+
+          if (this.cubeState.isSolved()) {
+            console.log('🎉 Cube solved!');
+          }
+        }
       }
       // console.table(this.cubeState.corners);
       // console.table(this.cubeState.edges);
@@ -528,7 +592,7 @@ export class RubiksCube {
 
   startDemo() {
     this.demo = true;
-
+    console.log('startDemo');
     const faces = [
       'R',
       'L',
@@ -653,6 +717,9 @@ export class RubiksCube {
     this.stopDemo();
 
     this.moveQueue = [];
+    this.history = [];
+    this.counter = 1;
+    this.isAnimation = false;
 
     if (this.currentRotation) {
       this.currentRotation = null;
@@ -668,6 +735,7 @@ export class RubiksCube {
 
   startScreenSaver() {
     this.screenSaver = true;
+    console.log('startScreenSaver');
   }
 
   stopScreenSaver() {
@@ -718,7 +786,7 @@ export class RubiksCube {
   }
 
   playTurnSound() {
-    console.log('PLAY');
+    // console.log('PLAY');
     if (!this.soundEnabled) return;
 
     const sound = this.turnSound.cloneNode();
@@ -726,5 +794,29 @@ export class RubiksCube {
     sound.volume = this.turnSound.volume;
 
     sound.play().catch(() => {});
+  }
+
+  onPrevBtn() {
+    this.isAnimation = true;
+    console.log('LENGTH', this.history.length);
+    console.log('PREVBTN');
+    console.log('MOVE', this.history[this.history.length - this.counter]);
+    console.log('COUNTER', this.counter);
+    let nameReverseMove = reverseMove(
+      this.history[this.history.length - this.counter]
+    );
+    console.log('ReverseMove', nameReverseMove);
+    this.execute(nameReverseMove);
+    this.counter = this.counter + 1;
+    console.log('PREVBTN-History', this.history);
+  }
+
+  onNextBtn() {
+    this.isAnimation = true;
+
+    this.counter = this.counter - 1;
+    this.execute(this.history[this.history.length - this.counter]);
+    console.log('MOVENext', this.history[this.history.length - this.counter]);
+    console.log('NextBTN-History', this.history);
   }
 }

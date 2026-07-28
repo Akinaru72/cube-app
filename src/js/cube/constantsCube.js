@@ -2,6 +2,10 @@ export const CUBE_SIZE = 0.95;
 
 export const ROTATION_SPEED = 0.02;
 
+export function reverseMove(move) {
+  return move.endsWith("'") ? move.slice(0, -1) : move + "'";
+}
+
 export const COLORS = {
   right: 0xff0000,
   left: 0xffa500,
