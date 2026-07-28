@@ -41,7 +41,7 @@ export class Phase2Solver {
     );
   }
 
-  solve(cube, maxDepth = 15) {
+  solve(cube, maxDepth = 13) {
     this.nodes = 0;
 
     const cp = cube.encodeCP();

@@ -132,6 +132,7 @@ img {
   box-shadow: none;
 }
 
+#reset-btn:disabled,
 #scramble-btn:disabled,
 #solve-btn:disabled,
 #undo-btn:disabled,

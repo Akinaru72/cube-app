@@ -22,8 +22,8 @@ export async function solveCube(cubeState) {
   );
   // --------------------solution1-----------------------
   // scramble
-  // cubeState.applyAlgorithm("R'");
-  cubeState.applyAlgorithm("U R B' R' D2 F2 D' R' B");
+  // cubeState.applyAlgorithm("R' D F L U");
+  // cubeState.applyAlgorithm("U R B' R' D2 F2 D' R' B");
   // cubeState.applyAlgorithm("R2 U F2 D2 L2 U' B2 R2 D' B2 U L F U2 L' B'");
   // cubeState.applyAlgorithm(
   //   "R U2 F' L2 D B U' R2 F2 D' L U B2 R' U2 L2 D' F R B'"
@@ -79,6 +79,9 @@ export async function solveCube(cubeState) {
 
   const best = solution1.length + solution2.length;
   console.log('BEST =', best);
+  const bestSolution = solution1.concat(solution2);
+  console.log(bestSolution);
+  return bestSolution;
 
   const optimized = new OptimizedSolver(
     tables.coTable,
@@ -137,6 +140,7 @@ export async function solveCube(cubeState) {
   console.log('FINAL BEST =', bestLength);
   console.log(bestPhase1.concat(bestPhase2));
   const solution = bestPhase1.concat(bestPhase2);
+  console.log(solution);
 
   return {
     solution,

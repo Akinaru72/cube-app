@@ -13,7 +13,9 @@ import {
 } from './constantsCube.js';
 import { AlgorithmParser } from './AlgorithmParser.js';
 import { CubeState } from '../solver/CubeState.js';
+import { solveCube } from '../solver/solveCube.js';
 
+const resetBtn = document.querySelector('#reset-btn');
 const scrambleBtn = document.querySelector('#scramble-btn');
 const solveBtn = document.querySelector('#solve-btn');
 const prevBtn = document.querySelector('#undo-btn');
@@ -51,33 +53,24 @@ export class RubiksCube {
     this.history = [];
     this.isAnimation = false;
     this.counter = 1;
+    this.isSolving = false;
   }
 
-  // updateResetButtons() {
-  //   // console.log('updateResetButtons');
-  //   const solved = this.cubeState.isSolved();
-  //   // console.log('solved', solved);
-
-  //   scrambleBtn.disabled = !solved;
-  //   // solveBtn.disabled = solved;
-  //   console.log('History', this.history.length);
-  //   if (!this.history.length) {
-  //     prevBtn.disabled = true;
-  //     nextBtn.disabled = true;
-  //   } else {
-  //     prevBtn.disabled = false;
-  //     nextBtn.disabled = false;
-  //   }
-  // }
   updateResetButtons() {
+    if (this.isSolving) {
+      prevBtn.disabled = true;
+      nextBtn.disabled = true;
+      scrambleBtn.disabled = true;
+      solveBtn.disabled = true;
+      resetBtn.disabled = true;
+      return;
+    }
+    resetBtn.disabled = false;
+
     const solved = this.cubeState.isSolved();
 
     scrambleBtn.disabled = this.isScrambling || !solved;
 
-    //  if (this.history.length === this.counter) {
-    //    console.log('TRUE');
-    //    prevBtn.disabled = true;
-    //  }
     if (
       !this.history.length ||
       this.isScrambling ||
@@ -92,6 +85,12 @@ export class RubiksCube {
       nextBtn.disabled = true;
     } else {
       nextBtn.disabled = false;
+    }
+
+    if (!this.history.length || solved) {
+      solveBtn.disabled = true;
+    } else {
+      solveBtn.disabled = false;
     }
 
     this.isAnimation = false;
@@ -720,6 +719,7 @@ export class RubiksCube {
     this.history = [];
     this.counter = 1;
     this.isAnimation = false;
+    this.isScrambling = false;
 
     if (this.currentRotation) {
       this.currentRotation = null;
@@ -727,8 +727,7 @@ export class RubiksCube {
 
     this.group.clear();
     this.cubies = [];
-    this.cubeState = new CubeState(); // <-- сброс логического куба
-
+    this.cubeState = new CubeState();
     this.create();
     this.updateResetButtons();
   }
@@ -818,5 +817,37 @@ export class RubiksCube {
     this.execute(this.history[this.history.length - this.counter]);
     console.log('MOVENext', this.history[this.history.length - this.counter]);
     console.log('NextBTN-History', this.history);
+  }
+
+  // onSolveBtn() {
+  //   console.log('Solve');
+  //   console.log(this.cubeState);
+
+  //   const result = await solveCube(this.cubeState);
+
+  //   // console.log(result);
+  //   // console.log(result.phase1);
+  //   // console.log(result.phase2);
+  //   // console.log(result.length);
+  // }
+
+  async onSolveBtn() {
+    // if (this.currentRotation || this.moveQueue.length) return;
+
+    // this.demo = true;
+    this.isSolving = true;
+    this.updateResetButtons();
+
+    try {
+      const bestSolution = await solveCube(this.cubeState.clone());
+      // console.log('Solution:', solution);
+      let strSolution = bestSolution.join(' ');
+      console.log(strSolution);
+      this.execute(strSolution);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      this.isSolving = false;
+    }
   }
 }

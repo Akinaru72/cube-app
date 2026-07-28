@@ -251,7 +251,7 @@ function startScramble() {
 
 function lockCubeScramble() {
   console.log('Lock');
-  isBusyScramble = true;
+  // isBusyScramble = true;
 
   // scrambleBtn.disabled = true;
   // solveBtn.disabled = true;
@@ -456,6 +456,13 @@ nextBtn.addEventListener('click', () => cube.onNextBtn());
 // // CP: 36177;
 // // EP: 21024;
 // ----------------------Solve-----------------------------
+// solveBtn.addEventListener('click', async () => {
+//   const result = await solveCube(cubeState);
+// });
+
+solveBtn.addEventListener('click', async () => {
+  await cube.onSolveBtn();
+});
 // const result = await solveCube(cubeState);
 
 // console.log(result);
