@@ -60,6 +60,7 @@ export class RubiksCube {
     this.isAnimation = false;
     this.counter = 1;
     this.isSolving = false;
+    this.solution = false;
     this.worker = new Worker(
       new URL('../solver/solver.wolker.js', import.meta.url),
       {
@@ -71,6 +72,16 @@ export class RubiksCube {
   }
 
   updateResetButtons() {
+    if (this.solution) {
+      scrambleBtn.disabled = true;
+      resetBtn.disabled = true;
+      prevBtn.disabled = true;
+      nextBtn.disabled = true;
+
+      solveBtn.disabled = false;
+
+      return;
+    }
     if (this.isSolving) {
       prevBtn.disabled = true;
       nextBtn.disabled = true;
@@ -846,50 +857,34 @@ export class RubiksCube {
   // }
 
   async onSolveBtn() {
-    console.log('Solve start');
+    if (this.solution) {
+      this.execute(this.solution.join(' '));
+      this.solution = null;
+      solveBtn.textContent = 'Find Solution';
+      this.updateResetButtons();
+      return;
+    }
     this.isSolving = true;
     this.updateResetButtons();
 
     modalOverlayEl.classList.add('is-open');
-    console.log(modalOverlayEl.classList.contains('is-open'));
+
     this.destroyLoader = createRubikLoader(loaderEl);
-    console.log('loader started');
-    // let destroyLoader;
+
     this.worker.postMessage({
       corners: this.cubeState.corners,
       edges: this.cubeState.edges,
     });
-    // const destroyLoader = createRubikLoader(loaderEl);
-
-    // createRubikLoader(loaderEl);
-    // try {
-    //   destroyLoader = createRubikLoader(loaderEl);
-    //   await new Promise(requestAnimationFrame);
-    //   await new Promise(requestAnimationFrame);
-
-    //   const bestSolution = await solveCube(this.cubeState.clone());
-    //   // console.log('Solution:', solution);
-    //   let strSolution = bestSolution.join(' ');
-    //   console.log(strSolution);
-    //   this.execute(strSolution);
-    // } catch (error) {
-    //   console.log(error);
-    // } finally {
-    //   this.isSolving = false;
-    //   destroyLoader?.();
-    //   // destroyLoader(); // остановить таймеры лоадера
-    //   // loaderEl?.remove();
-
-    //   modalOverlayEl.classList.remove('is-open');
-    // }
   }
   onSolveFinished(e) {
-    const solution = e.data;
-
-    this.execute(solution.join(' '));
+    this.solution = e.data;
+    console.log('onSolveFinished', this.solution);
+    // this.execute(this.solution.join(' '));
     this.isSolving = false;
     this.destroyLoader?.();
     modalOverlayEl.classList.remove('is-open');
+    solveBtn.textContent = 'Solve';
+    this.updateResetButtons();
 
     // если хочешь, чтобы кнопки были активны только после анимации,
     // isSolving = false НЕ здесь
@@ -904,3 +899,27 @@ export class RubiksCube {
     modalOverlayEl.classList.remove('is-open');
   }
 }
+
+// const destroyLoader = createRubikLoader(loaderEl);
+
+// createRubikLoader(loaderEl);
+// try {
+//   destroyLoader = createRubikLoader(loaderEl);
+//   await new Promise(requestAnimationFrame);
+//   await new Promise(requestAnimationFrame);
+
+//   const bestSolution = await solveCube(this.cubeState.clone());
+//   // console.log('Solution:', solution);
+//   let strSolution = bestSolution.join(' ');
+//   console.log(strSolution);
+//   this.execute(strSolution);
+// } catch (error) {
+//   console.log(error);
+// } finally {
+//   this.isSolving = false;
+//   destroyLoader?.();
+//   // destroyLoader(); // остановить таймеры лоадера
+//   // loaderEl?.remove();
+
+//   modalOverlayEl.classList.remove('is-open');
+// }
