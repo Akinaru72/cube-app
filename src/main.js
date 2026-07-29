@@ -13,7 +13,7 @@ import { PMREMGenerator } from 'three';
 import { guidePagesEN } from './js/docs/guidePagesEN.js';
 import { guidePagesUA } from './js/docs/guidePagesUA.js';
 import { cubePages } from './js/docs/cubePages.js';
-
+import { createRubikLoader } from './js/solver/loader.js';
 // import { scramble } from './js/cube/scrambler.js';
 
 const cubeState = new CubeState();
@@ -108,6 +108,8 @@ const modalDescriptionBtnClose = document.querySelector(
 const modalSettingsBtnClose = document.querySelector('#modal-settings-close');
 const modalGuideBtnClose = document.querySelector('#modal-guide-close');
 // console.log(modalGuideBtnClose);
+
+const loaderEl = document.querySelector('#cube-loader-vis');
 
 helpBtn.addEventListener('click', () => {
   modalOverlayEl.classList.add('is-open');
@@ -237,7 +239,8 @@ function resetScreenSaverTimer() {
 }
 
 // console.log('SOLVED_MAIN', cubeState.isSolved());
-
+// -------------------Loader-------------------------
+// createRubikLoader(loaderEl);
 // ---------------------Scramble------------
 // let isBusyScramble = false;
 

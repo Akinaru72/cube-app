@@ -14,12 +14,18 @@ import {
 import { AlgorithmParser } from './AlgorithmParser.js';
 import { CubeState } from '../solver/CubeState.js';
 import { solveCube } from '../solver/solveCube.js';
+import { createRubikLoader } from '../solver/loader.js';
 
 const resetBtn = document.querySelector('#reset-btn');
 const scrambleBtn = document.querySelector('#scramble-btn');
 const solveBtn = document.querySelector('#solve-btn');
 const prevBtn = document.querySelector('#undo-btn');
 const nextBtn = document.querySelector('#redo-btn');
+const modalOverlayEl = document.querySelector('.modal-overlay');
+const loaderEl = document.querySelector('#cube-loader-vis');
+// const worker = new Worker(new URL('./solver.worker.js', import.meta.url), {
+//   type: 'module',
+// });
 
 export class RubiksCube {
   constructor(scene) {
@@ -54,6 +60,14 @@ export class RubiksCube {
     this.isAnimation = false;
     this.counter = 1;
     this.isSolving = false;
+    this.worker = new Worker(
+      new URL('../solver/solver.wolker.js', import.meta.url),
+      {
+        type: 'module',
+      }
+    );
+    this.worker.onmessage = this.onSolveFinished.bind(this);
+    this.worker.onerror = this.onSolveError.bind(this);
   }
 
   updateResetButtons() {
@@ -832,22 +846,61 @@ export class RubiksCube {
   // }
 
   async onSolveBtn() {
-    // if (this.currentRotation || this.moveQueue.length) return;
-
-    // this.demo = true;
+    console.log('Solve start');
     this.isSolving = true;
     this.updateResetButtons();
 
-    try {
-      const bestSolution = await solveCube(this.cubeState.clone());
-      // console.log('Solution:', solution);
-      let strSolution = bestSolution.join(' ');
-      console.log(strSolution);
-      this.execute(strSolution);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      this.isSolving = false;
-    }
+    modalOverlayEl.classList.add('is-open');
+    console.log(modalOverlayEl.classList.contains('is-open'));
+    this.destroyLoader = createRubikLoader(loaderEl);
+    console.log('loader started');
+    // let destroyLoader;
+    this.worker.postMessage({
+      corners: this.cubeState.corners,
+      edges: this.cubeState.edges,
+    });
+    // const destroyLoader = createRubikLoader(loaderEl);
+
+    // createRubikLoader(loaderEl);
+    // try {
+    //   destroyLoader = createRubikLoader(loaderEl);
+    //   await new Promise(requestAnimationFrame);
+    //   await new Promise(requestAnimationFrame);
+
+    //   const bestSolution = await solveCube(this.cubeState.clone());
+    //   // console.log('Solution:', solution);
+    //   let strSolution = bestSolution.join(' ');
+    //   console.log(strSolution);
+    //   this.execute(strSolution);
+    // } catch (error) {
+    //   console.log(error);
+    // } finally {
+    //   this.isSolving = false;
+    //   destroyLoader?.();
+    //   // destroyLoader(); // остановить таймеры лоадера
+    //   // loaderEl?.remove();
+
+    //   modalOverlayEl.classList.remove('is-open');
+    // }
+  }
+  onSolveFinished(e) {
+    const solution = e.data;
+
+    this.execute(solution.join(' '));
+    this.isSolving = false;
+    this.destroyLoader?.();
+    modalOverlayEl.classList.remove('is-open');
+
+    // если хочешь, чтобы кнопки были активны только после анимации,
+    // isSolving = false НЕ здесь
+  }
+  onSolveError(err) {
+    console.error(err);
+
+    this.isSolving = false;
+    this.updateResetButtons();
+
+    this.destroyLoader?.();
+    modalOverlayEl.classList.remove('is-open');
   }
 }
