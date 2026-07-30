@@ -48,6 +48,43 @@ export class CubeState {
       { id: 'BR', orientation: 2, eo: 0 },
     ];
     this.moveTable = MOVE_TABLE;
+    this.faces = {
+      U: [
+        ['W', 'W', 'W'],
+        ['W', 'W', 'W'],
+        ['W', 'W', 'W'],
+      ],
+
+      F: [
+        ['G', 'G', 'G'],
+        ['G', 'G', 'G'],
+        ['G', 'G', 'G'],
+      ],
+
+      R: [
+        ['R', 'R', 'R'],
+        ['R', 'R', 'R'],
+        ['R', 'R', 'R'],
+      ],
+
+      B: [
+        ['B', 'B', 'B'],
+        ['B', 'B', 'B'],
+        ['B', 'B', 'B'],
+      ],
+
+      L: [
+        ['O', 'O', 'O'],
+        ['O', 'O', 'O'],
+        ['O', 'O', 'O'],
+      ],
+
+      D: [
+        ['Y', 'Y', 'Y'],
+        ['Y', 'Y', 'Y'],
+        ['Y', 'Y', 'Y'],
+      ],
+    };
     // this.moveCounter = 0;
   }
 
@@ -747,4 +784,47 @@ export class CubeState {
       this.move(move);
     }
   }
+
+  // -------------------Simple algoritm--------------------------------
+  setOrientation(upColor, frontColor) {
+    if (upColor === frontColor) throw Error('same color');
+
+    if (OPPOSITE[upColor] === frontColor) throw Error('opposite colors');
+
+    const order = NEIGHBORS[upColor];
+    const i = order.indexOf(frontColor);
+
+    return {
+      U: upColor,
+      D: OPPOSITE[upColor],
+
+      F: frontColor,
+      B: OPPOSITE[frontColor],
+
+      R: order[(i + 1) % 4],
+      L: order[(i + 3) % 4],
+    };
+  }
 }
+
+const OPPOSITE = {
+  W: 'Y',
+  Y: 'W',
+  G: 'B',
+  B: 'G',
+  R: 'O',
+  O: 'R',
+};
+
+const NEIGHBORS = {
+  W: ['G', 'R', 'B', 'O'],
+  Y: ['G', 'O', 'B', 'R'],
+
+  G: ['W', 'O', 'Y', 'R'],
+  B: ['W', 'R', 'Y', 'O'],
+
+  R: ['W', 'G', 'Y', 'B'],
+  O: ['W', 'B', 'Y', 'G'],
+};
+
+// function

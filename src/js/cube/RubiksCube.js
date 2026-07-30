@@ -1,6 +1,7 @@
 // RubiksCube.js
 
 import * as THREE from 'three';
+import turnMp3 from '/turn.mp3';
 
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 
@@ -54,7 +55,7 @@ export class RubiksCube {
     this.rotationSpeed = 0.1;
     this.scrambleLength = 20;
     this.soundEnabled = true;
-    this.turnSound = new Audio('/turn.mp3');
+    this.turnSound = new Audio(turnMp3);
     this.turnSound.volume = 0.3;
     this.history = [];
     this.isAnimation = false;

@@ -474,6 +474,13 @@ solveBtn.addEventListener('click', async () => {
 // console.log(result.phase1);
 // console.log(result.phase2);
 // console.log(result.length);
+
+// ------------------------simply algoritm--------------------------
+
+console.dir(cubeState.faces);
+console.log(cubeState.setOrientation('G', 'R'));
+console.dir(cubeState.faces);
+
 // -------------------------test--------
 initKeyboard(cube);
 
