@@ -4,7 +4,7 @@ import { Phase2Solver } from './Phase2Solver.js';
 import { OptimizedSolver } from './OptimizedSolver.js';
 
 export async function solveCube(cubeState) {
-  const tables = await fetch('/tables.json').then(r => r.json());
+  const tables = await fetch('../../public/tables.json').then(r => r.json());
 
   const solver = new Solver(
     tables.coTable,
