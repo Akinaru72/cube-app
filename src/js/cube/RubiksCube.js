@@ -458,6 +458,8 @@ export class RubiksCube {
       if (this.moveQueue.length === 0) {
         if (!this.demo) {
           this.isScrambling = false;
+          // this.isSolving = false;
+          // this.solution = false;
           this.updateResetButtons();
 
           if (this.cubeState.isSolved()) {
@@ -861,13 +863,16 @@ export class RubiksCube {
       this.execute(this.solution.join(' '));
       this.solution = null;
       solveBtn.textContent = 'Find Solution';
+
       this.updateResetButtons();
+      this.isSolving = false;
       return;
     }
     this.isSolving = true;
     this.updateResetButtons();
 
     modalOverlayEl.classList.add('is-open');
+    loaderEl.classList.remove('is-hidden');
 
     this.destroyLoader = createRubikLoader(loaderEl);
 
@@ -880,10 +885,12 @@ export class RubiksCube {
     this.solution = e.data;
     console.log('onSolveFinished', this.solution);
     // this.execute(this.solution.join(' '));
-    this.isSolving = false;
+    // this.isSolving = false;
     this.destroyLoader?.();
     modalOverlayEl.classList.remove('is-open');
+    loaderEl.classList.add('is-hidden');
     solveBtn.textContent = 'Solve';
+    // this.isScrambling = true;
     this.updateResetButtons();
 
     // если хочешь, чтобы кнопки были активны только после анимации,
@@ -897,6 +904,7 @@ export class RubiksCube {
 
     this.destroyLoader?.();
     modalOverlayEl.classList.remove('is-open');
+    loaderEl.classList.remove('is-hidden');
   }
 }
 

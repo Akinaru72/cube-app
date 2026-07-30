@@ -152,8 +152,10 @@ modalGuideBtnClose.addEventListener('click', () => {
   console.log(modalGuideEl);
 });
 
-modalOverlayEl.addEventListener('click', e => {
-  if (e.target === modalOverlayEl) {
+modalOverlayEl.addEventListener('click', event => {
+  console.log(event.currentTarget);
+  console.log(event.target);
+  if (event.target === modalOverlayEl) {
     modalOverlayEl.classList.remove('is-open');
 
     modalHelpEl.classList.add('is-hidden');
