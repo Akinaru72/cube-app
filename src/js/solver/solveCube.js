@@ -4,9 +4,22 @@ import { Phase2Solver } from './Phase2Solver.js';
 import { OptimizedSolver } from './OptimizedSolver.js';
 
 export async function solveCube(cubeState) {
-  const tables = await fetch(`${import.meta.env.BASE_URL}tables.json`).then(r =>
-    r.json()
-  );
+  const response = await fetch(`${import.meta.env.BASE_URL}tables.json`);
+  //   .then(
+  //   r => r.json()
+  // );
+
+  //   const response = await fetch(`${import.meta.env.BASE_URL}tables.json`);
+
+  // console.log(response.url);
+  // console.log(response.status);
+  // console.log(response.headers.get("content-type"));
+
+  // const text = await response.text();
+
+  // console.log(text.substring(0, 100));
+
+  const tables = await response.json();
 
   const solver = new Solver(
     tables.coTable,
