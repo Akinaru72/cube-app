@@ -87,6 +87,7 @@ img {
   height: 20px;
 }
 
+.solve-btn,
 .menu-btn,
 .control-btn {
   padding: 10px 20px;
@@ -124,6 +125,7 @@ img {
   pointer-events: none;
 }
 
+.solve-btn:hover,
 .menu-btn:hover,
 .control-btn:hover {
   transform: scale(1.2);
@@ -132,6 +134,11 @@ img {
   box-shadow: none;
 }
 
+#solve-first-cross:disabled,
+#solve-first-corners:disabled,
+#solve-middle:disabled,
+#solve-third-cross:disabled,
+#solve-third-corners:disabled,
 #reset-btn:disabled,
 #scramble-btn:disabled,
 #solve-btn:disabled,
@@ -803,4 +810,12 @@ img {
 
 #cube-loader-vis.is-hidden {
   display: none;
+}
+
+/* ------------------------Solve List------------------------------------ */
+.solve-list {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 100px;
 }

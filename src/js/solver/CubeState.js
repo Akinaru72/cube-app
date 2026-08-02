@@ -50,39 +50,39 @@ export class CubeState {
     this.moveTable = MOVE_TABLE;
     this.faces = {
       U: [
-        ['W', 'W', 'W'],
-        ['W', 'W', 'W'],
-        ['W', 'W', 'W'],
+        ['1', 'WB', '3'],
+        ['WO', 'W', 'WR'],
+        ['7', 'WG', '9'],
       ],
 
       F: [
-        ['G', 'G', 'G'],
-        ['G', 'G', 'G'],
-        ['G', 'G', 'G'],
+        ['G1', 'GW', 'G3'],
+        ['G4', 'G', 'G6'],
+        ['G7', 'G8', 'G9'],
       ],
 
       R: [
-        ['R', 'R', 'R'],
-        ['R', 'R', 'R'],
-        ['R', 'R', 'R'],
+        ['R1', 'RW', 'R3'],
+        ['R4', 'R', 'R6'],
+        ['R7', 'R8', 'R9'],
       ],
 
       B: [
-        ['B', 'B', 'B'],
-        ['B', 'B', 'B'],
-        ['B', 'B', 'B'],
+        ['B1', 'BW', 'B3'],
+        ['B4', 'B', 'B6'],
+        ['B7', 'B8', 'B9'],
       ],
 
       L: [
-        ['O', 'O', 'O'],
-        ['O', 'O', 'O'],
-        ['O', 'O', 'O'],
+        ['O1', 'OW', 'O3'],
+        ['O4', 'O', 'O6'],
+        ['O7', 'O8', 'O9'],
       ],
 
       D: [
-        ['Y', 'Y', 'Y'],
-        ['Y', 'Y', 'Y'],
-        ['Y', 'Y', 'Y'],
+        ['Y1', 'Y2', 'Y3'],
+        ['Y4', 'Y', 'Y6'],
+        ['Y7', 'Y8', 'Y9'],
       ],
     };
     // this.moveCounter = 0;
@@ -126,6 +126,8 @@ export class CubeState {
       this.updateEO(moveName, move);
       this.updateCO(moveName);
 
+      this.rotateFace(moveName);
+
       this.cycle(this.corners, move.corners, reverse);
       this.cycle(this.edges, move.edges, reverse);
       return;
@@ -153,6 +155,8 @@ export class CubeState {
       this.updateOrientation(move);
       this.updateEO(face, move);
       this.updateCO(face);
+
+      this.rotateFace(face);
 
       this.cycle(this.corners, move.corners, rev);
       this.cycle(this.edges, move.edges, rev);
@@ -279,6 +283,8 @@ export class CubeState {
 
     cube.corners = structuredClone(this.corners);
     cube.edges = structuredClone(this.edges);
+
+    cube.faces = structuredClone(this.faces);
 
     return cube;
   }
@@ -786,24 +792,63 @@ export class CubeState {
   }
 
   // -------------------Simple algoritm--------------------------------
-  setOrientation(upColor, frontColor) {
-    if (upColor === frontColor) throw Error('same color');
 
-    if (OPPOSITE[upColor] === frontColor) throw Error('opposite colors');
+  setOrientation(upColor, frontColor) {
+    if (upColor === frontColor) throw new Error('Same colors');
+
+    if (OPPOSITE[upColor] === frontColor) throw new Error('Opposite colors');
 
     const order = NEIGHBORS[upColor];
     const i = order.indexOf(frontColor);
 
-    return {
-      U: upColor,
-      D: OPPOSITE[upColor],
-
-      F: frontColor,
-      B: OPPOSITE[frontColor],
-
-      R: order[(i + 1) % 4],
-      L: order[(i + 3) % 4],
+    // найти грань по центральному цвету
+    const findFace = color => {
+      return Object.values(this.faces).find(face => face[1][1] === color);
     };
+
+    this.faces = {
+      U: findFace(upColor),
+      F: findFace(frontColor),
+      R: findFace(order[(i + 1) % 4]),
+      L: findFace(order[(i + 3) % 4]),
+      B: findFace(OPPOSITE[frontColor]),
+      D: findFace(OPPOSITE[upColor]),
+    };
+  }
+
+  rotateFace(face) {
+    // console.log('before', this.faces);
+    const m = this.faces[face];
+
+    this.faces[face] = [
+      [m[2][0], m[1][0], m[0][0]],
+      [m[2][1], m[1][1], m[0][1]],
+      [m[2][2], m[1][2], m[0][2]],
+    ];
+
+    this.rotateAdjacent(face);
+    // console.log('after', this.faces);
+  }
+
+  rotateAdjacent(face) {
+    const ring = ADJACENT[face];
+
+    // Сохраняем все 4 полоски
+    const strips = ring.map(([faceName, cells]) =>
+      cells.map(([r, c]) => this.faces[faceName][r][c])
+    );
+
+    // Поворот по часовой
+    for (let i = 0; i < 4; i++) {
+      const to = (i + 1) % 4;
+
+      ring[to][1].forEach(([r, c], j) => {
+        this.faces[ring[to][0]][r][c] = strips[i][j];
+      });
+    }
+  }
+  getCell(face, r, c) {
+    return this.faces[face][r][c];
   }
 }
 
@@ -816,15 +861,220 @@ const OPPOSITE = {
   O: 'R',
 };
 
-const NEIGHBORS = {
+export const NEIGHBORS = {
   W: ['G', 'R', 'B', 'O'],
-  Y: ['G', 'O', 'B', 'R'],
+  Y: ['B', 'R', 'G', 'O'],
 
-  G: ['W', 'O', 'Y', 'R'],
+  G: ['Y', 'R', 'W', 'O'],
   B: ['W', 'R', 'Y', 'O'],
 
-  R: ['W', 'G', 'Y', 'B'],
+  R: ['O', 'B', 'W', 'G'],
   O: ['W', 'B', 'Y', 'G'],
 };
+const ADJACENT = {
+  U: [
+    [
+      'F',
+      [
+        [0, 0],
+        [0, 1],
+        [0, 2],
+      ],
+    ],
+    [
+      'L',
+      [
+        [0, 0],
+        [0, 1],
+        [0, 2],
+      ],
+    ],
+    [
+      'B',
+      [
+        [0, 0],
+        [0, 1],
+        [0, 2],
+      ],
+    ],
+    [
+      'R',
+      [
+        [0, 0],
+        [0, 1],
+        [0, 2],
+      ],
+    ],
+  ],
 
-// function
+  F: [
+    [
+      'U',
+      [
+        [2, 0],
+        [2, 1],
+        [2, 2],
+      ],
+    ],
+    [
+      'R',
+      [
+        [0, 0],
+        [1, 0],
+        [2, 0],
+      ],
+    ],
+    [
+      'D',
+      [
+        [0, 2],
+        [0, 1],
+        [0, 0],
+      ],
+    ],
+    [
+      'L',
+      [
+        [2, 2],
+        [1, 2],
+        [0, 2],
+      ],
+    ],
+  ],
+  L: [
+    [
+      'U',
+      [
+        [0, 0],
+        [1, 0],
+        [2, 0],
+      ],
+    ],
+    [
+      'F',
+      [
+        [0, 0],
+        [1, 0],
+        [2, 0],
+      ],
+    ],
+    [
+      'D',
+      [
+        [0, 0],
+        [1, 0],
+        [2, 0],
+      ],
+    ],
+    [
+      'B',
+      [
+        [2, 2],
+        [1, 2],
+        [0, 2],
+      ],
+    ],
+  ],
+  B: [
+    [
+      'U',
+      [
+        [0, 2],
+        [0, 1],
+        [0, 0],
+      ],
+    ],
+    [
+      'L',
+      [
+        [0, 0],
+        [1, 0],
+        [2, 0],
+      ],
+    ],
+    [
+      'D',
+      [
+        [2, 0],
+        [2, 1],
+        [2, 2],
+      ],
+    ],
+    [
+      'R',
+      [
+        [2, 2],
+        [1, 2],
+        [0, 2],
+      ],
+    ],
+  ],
+  R: [
+    [
+      'U',
+      [
+        [0, 2],
+        [1, 2],
+        [2, 2],
+      ],
+    ],
+    [
+      'B',
+      [
+        [2, 0],
+        [1, 0],
+        [0, 0],
+      ],
+    ],
+    [
+      'D',
+      [
+        [0, 2],
+        [1, 2],
+        [2, 2],
+      ],
+    ],
+    [
+      'F',
+      [
+        [0, 2],
+        [1, 2],
+        [2, 2],
+      ],
+    ],
+  ],
+  D: [
+    [
+      'F',
+      [
+        [2, 0],
+        [2, 1],
+        [2, 2],
+      ],
+    ],
+    [
+      'R',
+      [
+        [2, 0],
+        [2, 1],
+        [2, 2],
+      ],
+    ],
+    [
+      'B',
+      [
+        [2, 0],
+        [2, 1],
+        [2, 2],
+      ],
+    ],
+    [
+      'L',
+      [
+        [2, 0],
+        [2, 1],
+        [2, 2],
+      ],
+    ],
+  ],
+};

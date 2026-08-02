@@ -165,6 +165,19 @@ modalOverlayEl.addEventListener('click', event => {
   }
 });
 
+const solveList = document.querySelector('.solve-list');
+const solve1Cross = document.querySelector('#solve-first-cross');
+const solve1Corners = document.querySelector('#solve-first-corners');
+const solveMiddle = document.querySelector('#solve-middle');
+const solve3Cross = document.querySelector('#solve-third-cross');
+const solve3Corners = document.querySelector('#solve-third-corners');
+
+solve1Cross.disabled = true;
+solve1Corners.disabled = true;
+solveMiddle.disabled = true;
+solve3Cross.disabled = true;
+solve3Corners.disabled = true;
+
 // modal - settings;
 scrambleBtn.disabled = true;
 solveBtn.disabled = true;
@@ -477,9 +490,24 @@ solveBtn.addEventListener('click', async () => {
 
 // ------------------------simply algoritm--------------------------
 
-console.dir(cubeState.faces);
-console.log(cubeState.setOrientation('G', 'R'));
-console.dir(cubeState.faces);
+solve1Cross.addEventListener('click', async () => {
+  await cube.onSolve1thCross();
+});
+
+// console.dir(cubeState.faces);
+// console.log(cubeState.setOrientation('G', 'R'));
+// console.dir(cubeState.faces);
+// cube.rotateToUp('R');
+// cube.rotateToUp('R');
+// cube.rotateToOrientation('G', 'Y');
+
+// console.log(cube.targetRotation);
+
+// console.dir(cubeState.faces);
+
+// cubeState.rotateFace('D');
+
+// console.dir(cubeState.faces);
 
 // -------------------------test--------
 initKeyboard(cube);
@@ -491,14 +519,16 @@ function animate() {
   cube.update();
 
   if (cube.screenSaver) {
-    cube.rotateY(0.01);
+    cube.rotateY(0.001);
 
-    cube.rotateX(0.01);
+    cube.rotateX(0.001);
     navEls.classList.add('is-hidden');
     headerEls.classList.add('is-hidden');
+    solveList.classList.add('is-hidden');
   } else {
     navEls.classList.remove('is-hidden');
     headerEls.classList.remove('is-hidden');
+    solveList.classList.remove('is-hidden');
   }
 
   if (cube.demo) {
