@@ -33,6 +33,7 @@ import {
   solveMiddle7,
   solveMiddle8,
 } from '../solver/solverMiddle.js';
+import { solve3Corners1 } from '../solver/solve3Corners.js';
 
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 
@@ -58,6 +59,7 @@ const loaderEl = document.querySelector('#cube-loader-vis');
 const solve1CrossEl = document.querySelector('#solve-first-cross');
 const solve1CornersEl = document.querySelector('#solve-first-corners');
 const solveMiddleEl = document.querySelector('#solve-middle');
+const solve3CrossEl = document.querySelector('#solve-third-cross');
 // const worker = new Worker(new URL('./solver.worker.js', import.meta.url), {
 //   type: 'module',
 // });
@@ -109,6 +111,7 @@ export class RubiksCube {
     this.solCross1 = false;
     this.solCorner1 = false;
     this.solMiddle = false;
+    this.sol3Cross = false;
 
     // this.afterRotateStep = null;
     // this.afterRotateDone = null;
@@ -125,6 +128,7 @@ export class RubiksCube {
       solve1CrossEl.disabled = false;
       solve1CornersEl.disabled = false;
       solveMiddleEl.disabled = false;
+      solve3CrossEl.disabled = false;
 
       return;
     }
@@ -136,6 +140,7 @@ export class RubiksCube {
       solve1CrossEl.disabled = true;
       solve1CornersEl.disabled = true;
       solveMiddleEl.disabled = true;
+      solve3CrossEl.disabled = true;
 
       resetBtn.disabled = true;
       return;
@@ -181,6 +186,20 @@ export class RubiksCube {
     } else {
       this.solMiddle = false;
       solveMiddleEl.disabled = false;
+    }
+
+    if (
+      this.cubeState.getCell('D', 0, 1) === 'YG' &&
+      this.cubeState.getCell('D', 1, 0) === 'YO' &&
+      this.cubeState.getCell('D', 1, 2) === 'YR' &&
+      this.cubeState.getCell('D', 2, 1) === 'YB' &&
+      this.solMiddle
+    ) {
+      this.sol3Cross = true;
+      solve3CrossEl.disabled = true;
+    } else {
+      this.sol3Cross = false;
+      solve3CrossEl.disabled = false;
     }
 
     const solved = this.cubeState.isSolved();
@@ -1277,21 +1296,44 @@ export class RubiksCube {
     await this.rotateTo('left');
 
     solutionCross = solveMiddle6(this.cubeState);
-    console.log('solveMiddle6', solutionCross);
+    // console.log('solveMiddle6', solutionCross);
     await this.execute(solutionCross.join(' '));
     await this.rotateTo('left');
 
     solutionCross = solveMiddle7(this.cubeState);
-    console.log('solveMiddle7', solutionCross);
+    // console.log('solveMiddle7', solutionCross);
     await this.execute(solutionCross.join(' '));
     await this.rotateTo('left');
 
     solutionCross = solveMiddle8(this.cubeState);
-    console.log('solveMiddle8', solutionCross);
+    // console.log('solveMiddle8', solutionCross);
     await this.execute(solutionCross.join(' '));
     await this.rotateTo('left');
     await this.rotateTo('up', 2);
     // await this.rotateTo('up');
+
+    this.isSolving = false;
+    this.updateResetButtons();
+  }
+
+  async onsolve3Cross() {
+    if (!this.solMiddle) {
+      await this.onsolveMiddle();
+    }
+    this.isSolving = true;
+    this.updateResetButtons();
+
+    await this.rotateTo('up', 2);
+    let solutionCross = solve3Corners1(this.cubeState);
+    console.log('solve3Corners1', solutionCross);
+    await this.execute(solutionCross.join(' '));
+    await this.rotateTo('left');
+    await this.rotateTo('left');
+    await this.rotateTo('left');
+    await this.rotateTo('left');
+    await this.rotateTo('up', 2);
+
+    console.log('Hello');
 
     this.isSolving = false;
     this.updateResetButtons();

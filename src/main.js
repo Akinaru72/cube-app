@@ -503,6 +503,10 @@ solveMiddle.addEventListener('click', async () => {
   await cube.onsolveMiddle();
 });
 
+solve3Cross.addEventListener('click', async () => {
+  await cube.onsolve3Cross();
+});
+
 // console.dir(cubeState.faces);
 // console.log(cubeState.setOrientation('G', 'R'));
 // console.dir(cubeState.faces);

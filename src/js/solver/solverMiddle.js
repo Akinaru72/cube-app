@@ -12,7 +12,7 @@ export function solveMiddle1(state) {
   ) {
     return solution;
   }
-  console.log('solveMiddle1', calcState.getCell('B', 2, 1).includes('Y'));
+  // console.log('solveMiddle1', calcState.getCell('B', 2, 1).includes('Y'));
   while (!calcState.getCell('B', 2, 1).includes('Y')) {
     apply('D');
   }
@@ -41,7 +41,7 @@ export function solveMiddle2(state) {
   ) {
     return solution;
   }
-  console.log('solveMiddle1', calcState.getCell('R', 2, 1).includes('Y'));
+  // console.log('solveMiddle1', calcState.getCell('R', 2, 1).includes('Y'));
   while (!calcState.getCell('R', 2, 1).includes('Y')) {
     apply('D');
   }
@@ -70,7 +70,7 @@ export function solveMiddle3(state) {
   ) {
     return solution;
   }
-  console.log('solveMiddle1', calcState.getCell('F', 2, 1).includes('Y'));
+  // console.log('solveMiddle1', calcState.getCell('F', 2, 1).includes('Y'));
   while (!calcState.getCell('F', 2, 1).includes('Y')) {
     apply('D');
   }
@@ -99,7 +99,7 @@ export function solveMiddle4(state) {
   ) {
     return solution;
   }
-  console.log('solveMiddle1', calcState.getCell('L', 2, 1).includes('Y'));
+  // console.log('solveMiddle1', calcState.getCell('L', 2, 1).includes('Y'));
   while (!calcState.getCell('L', 2, 1).includes('Y')) {
     apply('D');
   }

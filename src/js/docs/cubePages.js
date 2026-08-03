@@ -494,6 +494,31 @@ export const cubePages = [
         }
       ),
     ],
+    topCrossCase5: [
+      createCube(
+        {
+          5: 'G',
+          6: 'G',
+          8: 'G',
+        },
+        {
+          4: 'W',
+          5: 'W',
+          6: 'W',
+          7: 'W',
+          8: 'W',
+          9: 'W',
+        },
+        {
+          4: 'O',
+          5: 'O',
+          6: 'O',
+          7: 'O',
+          8: 'O',
+          9: 'O',
+        }
+      ),
+    ],
     topCrossSolved: [
       createCube(
         {

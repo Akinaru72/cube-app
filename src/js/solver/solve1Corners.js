@@ -10,14 +10,14 @@ export function solve1Corners1(state) {
   const calcState = state.clone();
   let solution = [];
 
-  console.log('solve1Corners1', calcState.getCell('U', 2, 2).includes('W'));
+  // console.log('solve1Corners1', calcState.getCell('U', 2, 2).includes('W'));
   while (
     calcState.getCell('U', 0, 0).includes('W') ||
     calcState.getCell('U', 0, 2).includes('W') ||
     calcState.getCell('U', 2, 0).includes('W') ||
     calcState.getCell('U', 2, 2).includes('W')
   ) {
-    console.log('ECNM');
+    // console.log('ECNM');
     while (!calcState.getCell('U', 2, 2).includes('W')) {
       apply('U');
     }
