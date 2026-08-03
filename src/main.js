@@ -481,6 +481,7 @@ nextBtn.addEventListener('click', () => cube.onNextBtn());
 solveBtn.addEventListener('click', async () => {
   await cube.onSolveBtn();
 });
+
 // const result = await solveCube(cubeState);
 
 // console.log(result);
@@ -492,6 +493,10 @@ solveBtn.addEventListener('click', async () => {
 
 solve1Cross.addEventListener('click', async () => {
   await cube.onSolve1thCross();
+});
+
+solve1Corners.addEventListener('click', async () => {
+  await cube.onSolve1thCorners();
 });
 
 // console.dir(cubeState.faces);

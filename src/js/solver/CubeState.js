@@ -50,31 +50,31 @@ export class CubeState {
     this.moveTable = MOVE_TABLE;
     this.faces = {
       U: [
-        ['1', 'WB', '3'],
+        ['WOB', 'WB', 'WBR'],
         ['WO', 'W', 'WR'],
-        ['7', 'WG', '9'],
+        ['WGO', 'WG', 'WRG'],
       ],
 
       F: [
-        ['G1', 'GW', 'G3'],
+        ['GOW', 'GW', 'GWR'],
         ['G4', 'G', 'G6'],
         ['G7', 'G8', 'G9'],
       ],
 
       R: [
-        ['R1', 'RW', 'R3'],
+        ['RGW', 'RW', 'RWB'],
         ['R4', 'R', 'R6'],
         ['R7', 'R8', 'R9'],
       ],
 
       B: [
-        ['B1', 'BW', 'B3'],
+        ['BRW', 'BW', 'BWO'],
         ['B4', 'B', 'B6'],
         ['B7', 'B8', 'B9'],
       ],
 
       L: [
-        ['O1', 'OW', 'O3'],
+        ['OBW', 'OW', 'OWG'],
         ['O4', 'O', 'O6'],
         ['O7', 'O8', 'O9'],
       ],

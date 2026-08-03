@@ -16,6 +16,13 @@ import {
   solveCross10,
 } from '../solver/solveCross.js';
 
+import {
+  solve1Corners1,
+  solve1Corners2,
+  solve1Corners3,
+  solve1Corners4,
+} from '../solver/solve1Corners.js';
+
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 
 import {
@@ -38,6 +45,7 @@ const nextBtn = document.querySelector('#redo-btn');
 const modalOverlayEl = document.querySelector('.modal-overlay');
 const loaderEl = document.querySelector('#cube-loader-vis');
 const solve1CrossEl = document.querySelector('#solve-first-cross');
+const solve1CornersEl = document.querySelector('#solve-first-corners');
 // const worker = new Worker(new URL('./solver.worker.js', import.meta.url), {
 //   type: 'module',
 // });
@@ -87,6 +95,7 @@ export class RubiksCube {
     this.targetRotation = null;
     this.rotateSpeed = 0.15;
     this.solCross1 = false;
+    this.colCorner1 = false;
 
     // this.afterRotateStep = null;
     // this.afterRotateDone = null;
@@ -101,6 +110,7 @@ export class RubiksCube {
 
       solveBtn.disabled = false;
       solve1CrossEl.disabled = false;
+      solve1CornersEl.disabled = false;
 
       return;
     }
@@ -110,6 +120,7 @@ export class RubiksCube {
       scrambleBtn.disabled = true;
       solveBtn.disabled = true;
       solve1CrossEl.disabled = true;
+      solve1CornersEl.disabled = true;
       resetBtn.disabled = true;
       return;
     }
@@ -128,6 +139,22 @@ export class RubiksCube {
       this.solCross1 = false;
       // console.log('NON FALSE', this.solCross1);
       solve1CrossEl.disabled = false;
+    }
+
+    if (
+      this.cubeState.getCell('U', 0, 0) === 'WOB' &&
+      this.cubeState.getCell('U', 0, 2) === 'WBR' &&
+      this.cubeState.getCell('U', 2, 0) === 'WGO' &&
+      this.cubeState.getCell('U', 2, 2) === 'WRG' &&
+      this.solCross1
+    ) {
+      this.colCorner1 = true;
+      // console.log('WOW TRUE', this.solCross1);
+      solve1CornersEl.disabled = true;
+    } else {
+      this.colCorner1 = false;
+      // console.log('NON FALSE', this.solCross1);
+      solve1CornersEl.disabled = false;
     }
 
     const solved = this.cubeState.isSolved();
@@ -1157,6 +1184,38 @@ export class RubiksCube {
     this.updateResetButtons();
 
     // console.log('After', this.solCross1);
+  }
+
+  async onSolve1thCorners() {
+    if (!this.solCross1) {
+      await this.onSolve1thCross();
+    }
+    this.isSolving = true;
+    this.updateResetButtons();
+
+    let solutionCross = solve1Corners1(this.cubeState);
+    // console.log('solve1Corners1', solutionCross);
+    await this.execute(solutionCross.join(' '));
+    await this.rotateTo('right');
+
+    solutionCross = solve1Corners2(this.cubeState);
+    // console.log('solve1Corners2', solutionCross);
+    await this.execute(solutionCross.join(' '));
+    await this.rotateTo('right');
+
+    solutionCross = solve1Corners3(this.cubeState);
+    // console.log('solve1Corners3', solutionCross);
+    await this.execute(solutionCross.join(' '));
+    await this.rotateTo('right');
+
+    solutionCross = solve1Corners4(this.cubeState);
+    console.log('solve1Corners4', solutionCross);
+    await this.execute(solutionCross.join(' '));
+    await this.rotateTo('right');
+
+    // console.log('Hello');
+    this.isSolving = false;
+    this.updateResetButtons();
   }
 }
 
