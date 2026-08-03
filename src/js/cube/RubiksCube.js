@@ -23,6 +23,17 @@ import {
   solve1Corners4,
 } from '../solver/solve1Corners.js';
 
+import {
+  solveMiddle1,
+  solveMiddle2,
+  solveMiddle3,
+  solveMiddle4,
+  solveMiddle5,
+  solveMiddle6,
+  solveMiddle7,
+  solveMiddle8,
+} from '../solver/solverMiddle.js';
+
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 
 import {
@@ -46,6 +57,7 @@ const modalOverlayEl = document.querySelector('.modal-overlay');
 const loaderEl = document.querySelector('#cube-loader-vis');
 const solve1CrossEl = document.querySelector('#solve-first-cross');
 const solve1CornersEl = document.querySelector('#solve-first-corners');
+const solveMiddleEl = document.querySelector('#solve-middle');
 // const worker = new Worker(new URL('./solver.worker.js', import.meta.url), {
 //   type: 'module',
 // });
@@ -95,7 +107,8 @@ export class RubiksCube {
     this.targetRotation = null;
     this.rotateSpeed = 0.15;
     this.solCross1 = false;
-    this.colCorner1 = false;
+    this.solCorner1 = false;
+    this.solMiddle = false;
 
     // this.afterRotateStep = null;
     // this.afterRotateDone = null;
@@ -111,6 +124,7 @@ export class RubiksCube {
       solveBtn.disabled = false;
       solve1CrossEl.disabled = false;
       solve1CornersEl.disabled = false;
+      solveMiddleEl.disabled = false;
 
       return;
     }
@@ -121,6 +135,8 @@ export class RubiksCube {
       solveBtn.disabled = true;
       solve1CrossEl.disabled = true;
       solve1CornersEl.disabled = true;
+      solveMiddleEl.disabled = true;
+
       resetBtn.disabled = true;
       return;
     }
@@ -133,11 +149,9 @@ export class RubiksCube {
       this.cubeState.getCell('U', 2, 1) === 'WG'
     ) {
       this.solCross1 = true;
-      // console.log('WOW TRUE', this.solCross1);
       solve1CrossEl.disabled = true;
     } else {
       this.solCross1 = false;
-      // console.log('NON FALSE', this.solCross1);
       solve1CrossEl.disabled = false;
     }
 
@@ -148,13 +162,25 @@ export class RubiksCube {
       this.cubeState.getCell('U', 2, 2) === 'WRG' &&
       this.solCross1
     ) {
-      this.colCorner1 = true;
-      // console.log('WOW TRUE', this.solCross1);
+      this.solCorner1 = true;
       solve1CornersEl.disabled = true;
     } else {
-      this.colCorner1 = false;
-      // console.log('NON FALSE', this.solCross1);
+      this.solCorner1 = false;
       solve1CornersEl.disabled = false;
+    }
+
+    if (
+      this.cubeState.getCell('F', 1, 0) === 'GO' &&
+      this.cubeState.getCell('F', 1, 2) === 'GR' &&
+      this.cubeState.getCell('B', 1, 0) === 'BR' &&
+      this.cubeState.getCell('B', 1, 2) === 'BO' &&
+      this.solCorner1
+    ) {
+      this.solMiddle = true;
+      solveMiddleEl.disabled = true;
+    } else {
+      this.solMiddle = false;
+      solveMiddleEl.disabled = false;
     }
 
     const solved = this.cubeState.isSolved();
@@ -1209,11 +1235,64 @@ export class RubiksCube {
     await this.rotateTo('right');
 
     solutionCross = solve1Corners4(this.cubeState);
-    console.log('solve1Corners4', solutionCross);
+    // console.log('solve1Corners4', solutionCross);
     await this.execute(solutionCross.join(' '));
     await this.rotateTo('right');
 
-    // console.log('Hello');
+    this.isSolving = false;
+    this.updateResetButtons();
+  }
+
+  async onsolveMiddle() {
+    if (!this.solCorner1) {
+      await this.onSolve1thCorners();
+    }
+    this.isSolving = true;
+    this.updateResetButtons();
+
+    await this.rotateTo('up', 2);
+    let solutionCross = solveMiddle1(this.cubeState);
+    // console.log('solveMiddle1', solutionCross);
+    await this.execute(solutionCross.join(' '));
+    await this.rotateTo('left');
+
+    solutionCross = solveMiddle2(this.cubeState);
+    // console.log('solveMiddle2', solutionCross);
+    await this.execute(solutionCross.join(' '));
+    await this.rotateTo('left');
+
+    solutionCross = solveMiddle3(this.cubeState);
+    // console.log('solveMiddle3', solutionCross);
+    await this.execute(solutionCross.join(' '));
+    await this.rotateTo('left');
+
+    solutionCross = solveMiddle4(this.cubeState);
+    // console.log('solveMiddle4', solutionCross);
+    await this.execute(solutionCross.join(' '));
+    await this.rotateTo('left');
+
+    solutionCross = solveMiddle5(this.cubeState);
+    // console.log('solveMiddle5', solutionCross);
+    await this.execute(solutionCross.join(' '));
+    await this.rotateTo('left');
+
+    solutionCross = solveMiddle6(this.cubeState);
+    console.log('solveMiddle6', solutionCross);
+    await this.execute(solutionCross.join(' '));
+    await this.rotateTo('left');
+
+    solutionCross = solveMiddle7(this.cubeState);
+    console.log('solveMiddle7', solutionCross);
+    await this.execute(solutionCross.join(' '));
+    await this.rotateTo('left');
+
+    solutionCross = solveMiddle8(this.cubeState);
+    console.log('solveMiddle8', solutionCross);
+    await this.execute(solutionCross.join(' '));
+    await this.rotateTo('left');
+    await this.rotateTo('up', 2);
+    // await this.rotateTo('up');
+
     this.isSolving = false;
     this.updateResetButtons();
   }

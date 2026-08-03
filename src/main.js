@@ -499,6 +499,10 @@ solve1Corners.addEventListener('click', async () => {
   await cube.onSolve1thCorners();
 });
 
+solveMiddle.addEventListener('click', async () => {
+  await cube.onsolveMiddle();
+});
+
 // console.dir(cubeState.faces);
 // console.log(cubeState.setOrientation('G', 'R'));
 // console.dir(cubeState.faces);
