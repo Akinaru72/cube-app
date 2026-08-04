@@ -58,31 +58,31 @@ export class CubeState {
       F: [
         ['GOW', 'GW', 'GWR'],
         ['GO', 'G', 'GR'],
-        ['G7', 'GY', 'G9'],
+        ['GYO', 'GY', 'GRY'],
       ],
 
       R: [
         ['RGW', 'RW', 'RWB'],
         ['RG', 'R', 'RB'],
-        ['R7', 'RY', 'R9'],
+        ['RYG', 'RY', 'RBY'],
       ],
 
       B: [
         ['BRW', 'BW', 'BWO'],
         ['BR', 'B', 'BO'],
-        ['B7', 'BY', 'B9'],
+        ['BYR', 'BY', 'BOY'],
       ],
 
       L: [
         ['OBW', 'OW', 'OWG'],
         ['OB', 'O', 'OG'],
-        ['O7', 'OY', 'O9'],
+        ['OYB', 'OY', 'OGY'],
       ],
 
       D: [
-        ['Y1', 'YG', 'Y3'],
+        ['YOG', 'YG', 'YGR'],
         ['YO', 'Y', 'YR'],
-        ['Y7', 'YB', 'Y9'],
+        ['YBO', 'YB', 'YRB'],
       ],
     };
     // this.moveCounter = 0;

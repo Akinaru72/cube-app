@@ -5,152 +5,114 @@ export function solve3Corners1(state) {
   }
   const calcState = state.clone();
   let solution = [];
-
-  // console.log(calcState.getCell('D', 0, 1).slice(0, 1) !== 'Y');
-  while (
-    calcState.getCell('D', 0, 1).slice(0, 1) !== 'Y' ||
-    calcState.getCell('D', 1, 0).slice(0, 1) !== 'Y' ||
-    calcState.getCell('D', 1, 2).slice(0, 1) !== 'Y' ||
-    calcState.getCell('D', 2, 1).slice(0, 1) !== 'Y'
+  // console.log(calcState.getCell('D', 0, 0));
+  let nextStep = false;
+  if (
+    !calcState.getCell('D', 0, 0).includes('G') ||
+    !calcState.getCell('D', 0, 0).includes('O')
   ) {
-    if (
-      calcState.getCell('D', 0, 1).slice(0, 1) !== 'Y' &&
-      calcState.getCell('D', 1, 0).slice(0, 1) !== 'Y' &&
-      calcState.getCell('D', 1, 2).slice(0, 1) !== 'Y' &&
-      calcState.getCell('D', 2, 1).slice(0, 1) !== 'Y'
-    ) {
-      apply('B');
-      apply('R');
-      apply('D');
-      apply("R'");
-      apply("D'");
-      apply("B'");
-      console.log('TRUE-*');
-    } else if (
-      calcState.getCell('D', 0, 1).slice(0, 1) ===
-        calcState.getCell('D', 2, 1).slice(0, 1) ||
-      calcState.getCell('D', 1, 0).slice(0, 1) ===
-        calcState.getCell('D', 1, 2).slice(0, 1)
-    ) {
+    while (!nextStep) {
       if (
-        calcState.getCell('D', 0, 1).slice(0, 1) === 'Y' &&
-        calcState.getCell('D', 2, 1).slice(0, 1) === 'Y'
+        calcState.getCell('D', 0, 2).includes('G') &&
+        calcState.getCell('D', 0, 2).includes('R')
       ) {
-        apply('D');
-      } else {
-        apply('B');
-        apply('R');
-        apply('D');
-        apply("R'");
+        // console.log('Corner2 in PLACE');
         apply("D'");
-        apply("B'");
-        console.log('ON PLACE-||');
-      }
-    } else {
-      if (
-        calcState.getCell('D', 0, 1).slice(0, 1) === 'Y' &&
-        calcState.getCell('D', 1, 2).slice(0, 1) === 'Y'
-      ) {
-        apply('D');
-        apply('D');
-        apply('D');
+        nextStep = true;
       } else if (
-        calcState.getCell('D', 1, 2).slice(0, 1) === 'Y' &&
-        calcState.getCell('D', 2, 1).slice(0, 1) === 'Y'
+        calcState.getCell('D', 2, 2).includes('R') &&
+        calcState.getCell('D', 2, 2).includes('B')
       ) {
+        // console.log('Corner3 in PLACE');
         apply('D');
         apply('D');
+        nextStep = true;
       } else if (
-        calcState.getCell('D', 2, 1).slice(0, 1) === 'Y' &&
-        calcState.getCell('D', 1, 0).slice(0, 1) === 'Y'
+        calcState.getCell('D', 2, 0).includes('B') &&
+        calcState.getCell('D', 2, 0).includes('O')
       ) {
+        // console.log('Corner4 in PLACE');
         apply('D');
+        nextStep = true;
       } else {
-        apply('B');
-        apply('D');
-        apply('R');
-        apply("D'");
         apply("R'");
         apply("B'");
-        console.log('ON PLACE-Г');
+        apply("L'");
+        apply('B');
+        apply('R');
+        apply("B'");
+        apply('L');
+        apply('B');
+        // console.log('MOVE ');
       }
     }
+  }
+  // console.log('NEXT STEP');
+  // console.log(
+  //   calcState.getCell('D', 0, 2).includes(calcState.getCell('D', 0, 1).slice(1))
+  // );
 
-    console.log('Solved');
+  while (
+    !calcState
+      .getCell('D', 0, 2)
+      .includes(calcState.getCell('D', 0, 1).slice(1))
+  ) {
+    apply("R'");
+    apply("B'");
+    apply("L'");
+    apply('B');
+    apply('R');
+    apply("B'");
+    apply('L');
+    apply('B');
   }
 
-  const colorArrow = 'OGRBOGRBO';
-  // console.log('ArrayArrowRG', colorArrow.includes('RG'));
-  // console.log('ArrayArrowOG', colorArrow.includes('OG'));
-
-  let testStr =
-    calcState.getCell('D', 0, 1).slice(1) +
-    calcState.getCell('D', 1, 2).slice(1) +
-    calcState.getCell('D', 2, 1).slice(1) +
-    calcState.getCell('D', 1, 0).slice(1);
-  console.log(testStr, colorArrow.includes(testStr));
-
-  while (!colorArrow.includes(testStr)) {
-    if (
-      colorArrow.includes(
-        calcState.getCell('D', 1, 2).slice(1) +
-          calcState.getCell('D', 2, 1).slice(1)
-      )
-    ) {
-      // console.log(
-      //   '3D',
-      //   colorArrow.includes(
-      //     calcState.getCell('D', 1, 2).slice(1) +
-      //       calcState.getCell('D', 2, 1).slice(1)
-      //   )
-      // );
-      apply('D');
-      apply('D');
-      apply('D');
-    } else if (
-      colorArrow.includes(
-        calcState.getCell('D', 2, 1).slice(1) +
-          calcState.getCell('D', 1, 0).slice(1)
-      )
-    ) {
-      console.log('2D');
-      apply('D');
-      apply('D');
-    } else if (
-      colorArrow.includes(
-        calcState.getCell('D', 1, 0).slice(1) +
-          calcState.getCell('D', 0, 1).slice(1)
-      )
-    ) {
-      console.log('D');
-      apply('D');
-    }
-
-    apply('R');
-    apply('D');
-    apply("R'");
-    apply('D');
-    apply('R');
-    apply('D');
-    apply('D');
-    apply("R'");
-    testStr = '';
-    testStr =
-      calcState.getCell('D', 0, 1).slice(1) +
-      calcState.getCell('D', 1, 2).slice(1) +
-      calcState.getCell('D', 2, 1).slice(1) +
-      calcState.getCell('D', 1, 0).slice(1);
-  }
   while (calcState.getCell('D', 0, 1) !== 'YG') {
     apply('D');
   }
 
-  // console.log('TEST STR', testStr);
-  // if (
-  //   calcState.getCell('D', 0, 1).slice(1) !== 'Y' ||
-  //   calcState.getCell('D', 1, 0).slice(0, 1) !== 'Y' ||
-  //   calcState.getCell('D', 1, 2).slice(0, 1) !== 'Y' ||
-  //   calcState.getCell('D', 2, 1).slice(0, 1) !== 'Y'
-  // )
+  return solution;
+}
+
+export function solve3Corners2(state) {
+  function apply(move) {
+    calcState.move(move);
+    solution.push(move);
+  }
+  const calcState = state.clone();
+  let solution = [];
+
+  // console.log('fullname', calcState.getCell('D', 2, 2));
+  // console.log('right', calcState.getCell('D', 2, 2).slice(1, 2));
+  // console.log('down', calcState.getCell('D', 2, 2).slice(2));
+
+  for (let i = 0; i < 4; i++) {
+    if (calcState.getCell('D', 2, 2).slice(1, 2) === 'Y') {
+      apply("B'");
+      apply('R');
+      apply('B');
+      apply("R'");
+      apply("B'");
+      apply('R');
+      apply('B');
+      apply("R'");
+      apply('D');
+      // console.log('MoveLeft');
+    } else if (calcState.getCell('D', 2, 2).slice(2) === 'Y') {
+      apply('R');
+      apply("B'");
+      apply("R'");
+      apply('B');
+      apply('R');
+      apply("B'");
+      apply("R'");
+      apply('B');
+      apply('D');
+      // console.log('MoveUP');
+    } else {
+      apply('D');
+    }
+  }
+
   return solution;
 }

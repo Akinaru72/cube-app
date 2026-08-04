@@ -169,14 +169,18 @@ const solveList = document.querySelector('.solve-list');
 const solve1Cross = document.querySelector('#solve-first-cross');
 const solve1Corners = document.querySelector('#solve-first-corners');
 const solveMiddle = document.querySelector('#solve-middle');
-const solve3Cross = document.querySelector('#solve-third-cross');
-const solve3Corners = document.querySelector('#solve-third-corners');
+const solve3Cross1 = document.querySelector('#solve-third-cross-1');
+const solve3Cross2 = document.querySelector('#solve-third-cross-2');
+const solve3Corners1 = document.querySelector('#solve-third-corners-1');
+const solve3Corners2 = document.querySelector('#solve-third-corners-2');
 
 solve1Cross.disabled = true;
 solve1Corners.disabled = true;
 solveMiddle.disabled = true;
-solve3Cross.disabled = true;
-solve3Corners.disabled = true;
+solve3Cross1.disabled = true;
+solve3Cross2.disabled = true;
+solve3Corners1.disabled = true;
+solve3Corners2.disabled = true;
 
 // modal - settings;
 scrambleBtn.disabled = true;
@@ -503,8 +507,20 @@ solveMiddle.addEventListener('click', async () => {
   await cube.onsolveMiddle();
 });
 
-solve3Cross.addEventListener('click', async () => {
-  await cube.onsolve3Cross();
+solve3Cross1.addEventListener('click', async () => {
+  await cube.onsolve3Cross1();
+});
+
+solve3Cross2.addEventListener('click', async () => {
+  await cube.onsolve3Cross2();
+});
+
+solve3Corners1.addEventListener('click', async () => {
+  await cube.onsolve3Corners1();
+});
+
+solve3Corners2.addEventListener('click', async () => {
+  await cube.onsolve3Corners2();
 });
 
 // console.dir(cubeState.faces);
