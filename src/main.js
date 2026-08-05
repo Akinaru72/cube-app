@@ -447,10 +447,24 @@ solve3Corners2.addEventListener('click', async () => {
 // ----------------------Adapt----------------------
 const buttons = document.querySelectorAll('.solve-btn');
 
+// function updateButtons() {
+//   buttons.forEach(button => {
+//     button.textContent =
+//       window.innerWidth < 768 ? button.dataset.short : button.dataset.full;
+//   });
+// }
+
 function updateButtons() {
+  const width = window.innerWidth;
+
   buttons.forEach(button => {
-    button.textContent =
-      window.innerWidth < 768 ? button.dataset.short : button.dataset.full;
+    if (width < 768) {
+      button.textContent = button.dataset.short;
+    } else if (width < 1024) {
+      button.textContent = button.dataset.medium;
+    } else {
+      button.textContent = button.dataset.full;
+    }
   });
 }
 
