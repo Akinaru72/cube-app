@@ -1,7 +1,3 @@
-// function getCell(face, r, c) {
-//   return this.faces[face][r][c];
-// }
-
 export function solve1Corners1(state) {
   function apply(move) {
     calcState.move(move);
@@ -10,14 +6,12 @@ export function solve1Corners1(state) {
   const calcState = state.clone();
   let solution = [];
 
-  // console.log('solve1Corners1', calcState.getCell('U', 2, 2).includes('W'));
   while (
     calcState.getCell('U', 0, 0).includes('W') ||
     calcState.getCell('U', 0, 2).includes('W') ||
     calcState.getCell('U', 2, 0).includes('W') ||
     calcState.getCell('U', 2, 2).includes('W')
   ) {
-    // console.log('ECNM');
     while (!calcState.getCell('U', 2, 2).includes('W')) {
       apply('U');
     }
@@ -59,7 +53,7 @@ export function solve1Corners1(state) {
     apply("D'");
     apply('R');
   }
-  // console.log('EXIt');
+
   return solution;
 }
 
@@ -70,8 +64,6 @@ export function solve1Corners2(state) {
   }
   const calcState = state.clone();
   let solution = [];
-
-  // console.log('solve1Corners2', calcState.getCell('D', 2, 2).includes('W'));
 
   while (
     !calcState.getCell('D', 2, 2).includes('B') ||
@@ -99,7 +91,6 @@ export function solve1Corners2(state) {
     apply("D'");
     apply('B');
   }
-  // console.log('EXIt');
   return solution;
 }
 
@@ -110,8 +101,6 @@ export function solve1Corners3(state) {
   }
   const calcState = state.clone();
   let solution = [];
-
-  // console.log('solve1Corners2', calcState.getCell('D', 2, 2).includes('W'));
 
   while (
     !calcState.getCell('D', 2, 0).includes('O') ||
@@ -139,7 +128,6 @@ export function solve1Corners3(state) {
     apply("D'");
     apply('L');
   }
-  // console.log('EXIt');
   return solution;
 }
 
@@ -150,8 +138,6 @@ export function solve1Corners4(state) {
   }
   const calcState = state.clone();
   let solution = [];
-
-  // console.log('solve1Corners2', calcState.getCell('D', 2, 2).includes('W'));
 
   while (
     !calcState.getCell('D', 0, 0).includes('G') ||
@@ -179,6 +165,5 @@ export function solve1Corners4(state) {
     apply("D'");
     apply('F');
   }
-  // console.log('EXIt');
   return solution;
 }

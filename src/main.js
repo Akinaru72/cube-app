@@ -14,14 +14,10 @@ import { guidePagesEN } from './js/docs/guidePagesEN.js';
 import { guidePagesUA } from './js/docs/guidePagesUA.js';
 import { cubePages } from './js/docs/cubePages.js';
 import { createRubikLoader } from './js/solver/loader.js';
-// import { scramble } from './js/cube/scrambler.js';
 
 const cubeState = new CubeState();
-
 const scene = new THREE.Scene();
-
 const cube = new RubiksCube(scene);
-
 const camera = new THREE.PerspectiveCamera(
   75,
   window.innerWidth / window.innerHeight,
@@ -31,29 +27,17 @@ const camera = new THREE.PerspectiveCamera(
 const renderer = new THREE.WebGLRenderer({
   antialias: true,
 });
-
 const pmremGenerator = new THREE.PMREMGenerator(renderer);
-
-// scene.environment = pmremGenerator.fromScene(
-//   new RoomEnvironment(),
-//   0.05
-// ).texture;
-// renderer.setSize(window.innerWidth, window.innerHeight);
 const cubeContainer = document.querySelector('#cube-container');
 
 cubeContainer.appendChild(renderer.domElement);
-
 renderer.setSize(cubeContainer.clientWidth, cubeContainer.clientHeight);
-
 window.addEventListener('resize', () => {
   camera.aspect = cubeContainer.clientWidth / cubeContainer.clientHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(cubeContainer.clientWidth, cubeContainer.clientHeight);
 });
-// document.body.appendChild(renderer.domElement);
 
-// const ambientLight = new THREE.AmbientLight(0xffffff, 2);
-// scene.add(ambientLight);
 // -----------------------Light-----------------------
 const directionalLight = new THREE.DirectionalLight(0xffffff, 4);
 directionalLight.position.set(5, 5, 5);
@@ -73,7 +57,6 @@ scene.background = new THREE.Color(0x444444);
 
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
-
 camera.position.set(4, 4, 6);
 camera.lookAt(0, 0, 0);
 
@@ -91,25 +74,55 @@ const helpBtn = document.querySelector('#help-btn');
 const descriptionBtn = document.querySelector('#description-btn');
 const settingsBtn = document.querySelector('#settings-btn');
 const guideBtn = document.querySelector('#guide-btn');
-
-// modal - settings;
 const modalOverlayEl = document.querySelector('.modal-overlay');
-
 const modalHelpEl = document.querySelector('.modal-help');
 const modalDescriptionEl = document.querySelector('.modal-description');
 const modalSettingsEl = document.querySelector('.modal-settings');
 const modalGuideEl = document.querySelector('.modal-guide');
-// console.log(modalGuideEl);
-
 const modalHelpBtnClose = document.querySelector('#modal-help-close');
 const modalDescriptionBtnClose = document.querySelector(
   '#modal-description-close'
 );
 const modalSettingsBtnClose = document.querySelector('#modal-settings-close');
 const modalGuideBtnClose = document.querySelector('#modal-guide-close');
-// console.log(modalGuideBtnClose);
-
 const loaderEl = document.querySelector('#cube-loader-vis');
+const openHeaderBtnEl = document.querySelector('#openHeaderBtn');
+const modalMenuNavEl = document.querySelector('.modal-menu-nav');
+const closeHeaderBtnEl = document.querySelector('#closeHeaderBtn');
+const desMenuBtnEl = document.querySelector('#des-menu-btn');
+const htsMenuBtnEl = document.querySelector('#hts-menu-btn');
+const setMenuBtnEl = document.querySelector('#set-menu-btn');
+const helpMenuBtnEl = document.querySelector('#help-menu-btn');
+
+desMenuBtnEl.addEventListener('click', () => {
+  modalMenuNavEl.classList.add('is-hidden');
+  modalDescriptionEl.classList.remove('is-hidden');
+});
+
+htsMenuBtnEl.addEventListener('click', () => {
+  modalMenuNavEl.classList.add('is-hidden');
+  modalGuideEl.classList.remove('is-hidden');
+});
+
+setMenuBtnEl.addEventListener('click', () => {
+  modalMenuNavEl.classList.add('is-hidden');
+  modalSettingsEl.classList.remove('is-hidden');
+});
+
+helpMenuBtnEl.addEventListener('click', () => {
+  modalMenuNavEl.classList.add('is-hidden');
+  modalHelpEl.classList.remove('is-hidden');
+});
+
+openHeaderBtnEl.addEventListener('click', () => {
+  modalOverlayEl.classList.add('is-open');
+  modalMenuNavEl.classList.remove('is-hidden');
+});
+
+closeHeaderBtnEl.addEventListener('click', () => {
+  modalOverlayEl.classList.remove('is-open');
+  modalMenuNavEl.classList.add('is-hidden');
+});
 
 helpBtn.addEventListener('click', () => {
   modalOverlayEl.classList.add('is-open');
@@ -153,8 +166,8 @@ modalGuideBtnClose.addEventListener('click', () => {
 });
 
 modalOverlayEl.addEventListener('click', event => {
-  console.log(event.currentTarget);
-  console.log(event.target);
+  // console.log(event.currentTarget);
+  // console.log(event.target);
   if (event.target === modalOverlayEl) {
     modalOverlayEl.classList.remove('is-open');
 
@@ -182,18 +195,11 @@ solve3Cross2.disabled = true;
 solve3Corners1.disabled = true;
 solve3Corners2.disabled = true;
 
-// modal - settings;
 scrambleBtn.disabled = true;
 solveBtn.disabled = true;
 
 prevBtn.disabled = true;
 nextBtn.disabled = true;
-
-// const axesHelper = new THREE.AxesHelper(5);
-// scene.add(axesHelper);
-
-// const gridHelper = new THREE.GridHelper(10, 10);
-// scene.add(gridHelper);
 
 initMouseControls({
   renderer,
@@ -215,20 +221,17 @@ let formData = {
 
 onOutputSettingsFromLs();
 applySettingsToForm();
-// console.log('After LS:', cube.rotationSpeed, cube.soundEnabled);
 cube.create();
-// console.log('After create:', cube.rotationSpeed, cube.soundEnabled);
 // ---------------------Вход в приложение-------------------
 resetScreenSaverTimer();
 const resetBtn = document.querySelector('#reset-btn');
 
 function startApplication() {
-  // console.log('Helloooo');
   cube.reset();
-
   resetBtn.textContent = 'RESET';
 }
 cube.startDemo();
+
 resetBtn.addEventListener('click', startApplication);
 scrambleBtn.addEventListener('click', startScramble);
 
@@ -238,61 +241,38 @@ function onUserActivity() {
   if (cube.screenSaver) {
     cube.stopScreenSaver();
   }
-
   resetScreenSaverTimer();
 }
 
 function resetScreenSaverTimer() {
   clearTimeout(screenSaverTimer);
-
   screenSaverTimer = setTimeout(
     () => {
-      // console.log('WOW');
       cube.startScreenSaver();
-      // navEl.classList.add('is-hidden');
-      // cube - controls;
     },
-    // 10000
     idleAnimation * 60 * 1000
-  ); // 10 минут
+  );
 }
 
-// console.log('SOLVED_MAIN', cubeState.isSolved());
-// -------------------Loader-------------------------
-// createRubikLoader(loaderEl);
 // ---------------------Scramble------------
-// let isBusyScramble = false;
 
 function startScramble() {
-  // lockCubeScramble();
-
-  // scrambleBtn.disabled = true;
-
   cube.scramble();
 }
 
 function lockCubeScramble() {
   console.log('Lock');
-  // isBusyScramble = true;
-
-  // scrambleBtn.disabled = true;
-  // solveBtn.disabled = true;
-  // prevBtn.disabled = true;
-  // nextBtn.disabled = true;
 }
 
 function unlockCubeScramble() {
   isBusy = false;
-
   scrambleBtn.disabled = false;
   solveBtn.disabled = false;
   prevBtn.disabled = false;
   nextBtn.disabled = false;
 }
 // -------------------------Settings & LocalStorage-------------------------
-// cube.soundEnabled = false;
 
-// console.log('Cube', cube);
 settingsForm.addEventListener('change', e => {
   if (e.target.name === 'speed') {
     console.log('speed', Number(e.target.value) / 50);
@@ -328,7 +308,6 @@ function onOutputSettingsFromLs() {
       console.log('formDataNUll', formData);
     } else {
       formData = forDataFromLS;
-      // console.log('formData', formData);
     }
 
     cube.rotationSpeed = formData.speed;
@@ -376,8 +355,6 @@ const nextGuidElBtn = document.querySelector('#guide-next');
 const guideContent = document.querySelector('.guide-content');
 const guideCounter = document.querySelector('#guide-counter');
 
-// console.log(nextGuidElBtn);
-
 async function renderGuide() {
   try {
     const response = await fetch(guidePages[currentPage]);
@@ -385,10 +362,8 @@ async function renderGuide() {
       throw new Error(`Cannot load ${guidePages[currentPage]}`);
     }
     guideContent.innerHTML = await response.text();
-    // console.log(guideContent.innerHTML);
     const page = cubePages[currentPage];
     Object.entries(page).forEach(([name, cubes]) => {
-      // console.log(name);
       guideContent.querySelectorAll(`[data-cube="${name}"]`).forEach(el => {
         el.innerHTML = cubes.join('');
       });
@@ -434,66 +409,13 @@ prevGuidElBtn.addEventListener('click', prevPage);
 prevBtn.addEventListener('click', () => cube.onPrevBtn());
 nextBtn.addEventListener('click', () => cube.onNextBtn());
 
-// ------------------------------------
-// const scramble = cube.scramble();
-// console.log(scramble);
-
-// console.log(alg.join(' '));
-
-// ---------------------------------------------------
-
-// const scrambleText = scramble(20).join(' ');
-
-// console.log(scrambleText);
-// ----проверка-----------------
-
-// const state = new CubeState();
-
-// console.log('START');
-// console.log(state.isSolved());
-
-// state.move('R');
-// console.log('AFTER R');
-// console.log({
-//   CO: state.encodeCO(),
-//   EO: state.encodeEO(),
-//   UDS: state.encodeUDSlice(),
-//   CP: state.encodeCP(),
-//   EP: state.encodeEP(),
-//   EPerm: state.encodeEPerm(),
-//   solved: state.isSolved(),
-// });
-
-// state.move("R'");
-// console.log("AFTER R'");
-// console.log({
-//   CO: state.encodeCO(),
-//   EO: state.encodeEO(),
-//   UDS: state.encodeUDSlice(),
-//   CP: state.encodeCP(),
-//   EP: state.encodeEP(),
-//   EPerm: state.encodeEPerm(),
-//   solved: state.isSolved(),
-// });
-// // CP: 36177;
-// // EP: 21024;
 // ----------------------Solve-----------------------------
-// solveBtn.addEventListener('click', async () => {
-//   const result = await solveCube(cubeState);
-// });
 
 solveBtn.addEventListener('click', async () => {
   await cube.onSolveBtn();
 });
 
-// const result = await solveCube(cubeState);
-
-// console.log(result);
-// console.log(result.phase1);
-// console.log(result.phase2);
-// console.log(result.length);
-
-// ------------------------simply algoritm--------------------------
+// ------------------------simply algoritms--------------------------
 
 solve1Cross.addEventListener('click', async () => {
   await cube.onSolve1thCross();
@@ -522,34 +444,28 @@ solve3Corners1.addEventListener('click', async () => {
 solve3Corners2.addEventListener('click', async () => {
   await cube.onsolve3Corners2();
 });
+// ----------------------Adapt----------------------
+const buttons = document.querySelectorAll('.solve-btn');
 
-// console.dir(cubeState.faces);
-// console.log(cubeState.setOrientation('G', 'R'));
-// console.dir(cubeState.faces);
-// cube.rotateToUp('R');
-// cube.rotateToUp('R');
-// cube.rotateToOrientation('G', 'Y');
+function updateButtons() {
+  buttons.forEach(button => {
+    button.textContent =
+      window.innerWidth < 768 ? button.dataset.short : button.dataset.full;
+  });
+}
 
-// console.log(cube.targetRotation);
-
-// console.dir(cubeState.faces);
-
-// cubeState.rotateFace('D');
-
-// console.dir(cubeState.faces);
-
+updateButtons();
+window.addEventListener('resize', updateButtons);
 // -------------------------test--------
 initKeyboard(cube);
 
 function animate() {
   requestAnimationFrame(animate);
-
   controls.update();
   cube.update();
 
   if (cube.screenSaver) {
     cube.rotateY(0.001);
-
     cube.rotateX(0.001);
     navEls.classList.add('is-hidden');
     headerEls.classList.add('is-hidden');
@@ -569,5 +485,3 @@ function animate() {
 }
 
 animate();
-
-//----------------------------------------------------------------

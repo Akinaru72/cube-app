@@ -85,7 +85,6 @@ export class CubeState {
         ['YBO', 'YB', 'YRB'],
       ],
     };
-    // this.moveCounter = 0;
   }
 
   print() {
@@ -97,17 +96,6 @@ export class CubeState {
 
     console.log(this.edges.map(e => e.id).join(' '));
   }
-
-  // move(name, reverse = false) {
-  //   const move = this.moveTable[name];
-
-  //   this.updateOrientation(move);
-  //   this.updateEO(name, move);
-  //   this.updateCO(name);
-
-  //   this.cycle(this.corners, move.corners, reverse);
-  //   this.cycle(this.edges, move.edges, reverse);
-  // }
 
   applyMove(cube, move) {
     for (let i = 0; i < move.turns; i++) {
@@ -125,21 +113,17 @@ export class CubeState {
       this.updateOrientation(move);
       this.updateEO(moveName, move);
       this.updateCO(moveName);
-
       this.rotateFace(moveName);
-
       this.cycle(this.corners, move.corners, reverse);
       this.cycle(this.edges, move.edges, reverse);
       return;
     }
-
     // Новый вызов:
     // move("R")
     // move("R'")
     // move("R2")
 
     const face = moveName[0];
-
     let turns = 1;
     let rev = false;
 
@@ -155,70 +139,22 @@ export class CubeState {
       this.updateOrientation(move);
       this.updateEO(face, move);
       this.updateCO(face);
-
       this.rotateFace(face);
-
       this.cycle(this.corners, move.corners, rev);
       this.cycle(this.edges, move.edges, rev);
     }
   }
 
-  // move(moveName) {
-  //   let turns = 1;
-
-  //   if (moveName.endsWith('2')) turns = 2;
-  //   else if (moveName.endsWith("'")) turns = 3;
-  //   console.log('Hello');
-  //   for (let i = 0; i < turns; i++) {
-  //     this.applyMove(moveName);
-  //   }
-  // }
-
-  // applyMove(moveOrFace) {
-  //   console.log('moveOrFace =', moveOrFace, typeof moveOrFace);
-
-  //   let face;
-
-  //   if (typeof moveOrFace === 'string') {
-  //     face = moveOrFace[0]; // "R2" -> "R", "R'" -> "R"
-  //   } else {
-  //     face = moveOrFace; // если уже "R"
-  //   }
-  //   console.log('face =', face);
-  //   console.log('table =', this.moveTable[face]);
-  //   const move = this.moveTable[face];
-
-  //   this.updateOrientation(move);
-  //   this.updateEO(face, move);
-  //   this.updateCO(face);
-
-  //   this.cycle(this.corners, move.corners);
-  //   this.cycle(this.edges, move.edges);
-  // }
-
   cycle(array, indexes) {
-    // if (!reverse) {
     const temp = array[indexes[indexes.length - 1]];
-
     for (let i = indexes.length - 1; i > 0; i--) {
       array[indexes[i]] = array[indexes[i - 1]];
     }
-
     array[indexes[0]] = temp;
-    // } else {
-    //   const temp = array[indexes[0]];
-
-    //   for (let i = 0; i < indexes.length - 1; i++) {
-    //     array[indexes[i]] = array[indexes[i + 1]];
-    //   }
-
-    //   array[indexes[indexes.length - 1]] = temp;
-    // }
   }
 
   updateEO(name, move) {
     if (name !== 'F' && name !== 'B') return;
-
     for (const index of move.edges) {
       this.edges[index].eo ^= 1;
     }
@@ -226,9 +162,7 @@ export class CubeState {
 
   updateCO(name) {
     const delta = CORNER_CO_DELTA[name];
-
     if (!delta) return;
-
     for (let i = 0; i < 8; i++) {
       this.corners[i].co = (this.corners[i].co + delta[i]) % 3;
     }
@@ -246,23 +180,6 @@ export class CubeState {
       this.encodeEPerm() === 0
     );
   }
-  // isSolved() {
-  //   const cornersSolved = this.corners.every((corner, index) => {
-  //     return (
-  //       corner.id === SOLVED_CORNERS[index].id &&
-  //       corner.orientation === SOLVED_CORNERS[index].orientation
-  //     );
-  //   });
-
-  //   const edgesSolved = this.edges.every((edge, index) => {
-  //     return (
-  //       edge.id === SOLVED_EDGES[index].id &&
-  //       edge.orientation === SOLVED_EDGES[index].orientation
-  //     );
-  //   });
-
-  //   return cornersSolved && edgesSolved;
-  // }
 
   updateOrientation(move) {
     for (const index of move.corners) {
@@ -280,12 +197,9 @@ export class CubeState {
 
   clone() {
     const cube = new CubeState();
-
     cube.corners = structuredClone(this.corners);
     cube.edges = structuredClone(this.edges);
-
     cube.faces = structuredClone(this.faces);
-
     return cube;
   }
 
@@ -293,7 +207,6 @@ export class CubeState {
     const corners = this.corners
       .map(corner => `${corner.id}${corner.orientation}`)
       .join('|');
-
     const edges = this.edges
       .map(edge => `${edge.id}${edge.orientation}`)
       .join('|');
@@ -303,11 +216,9 @@ export class CubeState {
 
   encodeCO() {
     let value = 0;
-
     for (let i = 0; i < 7; i++) {
       value = value * 3 + this.corners[i].co;
     }
-
     return value;
   }
 
@@ -326,32 +237,26 @@ export class CubeState {
 
   encodeEO() {
     let value = 0;
-
     for (let i = 0; i < 11; i++) {
       value = (value << 1) | this.edges[i].eo;
     }
-
     return value;
   }
 
   decodeEO(index) {
     const result = new Array(12);
     let parity = 0;
-
     for (let i = 10; i >= 0; i--) {
       result[i] = index & 1;
       parity ^= result[i];
       index >>= 1;
     }
-
     result[11] = parity;
-
     return result;
   }
 
   setEO(index) {
     const eo = this.decodeEO(index);
-
     for (let i = 0; i < 12; i++) {
       this.edges[i].eo = eo[i];
     }
@@ -398,10 +303,8 @@ export class CubeState {
 
   encodeLehmer(array) {
     let result = 0;
-
     for (let i = 0; i < array.length; i++) {
       let count = 0;
-
       for (let j = i + 1; j < array.length; j++) {
         if (array[i] > array[j]) {
           count++;
@@ -411,7 +314,6 @@ export class CubeState {
       result += count * factorial(array.length - 1 - i);
     }
     result;
-
     return result;
   }
 
@@ -420,11 +322,8 @@ export class CubeState {
     for (let i = 0; i < l; i++) {
       const a = Math.floor(v / factorial(l - i - 1));
       array[i] = a;
-
       v %= factorial(l - i - 1);
     }
-    // console.log(array);
-
     const arrayTemp = Array.from({ length: l }, (_, i) => i);
     const outputArray = new Array(l);
     for (let i = 0; i < l; i++) {
@@ -436,7 +335,6 @@ export class CubeState {
 
   setCO(id) {
     const orientation = this.decodeCO(id);
-
     for (let i = 0; i < 8; i++) {
       this.corners[i].co = orientation[i];
     }
@@ -444,14 +342,12 @@ export class CubeState {
 
   setCP(id) {
     const permutation = this.decodeLehmer(id, 8);
-
     for (let i = 0; i < 8; i++) {
       this.corners[i].id = SOLVED_CORNERS[permutation[i]].id;
     }
   }
   setEP(id) {
     const permutation = this.decodeLehmer(id, 12);
-
     for (let i = 0; i < 12; i++) {
       this.edges[i].id = SOLVED_EDGES[permutation[i]].id;
     }
@@ -459,7 +355,6 @@ export class CubeState {
 
   createCOMoveTable() {
     const table = Array.from({ length: 2187 }, () => new Array(18));
-
     for (let co = 0; co < 2187; co++) {
       const cube = new CubeState();
       cube.setCO(co);
@@ -468,18 +363,6 @@ export class CubeState {
 
         this.applyMove(copy, movesCubeState[move]);
         table[co][move] = copy.encodeCO();
-        // if (co === 0 && (move === 3 || move === 5)) {
-        //   console.log('MOVE', move);
-
-        //   console.table(
-        //     copy.corners.map(c => ({
-        //       id: c.id,
-        //       co: c.co,
-        //     }))
-        //   );
-
-        //   console.log('ENCODE', copy.encodeCO());
-        // }
       }
     }
 
@@ -488,20 +371,13 @@ export class CubeState {
 
   createEOMoveTable() {
     const table = Array.from({ length: 2048 }, () => new Array(18));
-
     for (let eo = 0; eo < 2048; eo++) {
       const cube = new CubeState();
       cube.setEO(eo);
-
       for (let move = 0; move < movesCubeState.length; move++) {
         const copy = cube.clone();
 
         this.applyMove(copy, movesCubeState[move]);
-        // console.log(
-        //   move,
-        //   copy.edges.map(e => e.eo),
-        //   copy.encodeEO()
-        // );
         table[eo][move] = copy.encodeEO();
       }
     }
@@ -510,100 +386,66 @@ export class CubeState {
   }
 
   createPruningTable(moveTable) {
-    // console.log('PRUNING START');
-    // console.log(moveTable);
-    // console.log(moveTable.length);
-
     const table = new Int8Array(moveTable.length);
-
     table.fill(-1);
     table[0] = 0;
-
     const queue = [0];
     let head = 0;
-
     while (head < queue.length) {
       const current = queue[head++];
       const depth = table[current];
-
       for (let move = 0; move < 18; move++) {
         const next = moveTable[current][move];
-
         if (table[next] === -1) {
           table[next] = depth + 1;
           queue.push(next);
         }
       }
     }
-    // console.log(Math.max(...table));
     return table;
   }
 
-  // applyMove(face) {
-  //   const move = this.moveTable[face];
-
-  //   this.updateOrientation(move);
-  //   this.updateEO(face, move);
-  //   this.updateCO(face);
-
-  //   this.cycle(this.corners, move.corners);
-  //   this.cycle(this.edges, move.edges);
-  // }
-
   getUDSlicePositions() {
     const ids = ['FR', 'FL', 'BL', 'BR'];
-
     const result = [];
-
     for (let i = 0; i < 12; i++) {
       if (ids.includes(this.edges[i].id)) {
         result.push(i);
       }
     }
-
     return result;
   }
 
   choose(n, k) {
     if (k > n) return 0;
     if (k === 0 || k === n) return 1;
-
     let result = 1;
-
     for (let i = 1; i <= k; i++) {
       result = (result * (n - k + i)) / i;
     }
-
     return Math.round(result);
   }
 
   encodeUDSlice() {
     let index = 0;
     let r = 4;
-
     for (let i = 11; i >= 0; i--) {
       const id = this.edges[i].id;
-
       if (id === 'FR' || id === 'FL' || id === 'BL' || id === 'BR') {
         index += this.choose(i, r);
         r--;
-
         if (r === 0) break;
       }
     }
-
     return 494 - index;
   }
 
   decodeUDSlice(index) {
     index = 494 - index;
-
     const result = [];
     let r = 4;
-
     for (let i = 11; i >= 0; i--) {
       const c = this.choose(i, r);
-
       if (index >= c) {
         result.push(i);
         index -= c;
@@ -618,7 +460,6 @@ export class CubeState {
 
   setUDSlice(index) {
     const positions = this.decodeUDSlice(index);
-
     const slice = ['FR', 'FL', 'BL', 'BR'];
     const other = ['UR', 'UF', 'UL', 'UB', 'DR', 'DF', 'DL', 'DB'];
 
@@ -632,7 +473,6 @@ export class CubeState {
 
   createUDSliceMoveTable() {
     const table = Array.from({ length: 495 }, () => new Array(18));
-
     for (let uds = 0; uds < 495; uds++) {
       const cube = new CubeState();
       cube.setUDSlice(uds);
@@ -648,7 +488,6 @@ export class CubeState {
 
   encodeCP() {
     const perm = this.corners.map(c => CORNER_NAMES.indexOf(c.id));
-
     return permToIndex(perm);
   }
 
@@ -668,14 +507,10 @@ export class CubeState {
 
     for (let cp = 0; cp < 40320; cp++) {
       const cube = new CubeState();
-
       cube.setCP(cp);
-
       for (let move = 0; move < PHASE2_MOVE_NAMES.length; move++) {
         const copy = cube.clone();
-
         copy.move(PHASE2_MOVE_NAMES[move]);
-
         table[cp][move] = copy.encodeCP();
       }
     }
@@ -688,18 +523,13 @@ export class CubeState {
 
     for (let ep = 0; ep < 40320; ep++) {
       const cube = new CubeState();
-
       cube.setEP(ep);
-
       for (let move = 0; move < PHASE2_MOVE_NAMES.length; move++) {
         const copy = cube.clone();
-
         copy.move(PHASE2_MOVE_NAMES[move]);
-
         table[ep][move] = copy.encodeEP();
       }
     }
-
     return table;
   }
 
@@ -721,7 +551,6 @@ export class CubeState {
     const perm = this.edges
       .filter(e => PHASE2_EDGES.includes(e.id))
       .map(e => PHASE2_EDGES.indexOf(e.id));
-
     return permToIndex(perm);
   }
 
@@ -731,9 +560,7 @@ export class CubeState {
 
   setEP(index) {
     const perm = this.decodeEP(index);
-
     let j = 0;
-
     for (let i = 0; i < 12; i++) {
       if (PHASE2_EDGES.includes(this.edges[i].id)) {
         this.edges[i].id = PHASE2_EDGES[perm[j++]];
@@ -743,12 +570,10 @@ export class CubeState {
 
   encodeUDPerm() {
     const perm = [];
-
     for (const id of SLICE_ORDER) {
       const pos = this.edges.findIndex(e => e.id === id);
       perm.push(pos);
     }
-
     return permToIndex(
       perm.map(p =>
         perm
@@ -761,11 +586,9 @@ export class CubeState {
 
   encodeEPerm() {
     const perm = [];
-
     for (let i = 8; i < 12; i++) {
       perm.push(SLICE_ORDER.indexOf(this.edges[i].id));
     }
-
     return permToIndex(perm);
   }
 
@@ -775,7 +598,6 @@ export class CubeState {
 
   setEPerm(index) {
     const perm = this.decodeEPerm(index);
-
     for (let i = 0; i < 4; i++) {
       this.edges[8 + i].id = SLICE_ORDER[perm[i]];
     }
@@ -795,13 +617,9 @@ export class CubeState {
 
   setOrientation(upColor, frontColor) {
     if (upColor === frontColor) throw new Error('Same colors');
-
     if (OPPOSITE[upColor] === frontColor) throw new Error('Opposite colors');
-
     const order = NEIGHBORS[upColor];
     const i = order.indexOf(frontColor);
-
-    // найти грань по центральному цвету
     const findFace = color => {
       return Object.values(this.faces).find(face => face[1][1] === color);
     };
@@ -817,28 +635,21 @@ export class CubeState {
   }
 
   rotateFace(face) {
-    // console.log('before', this.faces);
     const m = this.faces[face];
-
     this.faces[face] = [
       [m[2][0], m[1][0], m[0][0]],
       [m[2][1], m[1][1], m[0][1]],
       [m[2][2], m[1][2], m[0][2]],
     ];
-
     this.rotateAdjacent(face);
-    // console.log('after', this.faces);
   }
 
   rotateAdjacent(face) {
     const ring = ADJACENT[face];
-
-    // Сохраняем все 4 полоски
     const strips = ring.map(([faceName, cells]) =>
       cells.map(([r, c]) => this.faces[faceName][r][c])
     );
 
-    // Поворот по часовой
     for (let i = 0; i < 4; i++) {
       const to = (i + 1) % 4;
 

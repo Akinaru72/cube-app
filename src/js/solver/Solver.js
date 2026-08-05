@@ -68,13 +68,10 @@ export class Solver {
       }
 
       const cubeG1 = cube.clone();
-
       cubeG1.applyAlgorithm(this.solution);
-
       const cp = cubeG1.encodeCP();
       const ep = cubeG1.encodeEP();
       const ePerm = cubeG1.encodeEPerm();
-
       const h2 = Math.max(
         this.cpPruningPhase2[cp],
         this.epPruningPhase2[ep],
@@ -91,13 +88,10 @@ export class Solver {
       const nextUDS = this.udsTable[uds][move];
       const lastFace = lastMove === -1 ? -1 : Math.floor(lastMove / 3);
       const prevFace = prevMove === -1 ? -1 : Math.floor(prevMove / 3);
-
       if (face === lastFace) continue;
       const opposite = [3, 4, 5, 0, 1, 2];
-
       if (face === prevFace && lastFace === opposite[face]) continue;
       this.solution.push(MOVE_NAMES[move]);
-
       if (
         this.search(nextCO, nextEO, nextUDS, depth - 1, move, lastMove, cube)
       ) {
@@ -105,7 +99,6 @@ export class Solver {
       }
       this.solution.pop();
     }
-
     return false;
   }
 }

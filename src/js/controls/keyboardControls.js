@@ -1,6 +1,5 @@
 // controls.js
 export function initKeyboard(cube) {
-  // console.log('Hello');
   const KEY_MAP = {
     r: () => cube.R(),
     R: () => cube.RPrime(),

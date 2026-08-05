@@ -65,10 +65,6 @@ const solve3Cross2El = document.querySelector('#solve-third-cross-2');
 const solve3Corners1El = document.querySelector('#solve-third-corners-1');
 const solve3Corners2El = document.querySelector('#solve-third-corners-2');
 
-// const worker = new Worker(new URL('./solver.worker.js', import.meta.url), {
-//   type: 'module',
-// });
-
 export class RubiksCube {
   constructor(scene) {
     this.scene = scene;
@@ -83,14 +79,12 @@ export class RubiksCube {
       6, // сегменты
       0.05 // радиус
     );
-    // this.geometry = new THREE.BoxGeometry(CUBE_SIZE, CUBE_SIZE, CUBE_SIZE);
     this.currentRotation = null;
     this.moveQueue = [];
     this.moves = MOVES;
     this.parser = new AlgorithmParser();
     this.cubeState = new CubeState();
     this.screenSaver = false;
-    // this.updateButtons;
     this.isBusyScramble = false;
     this.isScrambling = false;
     this.rotationSpeed = 0.1;
@@ -120,9 +114,6 @@ export class RubiksCube {
     this.sol3Cross2 = false;
     this.sol3Corners1 = false;
     this.sol3Corners2 = false;
-
-    // this.afterRotateStep = null;
-    // this.afterRotateDone = null;
   }
 
   updateResetButtons() {
@@ -263,7 +254,6 @@ export class RubiksCube {
     }
 
     const solved = this.cubeState.isSolved();
-
     scrambleBtn.disabled = this.isScrambling || !solved;
 
     if (
@@ -284,10 +274,8 @@ export class RubiksCube {
 
     if (!this.history.length || solved) {
       solveBtn.disabled = true;
-      // solve1CrossEl.disabled = true;
     } else {
       solveBtn.disabled = false;
-      // solve1CrossEl.disabled = false;
     }
 
     this.isAnimation = false;
@@ -297,12 +285,6 @@ export class RubiksCube {
     const materials = [
       new THREE.MeshPhysicalMaterial({
         color: this.colors.inner,
-        // color: x === 1 ? this.colors.right : this.colors.inner,
-        // roughness: 0.38,
-        // metalness: 0.02,
-
-        // clearcoat: 0.45,
-        // clearcoatRoughness: 0.18,
         roughness: 0.15,
         metalness: 0,
 
@@ -312,7 +294,14 @@ export class RubiksCube {
       }),
       new THREE.MeshPhysicalMaterial({
         color: this.colors.inner,
-        // color: x === -1 ? this.colors.left : this.colors.inner,
+        roughness: 0.38,
+        metalness: 0.02,
+        clearcoat: 0.45,
+        clearcoatRoughness: 0.18,
+        emissive: 0x000000,
+      }),
+      new THREE.MeshPhysicalMaterial({
+        color: this.colors.inner,
         roughness: 0.38,
         metalness: 0.02,
 
@@ -322,7 +311,6 @@ export class RubiksCube {
       }),
       new THREE.MeshPhysicalMaterial({
         color: this.colors.inner,
-        // color: y === 1 ? this.colors.top : this.colors.inner,
         roughness: 0.38,
         metalness: 0.02,
 
@@ -332,30 +320,16 @@ export class RubiksCube {
       }),
       new THREE.MeshPhysicalMaterial({
         color: this.colors.inner,
-        // color: y === -1 ? this.colors.bottom : this.colors.inner,
         roughness: 0.38,
         metalness: 0.02,
-
         clearcoat: 0.45,
         clearcoatRoughness: 0.18,
         emissive: 0x000000,
       }),
       new THREE.MeshPhysicalMaterial({
         color: this.colors.inner,
-        // color: z === 1 ? this.colors.front : this.colors.inner,
         roughness: 0.38,
         metalness: 0.02,
-
-        clearcoat: 0.45,
-        clearcoatRoughness: 0.18,
-        emissive: 0x000000,
-      }),
-      new THREE.MeshPhysicalMaterial({
-        color: this.colors.inner,
-        // color: z === -1 ? this.colors.back : this.colors.inner,
-        roughness: 0.38,
-        metalness: 0.02,
-
         clearcoat: 0.45,
         clearcoatRoughness: 0.18,
         emissive: 0x000000,
@@ -365,7 +339,6 @@ export class RubiksCube {
     const cubie = new THREE.Mesh(this.geometry, materials);
     const spacing = 0.98;
     cubie.position.set(x * spacing, y * spacing, z * spacing);
-    // cubie.position.set(x, y, z);
     cubie.userData = {
       isCubie: true,
       coord: {
@@ -394,14 +367,11 @@ export class RubiksCube {
   }
 
   createSticker(color) {
-    // const geometry = new THREE.PlaneGeometry(0.78, 0.78);
     const geometry = new THREE.BoxGeometry(0.78, 0.78, 0.02);
-
     const material = new THREE.MeshStandardMaterial({
       color,
       roughness: 0.18,
       metalness: 0,
-
       polygonOffset: true,
       polygonOffsetFactor: -1,
       polygonOffsetUnits: -1,
@@ -493,16 +463,12 @@ export class RubiksCube {
     face.forEach(cubie => {
       this.group.attach(cubie);
       console.log(cubie.userData.coord, cubie.position);
-      // console.log(cubie.position.x, cubie.position.y, cubie.position.z);
-      // console.log(cubie.position);
       this.updateCubieCoords(cubie);
     });
     this.group.remove(faceGroup);
   }
 
   updateCubieCoords(cubie) {
-    // console.log(cubie.position.x, cubie.position.y, cubie.position.z);
-
     cubie.userData.coord.x = Math.round(cubie.position.x);
     cubie.userData.coord.y = Math.round(cubie.position.y);
     cubie.userData.coord.z = Math.round(cubie.position.z);
@@ -511,15 +477,12 @@ export class RubiksCube {
   startRotation(move) {
     if (this.currentRotation) return;
     this.playTurnSound();
-
     const face = this.getFace(move.axis, move.value);
     const faceGroup = new THREE.Group();
     this.group.add(faceGroup);
-
     face.forEach(cubie => {
       faceGroup.attach(cubie);
     });
-
     this.currentRotation = {
       ...move,
       currentAngle: 0,
@@ -553,10 +516,7 @@ export class RubiksCube {
           this.targetRotation.y,
           this.targetRotation.z
         );
-        // console.log('SET TO', this.targetRotation);
         this.targetRotation = null;
-        // console.log('Rotation finished');
-        // console.log('SET TO', this.targetRotation);
 
         if (this.afterRotate) {
           const fn = this.afterRotate;
@@ -572,17 +532,6 @@ export class RubiksCube {
       }
     }
     // ---------------------------------------------
-
-    // console.log(this.isScrambling);
-    // if (
-    //   this.isScrambling &&
-    //   !this.currentRotation &&
-    //   this.moveQueue.length === 0
-    // ) {
-    //   this.isScrambling = false;
-    //   this.unlockCubeScramble();
-    // }
-
     if (!this.currentRotation) return;
     let speed;
     if (!this.demo) {
@@ -607,8 +556,6 @@ export class RubiksCube {
           Math.round(cubie.position.y),
           Math.round(cubie.position.z)
         );
-
-        // Защёлкиваем вращение
         const q = Math.PI / 2;
 
         cubie.rotation.set(
@@ -621,51 +568,29 @@ export class RubiksCube {
         cubie.updateMatrixWorld(true);
         this.updateCubieCoords(cubie);
       });
-      // console.table('BEFORE', this.cubeState.corners);
+
       this.group.remove(rotation.faceGroup);
       const reverse = rotation.name.endsWith('Prime');
       const moveName = reverse
         ? rotation.name.replace('Prime', '')
         : rotation.name;
 
-      // console.count('CubeState.move');
-      // console.log('MOVE:', moveName, reverse);
-
-      // console.log('Before', {
-      //   CO: this.cubeState.encodeCO(),
-      //   EO: this.cubeState.encodeEO(),
-      //   UDS: this.cubeState.encodeUDSlice(),
-      //   CP: this.cubeState.encodeCP(),
-      //   EP: this.cubeState.encodeEP(),
-      //   EPerm: this.cubeState.encodeEPerm(),
-      //   solved: this.cubeState.isSolved(),
-      // });
-      // console.log('Move', moveName, reverse);
-
       let newMoveName = moveName;
       !reverse ? newMoveName : (newMoveName = newMoveName + "'");
-      // console.log('NewMoveName', newMoveName);
 
       if (!this.demo) {
         this.cubeState.move(newMoveName, false);
-        // console.log('CubeStateFaces', this.cubeState.faces);
         let array = this.history.slice(
           0,
           this.history.length + 1 - this.counter
         );
         if (!this.isAnimation) {
           this.counter = 1;
-          array.push(newMoveName); // добавляем в новую историю
+          array.push(newMoveName);
           this.history = array;
         }
-        // console.log('History-Update', this.history);
-        // console.log('UPTADE_ARRAY', array);
       }
 
-      // console.dir('CS.move', this.cubeState.move);
-
-      // this.updateButtons();
-      // console.table('AFTER', this.cubeState.corners);
       this.currentRotation = null;
       if (this.moveQueue.length === 0) {
         if (this.onFinish) {
@@ -676,43 +601,18 @@ export class RubiksCube {
 
         if (!this.demo) {
           this.isScrambling = false;
-          // this.isSolving = false;
-          // this.solution = false;
           this.updateResetButtons();
-
           if (this.cubeState.isSolved()) {
             console.log('🎉 Cube solved!');
           }
         }
       }
-      // console.table(this.cubeState.corners);
-      // console.table(this.cubeState.edges);
-
-      // console.log('SOLVED_RubicCube', this.cubeState.isSolved());
-
-      // console.log('After', {
-      //   CO: this.cubeState.encodeCO(),
-      //   EO: this.cubeState.encodeEO(),
-      //   UDS: this.cubeState.encodeUDSlice(),
-      //   CP: this.cubeState.encodeCP(),
-      //   EP: this.cubeState.encodeEP(),
-      //   EPerm: this.cubeState.encodeEPerm(),
-      //   solved: this.cubeState.isSolved(),
-      // });
     }
   }
 
   enqueueMove(name) {
     const reverse = name.endsWith('Prime');
     const moveName = reverse ? name.replace('Prime', '') : name;
-
-    // const reverse = name.endsWith('Prime');
-
-    // console.log('enqueue:', name);
-    // console.log(this.moves[name]);
-
-    // this.cubeState.move(moveName, reverse);
-    // console.log('MOVE ENTRY', this.moves[name]);
     this.moveQueue.push({
       name,
       ...this.moves[name],
@@ -794,7 +694,7 @@ export class RubiksCube {
   execute(sequence) {
     return new Promise(resolve => {
       this.onFinish = resolve;
-      // this.onFinish = callback;
+
       if (!sequence.trim()) {
         resolve();
         return;
@@ -805,48 +705,11 @@ export class RubiksCube {
       moves.forEach(move => {
         this.enqueueMove(move);
       });
-      // console.log('execute finished');
     });
   }
-  // execute(sequence) {
-  //   const moves = this.parser.parse(sequence);
-
-  //   moves.forEach(move => {
-  //     this.enqueueMove(move);
-  //   });
-  // }
-
-  // scrambleDemo(demo) {
-  //   while (demo) {
-  //     let lastMove = null;
-
-  //     // for (let i = 0; i < count; i++) {
-  //     let move;
-
-  //     do {
-  //       const randomIndex = Math.floor(Math.random() * this.moves.length);
-  //       move = this.moves[randomIndex];
-  //     } while (lastMove && move[0] === lastMove[0]);
-
-  //     this[move]();
-  //     lastMove = move;
-  //     // }
-  //   }
-  // }
-
-  // scrambleDemo() {
-  //   const moveNames = Object.keys(this.moves);
-
-  //   const randomIndex = Math.floor(Math.random() * moveNames.length);
-
-  //   const move = moveNames[randomIndex];
-
-  //   this[move]();
-  // }
 
   startDemo() {
     this.demo = true;
-    console.log('startDemo');
     const faces = [
       'R',
       'L',
@@ -867,10 +730,8 @@ export class RubiksCube {
 
       if (!this.currentRotation && this.moveQueue.length === 0) {
         const randomMove = faces[Math.floor(Math.random() * faces.length)];
-
         this.enqueueMove(randomMove);
       }
-
       requestAnimationFrame(demoLoop);
     };
 
@@ -927,7 +788,6 @@ export class RubiksCube {
       lastAxis = axis;
     }
     this.updateResetButtons();
-
     return sequence.join(' ');
   }
 
@@ -937,18 +797,12 @@ export class RubiksCube {
 
   highlightFace(axis, value) {
     this.clearHighlight();
-
     const face = this.getFace(axis, value);
-
     face.forEach(cubie => {
       cubie.material.forEach(mat => {
         mat.emissive.setHex(0x888888);
       });
     });
-    // face.forEach(cubie => {
-    //   cubie.material.emissive.setHex(0x444444);
-    //   // cubie.userData.outline.material.opacity = 1;
-    // });
   }
 
   clearHighlight() {
@@ -957,9 +811,6 @@ export class RubiksCube {
         mat.emissive.setHex(0x000000);
       });
     });
-    // this.cubies.forEach(cubie => {
-    //   cubie.userData.outline.material.opacity = 0;
-    // });
   }
 
   stopDemo() {
@@ -970,7 +821,6 @@ export class RubiksCube {
 
   reset() {
     this.stopDemo();
-
     this.moveQueue = [];
     this.history = [];
     this.counter = 1;
@@ -1034,20 +884,12 @@ export class RubiksCube {
     this.isBusyScramble = false;
 
     console.log('UNLock');
-    // scrambleBtn.disabled = false;
-    // solveBtn.disabled = false;
-    // prevBtn.disabled = false;
-    // nextBtn.disabled = false;
   }
 
   playTurnSound() {
-    // console.log('PLAY');
     if (!this.soundEnabled) return;
-
     const sound = this.turnSound.cloneNode();
-
     sound.volume = this.turnSound.volume;
-
     sound.play().catch(() => {});
   }
 
@@ -1068,94 +910,50 @@ export class RubiksCube {
 
   onNextBtn() {
     this.isAnimation = true;
-
     this.counter = this.counter - 1;
     this.execute(this.history[this.history.length - this.counter]);
     console.log('MOVENext', this.history[this.history.length - this.counter]);
     console.log('NextBTN-History', this.history);
   }
 
-  // onSolveBtn() {
-  //   console.log('Solve');
-  //   console.log(this.cubeState);
-
-  //   const result = await solveCube(this.cubeState);
-
-  //   // console.log(result);
-  //   // console.log(result.phase1);
-  //   // console.log(result.phase2);
-  //   // console.log(result.length);
-  // }
-
   async onSolveBtn() {
     if (this.solution) {
       this.execute(this.solution.join(' '));
       this.solution = null;
       solveBtn.textContent = 'FIND SOLUTION KOCIEMBA';
-
       this.updateResetButtons();
       this.isSolving = false;
       return;
     }
     this.isSolving = true;
     this.updateResetButtons();
-
     modalOverlayEl.classList.add('is-open');
     loaderEl.classList.remove('is-hidden');
-
     this.destroyLoader = createRubikLoader(loaderEl);
-
     this.worker.postMessage({
       corners: this.cubeState.corners,
       edges: this.cubeState.edges,
     });
   }
+
   onSolveFinished(e) {
     this.solution = e.data;
     console.log('onSolveFinished', this.solution);
-    // this.execute(this.solution.join(' '));
-    // this.isSolving = false;
     this.destroyLoader?.();
     modalOverlayEl.classList.remove('is-open');
     loaderEl.classList.add('is-hidden');
     solveBtn.textContent = 'SOLVE KOCIEMBA';
-    // this.isScrambling = true;
     this.updateResetButtons();
-
-    // если хочешь, чтобы кнопки были активны только после анимации,
-    // isSolving = false НЕ здесь
   }
   onSolveError(err) {
     console.error(err);
-
     this.isSolving = false;
     this.updateResetButtons();
-
     this.destroyLoader?.();
     modalOverlayEl.classList.remove('is-open');
     loaderEl.classList.remove('is-hidden');
   }
   // ----------------------Simply algoritm---------------------------
-  // rotateToUp(color) {
-  //   const rot = {
-  //     W: { x: 0, y: 0, z: 0 },
-
-  //     Y: { x: Math.PI, y: 0, z: 0 },
-
-  //     G: { x: -Math.PI / 2, y: 0, z: 0 },
-
-  //     B: { x: Math.PI / 2, y: 0, z: 0 },
-
-  //     R: { x: 0, y: 0, z: -Math.PI / 2 },
-
-  //     O: { x: 0, y: 0, z: Math.PI / 2 },
-  //   };
-
-  //   const r = rot[color];
-
-  //   this.group.rotation.set(r.x, r.y, r.z);
-  // }
-
   rotateToUp(color) {
     const rotations = {
       W: { x: 0, y: 0, z: 0 },
@@ -1164,17 +962,9 @@ export class RubiksCube {
       B: { x: -Math.PI / 2, y: 0, z: 0 },
       R: { x: -Math.PI / 2, y: -Math.PI / 2, z: 0 },
       O: { x: -Math.PI / 2, y: Math.PI / 2, z: 0 },
-      // R: { x: 0, y: 0, z: Math.PI / 2 },
-      // O: { x: 0, y: 0, z: -Math.PI / 2 },
     };
 
     this.targetRotation = rotations[color];
-    // const r = rotations[color];
-    // // this.targetRotation = rotations[color];
-
-    // console.log(color, r);
-
-    // this.group.rotation.set(r[0], r[1], r[2]);
   }
 
   rotateToOrientation(upColor, frontColor) {
@@ -1230,7 +1020,6 @@ export class RubiksCube {
     this.isSolving = true;
     this.updateResetButtons();
 
-    // console.log('Before', this.solCross1);
     let solutionCross = solveCross1(this.cubeState);
     await this.execute(solutionCross.join(' '));
     await this.rotateTo('right');
@@ -1247,48 +1036,36 @@ export class RubiksCube {
     await this.execute(solutionCross.join(' '));
     await this.rotateTo('right');
 
-    // await this.rotateTo('up');
     solutionCross = solveCross5(this.cubeState);
-    // console.log('solutionCross5', solutionCross);
     await this.execute(solutionCross.join(' '));
 
     await this.rotateTo('up');
     solutionCross = solveCross6(this.cubeState);
-    // console.log('solutionCross6', solutionCross);
     await this.execute(solutionCross.join(' '));
 
     solutionCross = solveCross7(this.cubeState);
-    // console.log('solutionCross7', solutionCross);
     await this.execute(solutionCross.join(' '));
 
     await this.rotateTo('right');
     solutionCross = solveCross8(this.cubeState);
-    // console.log('solutionCross8', solutionCross);
     await this.execute(solutionCross.join(' '));
 
     await this.rotateTo('right');
     solutionCross = solveCross9(this.cubeState);
-    // console.log('solutionCross9', solutionCross);
     await this.execute(solutionCross.join(' '));
 
     await this.rotateTo('right');
     solutionCross = solveCross10(this.cubeState);
-    // console.log('solutionCross10', solutionCross);
     await this.execute(solutionCross.join(' '));
 
     this.isSolving = false;
     await this.rotateTo('right');
     await this.rotateTo('down');
-
-    // console.log(this.solCross1);
-
     await this.rotateTo('right');
     await this.rotateTo('right');
     await this.rotateTo('right');
     await this.rotateTo('right');
     this.updateResetButtons();
-
-    // console.log('After', this.solCross1);
   }
 
   async onSolve1thCorners() {
@@ -1299,22 +1076,18 @@ export class RubiksCube {
     this.updateResetButtons();
 
     let solutionCross = solve1Corners1(this.cubeState);
-    // console.log('solve1Corners1', solutionCross);
     await this.execute(solutionCross.join(' '));
     await this.rotateTo('right');
 
     solutionCross = solve1Corners2(this.cubeState);
-    // console.log('solve1Corners2', solutionCross);
     await this.execute(solutionCross.join(' '));
     await this.rotateTo('right');
 
     solutionCross = solve1Corners3(this.cubeState);
-    // console.log('solve1Corners3', solutionCross);
     await this.execute(solutionCross.join(' '));
     await this.rotateTo('right');
 
     solutionCross = solve1Corners4(this.cubeState);
-    // console.log('solve1Corners4', solutionCross);
     await this.execute(solutionCross.join(' '));
     await this.rotateTo('right');
 
@@ -1331,46 +1104,37 @@ export class RubiksCube {
 
     await this.rotateTo('up', 2);
     let solutionCross = solveMiddle1(this.cubeState);
-    // console.log('solveMiddle1', solutionCross);
     await this.execute(solutionCross.join(' '));
     await this.rotateTo('left');
 
     solutionCross = solveMiddle2(this.cubeState);
-    // console.log('solveMiddle2', solutionCross);
     await this.execute(solutionCross.join(' '));
     await this.rotateTo('left');
 
     solutionCross = solveMiddle3(this.cubeState);
-    // console.log('solveMiddle3', solutionCross);
     await this.execute(solutionCross.join(' '));
     await this.rotateTo('left');
 
     solutionCross = solveMiddle4(this.cubeState);
-    // console.log('solveMiddle4', solutionCross);
     await this.execute(solutionCross.join(' '));
     await this.rotateTo('left');
 
     solutionCross = solveMiddle5(this.cubeState);
-    // console.log('solveMiddle5', solutionCross);
     await this.execute(solutionCross.join(' '));
     await this.rotateTo('left');
 
     solutionCross = solveMiddle6(this.cubeState);
-    // console.log('solveMiddle6', solutionCross);
     await this.execute(solutionCross.join(' '));
     await this.rotateTo('left');
 
     solutionCross = solveMiddle7(this.cubeState);
-    // console.log('solveMiddle7', solutionCross);
     await this.execute(solutionCross.join(' '));
     await this.rotateTo('left');
 
     solutionCross = solveMiddle8(this.cubeState);
-    // console.log('solveMiddle8', solutionCross);
     await this.execute(solutionCross.join(' '));
     await this.rotateTo('left');
     await this.rotateTo('up', 2);
-    // await this.rotateTo('up');
 
     this.isSolving = false;
     this.updateResetButtons();
@@ -1385,7 +1149,6 @@ export class RubiksCube {
 
     await this.rotateTo('up', 2);
     let solutionCross = solve3Cross1(this.cubeState);
-    // console.log('solve3Cross', solutionCross);
     await this.execute(solutionCross.join(' '));
     await this.rotateTo('up', 2);
 
@@ -1402,7 +1165,6 @@ export class RubiksCube {
 
     await this.rotateTo('up', 2);
     let solutionCross = solve3Cross2(this.cubeState);
-    // console.log('solve3Cross', solutionCross);
     await this.execute(solutionCross.join(' '));
     await this.rotateTo('left');
     await this.rotateTo('left');
@@ -1423,10 +1185,8 @@ export class RubiksCube {
 
     await this.rotateTo('up', 2);
     let solutionCross = solve3Corners1(this.cubeState);
-    // console.log('solve3Corners', solutionCross);
     await this.execute(solutionCross.join(' '));
     await this.rotateTo('up', 2);
-    // console.log('Hello');
 
     this.isSolving = false;
     this.updateResetButtons();
@@ -1441,41 +1201,14 @@ export class RubiksCube {
 
     await this.rotateTo('up', 2);
     let solutionCross = solve3Corners2(this.cubeState);
-    // console.log('solve3Corners', solutionCross);
     await this.execute(solutionCross.join(' '));
     await this.rotateTo('left');
     await this.rotateTo('left');
     await this.rotateTo('left');
     await this.rotateTo('left');
-
     await this.rotateTo('up', 2);
-    // console.log('Hello');
 
     this.isSolving = false;
     this.updateResetButtons();
   }
 }
-
-// const destroyLoader = createRubikLoader(loaderEl);
-
-// createRubikLoader(loaderEl);
-// try {
-//   destroyLoader = createRubikLoader(loaderEl);
-//   await new Promise(requestAnimationFrame);
-//   await new Promise(requestAnimationFrame);
-
-//   const bestSolution = await solveCube(this.cubeState.clone());
-//   // console.log('Solution:', solution);
-//   let strSolution = bestSolution.join(' ');
-//   console.log(strSolution);
-//   this.execute(strSolution);
-// } catch (error) {
-//   console.log(error);
-// } finally {
-//   this.isSolving = false;
-//   destroyLoader?.();
-//   // destroyLoader(); // остановить таймеры лоадера
-//   // loaderEl?.remove();
-
-//   modalOverlayEl.classList.remove('is-open');
-// }

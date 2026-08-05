@@ -13,15 +13,3 @@ self.onmessage = async e => {
 
   self.postMessage(solution);
 };
-
-// import { solveCube } from './solveCube';
-// const cube = new CubeState();
-// cube.corners = data.corners;
-// cube.edges = data.edges;
-// self.onmessage = async e => {
-//   const cubeState = e.data;
-
-//   const solution = await solveCube(cubeState);
-
-//   self.postMessage(solution);
-// };

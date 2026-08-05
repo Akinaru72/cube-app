@@ -15,23 +15,19 @@ export function createRubikLoader(root) {
       for (const z of [-1, 1]) {
         const el = document.createElement('div');
         el.className = 'cubie';
-
         const exposed = [
           z === 1 ? 'f' : 'b',
           x === 1 ? 'r' : 'l',
           y === -1 ? 'u' : 'd',
         ];
-
         el.innerHTML = exposed
           .map(face => `<i class="sticker ${face}"></i>`)
           .join('');
-
         const item = {
           el,
           p: { x, y, z },
           transform: `translate3d(${x * 14}px, ${y * 14}px, ${z * 14}px)`,
         };
-
         el.style.transform = item.transform;
         cube.append(el);
         cubies.push(item);
@@ -55,22 +51,15 @@ export function createRubikLoader(root) {
 
   function turnRandomLayer() {
     if (stopped) return;
-
     const axis = ['x', 'y', 'z'][Math.floor(Math.random() * 3)];
     const side = Math.random() < 0.5 ? -1 : 1;
     const direction = Math.random() < 0.5 ? -1 : 1;
-
     const layer = cubies.filter(item => item.p[axis] === side);
-
     const group = document.createElement('div');
     group.className = 'turn-group';
     cube.append(group);
-
     layer.forEach(item => group.append(item.el));
-
     const rotation = `rotate${axis.toUpperCase()}(${direction * 90}deg)`;
-
-    // Фиксируем начальное положение, чтобы браузер начал transition.
     group.style.transform = `rotate${axis.toUpperCase()}(0deg)`;
     void group.offsetWidth;
 
@@ -81,9 +70,7 @@ export function createRubikLoader(root) {
     timer = setTimeout(() => {
       layer.forEach(item => {
         item.p = rotatePoint(item.p, axis, direction);
-
         item.transform = `rotate${axis.toUpperCase()}(${direction * 90}deg) ${item.transform}`;
-
         item.el.style.transform = item.transform;
         cube.append(item.el);
       });
@@ -102,8 +89,4 @@ export function createRubikLoader(root) {
     clearTimeout(timer);
     root.replaceChildren();
   };
-  // return () => {
-  //   stopped = true;
-  //   clearTimeout(timer);
-  // };
 }

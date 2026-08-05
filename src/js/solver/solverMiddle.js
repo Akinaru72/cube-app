@@ -12,7 +12,6 @@ export function solveMiddle1(state) {
   ) {
     return solution;
   }
-  // console.log('solveMiddle1', calcState.getCell('B', 2, 1).includes('Y'));
   while (!calcState.getCell('B', 2, 1).includes('Y')) {
     apply('D');
   }
@@ -41,7 +40,6 @@ export function solveMiddle2(state) {
   ) {
     return solution;
   }
-  // console.log('solveMiddle1', calcState.getCell('R', 2, 1).includes('Y'));
   while (!calcState.getCell('R', 2, 1).includes('Y')) {
     apply('D');
   }
@@ -70,7 +68,6 @@ export function solveMiddle3(state) {
   ) {
     return solution;
   }
-  // console.log('solveMiddle1', calcState.getCell('F', 2, 1).includes('Y'));
   while (!calcState.getCell('F', 2, 1).includes('Y')) {
     apply('D');
   }
@@ -99,7 +96,6 @@ export function solveMiddle4(state) {
   ) {
     return solution;
   }
-  // console.log('solveMiddle1', calcState.getCell('L', 2, 1).includes('Y'));
   while (!calcState.getCell('L', 2, 1).includes('Y')) {
     apply('D');
   }
@@ -125,7 +121,6 @@ export function solveMiddle5(state) {
   if (calcState.getCell('B', 1, 0) === 'BR') {
     return solution;
   }
-
   while (
     !calcState.getCell('B', 2, 1).includes('B') ||
     !calcState.getCell('B', 2, 1).includes('R')
@@ -152,7 +147,6 @@ export function solveMiddle5(state) {
     apply('R');
     apply("B'");
   }
-
   return solution;
 }
 
@@ -163,7 +157,6 @@ export function solveMiddle6(state) {
   }
   const calcState = state.clone();
   let solution = [];
-
   if (calcState.getCell('R', 1, 0) === 'RG') {
     return solution;
   }
@@ -194,7 +187,6 @@ export function solveMiddle6(state) {
     apply('F');
     apply("R'");
   }
-
   return solution;
 }
 
@@ -205,11 +197,9 @@ export function solveMiddle7(state) {
   }
   const calcState = state.clone();
   let solution = [];
-
   if (calcState.getCell('F', 1, 0) === 'GO') {
     return solution;
   }
-
   while (
     !calcState.getCell('F', 2, 1).includes('G') ||
     !calcState.getCell('F', 2, 1).includes('O')
@@ -236,7 +226,6 @@ export function solveMiddle7(state) {
     apply('L');
     apply("F'");
   }
-
   return solution;
 }
 

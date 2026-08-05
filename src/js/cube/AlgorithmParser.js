@@ -1,10 +1,5 @@
-// import { MOVES } from './constants';
-
 export class AlgorithmParser {
-  constructor(moves) {
-    // this.moves = MOVES;
-    // console.log(this.moves);
-  }
+  constructor(moves) {}
   parse(sequence) {
     const result = [];
     const tokens = sequence.trim().split(/\s+/);

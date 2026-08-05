@@ -5,22 +5,7 @@ import { OptimizedSolver } from './OptimizedSolver.js';
 
 export async function solveCube(cubeState) {
   const response = await fetch(`${import.meta.env.BASE_URL}tables.json`);
-  //   .then(
-  //   r => r.json()
-  // );
-
-  //   const response = await fetch(`${import.meta.env.BASE_URL}tables.json`);
-
-  // console.log(response.url);
-  // console.log(response.status);
-  // console.log(response.headers.get("content-type"));
-
-  // const text = await response.text();
-
-  // console.log(text.substring(0, 100));
-
   const tables = await response.json();
-
   const solver = new Solver(
     tables.coTable,
     tables.eoTable,
@@ -46,11 +31,8 @@ export async function solveCube(cubeState) {
 
   // Phase 1
   const solution1 = solver.solve(cubeState);
-
   console.log('solution1', solution1);
-
   const cubeG1 = cubeState.clone();
-
   cubeG1.applyAlgorithm(solution1);
 
   console.log('CO =', cubeG1.encodeCO());

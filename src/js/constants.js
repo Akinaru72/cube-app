@@ -1,20 +1,5 @@
 // constants.js;
 
-// export const MOVES = [
-//   'R',
-//   'RPrime',
-//   'L',
-//   'LPrime',
-//   'U',
-//   'UPrime',
-//   'D',
-//   'DPrime',
-//   'F',
-//   'FPrime',
-//   'B',
-//   'BPrime',
-// ];
-
 export const EDGE_NAMES = [
   'UR',
   'UF',

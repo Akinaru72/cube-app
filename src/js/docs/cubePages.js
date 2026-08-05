@@ -1,5 +1,4 @@
 import { createCube } from './createCube.js';
-// console.log(createCube('R', 'G', 'W'));
 
 export const cubePages = [
   // PAGE 1

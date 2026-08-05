@@ -50,43 +50,90 @@
 
         <button type="button" class="menu-btn" id="help-btn">Help</button>
       </nav>
+      <button class="header-open-btn" type="button" id="openHeaderBtn">
+        <svg class="header-mobile-icon" width="24" height="24">
+          <use href="/sprite.svg#icon-header-open"></use>
+        </svg>
+      </button>
     </header>
 
     <main class="main-content">
       <div id="cube-container">
         <ul class="solve-list">
           <li>
-            <button class="solve-btn" id="solve-first-cross" type="button">
+            <button
+              class="solve-btn"
+              id="solve-first-cross"
+              type="button"
+              data-full="Solve First Layer Cross"
+              data-short="Solve 1"
+            >
               Solve First Layer Cross
             </button>
           </li>
           <li>
-            <button class="solve-btn" id="solve-first-corners" type="button">
+            <button
+              class="solve-btn"
+              id="solve-first-corners"
+              type="button"
+              data-full="Solve First Layer Corners"
+              data-short="Solve 2"
+            >
               Solve First Layer Corners
             </button>
           </li>
           <li>
-            <button class="solve-btn" id="solve-middle" type="button">
+            <button
+              class="solve-btn"
+              id="solve-middle"
+              type="button"
+              data-full="Solve Middle Layer"
+              data-short="Solve 3"
+            >
               Solve Middle Layer
             </button>
           </li>
           <li>
-            <button class="solve-btn" id="solve-third-cross-1" type="button">
+            <button
+              class="solve-btn"
+              id="solve-third-cross-1"
+              type="button"
+              data-full="Solve Last Layer Cross Part 1"
+              data-short="Solve 4"
+            >
               Solve Last Layer Cross Part 1
             </button>
           </li>
           <li>
-            <button class="solve-btn" id="solve-third-cross-2" type="button">
+            <button
+              class="solve-btn"
+              id="solve-third-cross-2"
+              type="button"
+              data-full="Solve Last Layer Cross Part 2"
+              data-short="Solve 5"
+            >
               Solve Last Layer Cross Part 2
             </button>
           </li>
           <li>
-            <button class="solve-btn" id="solve-third-corners-1" type="button">
+            <button
+              class="solve-btn"
+              id="solve-third-corners-1"
+              type="button"
+              data-full="Solve Last Layer Corners Part 1"
+              data-short="Solve 6"
+            >
               Solve Last Layer Corners Part 1
             </button>
           </li>
           <li>
-            <button class="solve-btn" id="solve-third-corners-2" type="button">
+            <button
+              class="solve-btn"
+              id="solve-third-corners-2"
+              type="button"
+              data-full="Solve Last Layer Corners Part 2"
+              data-short="Solve 7"
+            >
               Solve Last Layer Corners Part 2
             </button>
           </li>
@@ -162,7 +209,7 @@
         </div>
       </div>
 
-      <div class="modal-description is-hidden">
+      <div class="modal-description is-hidden" id="modal-description">
         <button class="modal-close-btn" id="modal-description-close">✕</button>
 
         <h2 class="title-second">🧩 Rubik's Cube Simulator</h2>
@@ -420,6 +467,35 @@
         role="img"
         aria-label="Animated 2×2 Rubik's cube loader"
       ></div>
+    </div>
+    <div class="modal-menu-nav is-hidden">
+      <button class="header-close-btn" type="button" id="closeHeaderBtn">
+        <svg width="24" height="24">
+          <use href="/sprite.svg#icon-close"></use>
+        </svg>
+      </button>
+      <ul class="modal-menu-nav-list">
+        <li>
+          <button class="menu-btn" type="button" id="des-menu-btn">
+            DESCRIPTION
+          </button>
+        </li>
+        <li>
+          <button class="menu-btn" type="button" id="hts-menu-btn">
+            HOW TO SOLVE
+          </button>
+        </li>
+        <li>
+          <button class="menu-btn" type="button" id="set-menu-btn">
+            SETTINGS
+          </button>
+        </li>
+        <li>
+          <button class="menu-btn" type="button" id="help-menu-btn">
+            HELP
+          </button>
+        </li>
+      </ul>
     </div>
     <script src="./main.js" type="module" defer></script>
   </body>

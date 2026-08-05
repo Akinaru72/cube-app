@@ -47,6 +47,7 @@ img {
 .is-hidden {
   display: none;
 }
+
 /*--------------------------------------Main---------------------------- */
 
 .header {
@@ -55,7 +56,7 @@ img {
   left: 0;
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
   width: 100%;
   padding: 20px 40px;
   opacity: 1;
@@ -71,10 +72,15 @@ img {
   pointer-events: none;
 }
 
+#cube-container {
+  width: 100%;
+  height: 100vh;
+}
+
 .logo {
   text-decoration: none;
   color: #ffffff;
-  font-size: 24px;
+  font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.5px;
   display: flex;
@@ -83,8 +89,55 @@ img {
 }
 
 .logo-img {
-  width: 20px;
-  height: 20px;
+  width: 14px;
+  height: 14px;
+}
+
+.header-open-btn {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  background-color: transparent;
+  line-height: 0;
+  padding: 0;
+  stroke: #ffffff;
+  transition: stroke 250ms cubic-bezier(0.39, 0.575, 0.565, 1);
+}
+
+.header-open-btn:hover,
+.header-open-btn:focus {
+  stroke: aquamarine;
+}
+
+.main-nav {
+  display: none;
+}
+
+@media screen and (min-width: 768px) {
+  .header-open-btn {
+    display: none;
+  }
+
+  .main-nav {
+    display: block;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .header {
+    align-items: baseline;
+  }
+  .logo {
+    font-size: 24px;
+  }
+
+  .logo-img {
+    width: 20px;
+    height: 20px;
+  }
 }
 
 .solve-btn,
@@ -99,11 +152,6 @@ img {
   background-color: transparent;
   cursor: pointer;
   transition: transform 250ms cubic-bezier(0.39, 0.575, 0.565, 1);
-}
-
-#cube-container {
-  width: 100%;
-  height: 100vh;
 }
 
 .cube-controls {
@@ -172,14 +220,14 @@ img {
   pointer-events: auto;
 }
 
-/*-----------------------------Modal Help--------------------------- */
+/*-----------------------------Modal Mobile Menu-------------------- */
 
-.modal-help {
+.modal-menu-nav {
   position: fixed;
-  top: 20px;
-  right: 20px;
-  width: 320px;
-  padding: 20px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background: rgba(30, 30, 30, 0.97);
   color: #ffffff;
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -188,6 +236,68 @@ img {
   line-height: 1.5;
   z-index: 1000;
   animation: helpFade 500ms ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-menu-nav.is-hidden {
+  display: none;
+}
+
+.header-close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  stroke: #ffffff;
+  background-color: transparent;
+  line-height: 0;
+  border: none;
+  transition: stroke 250ms cubic-bezier(0.39, 0.575, 0.565, 1);
+}
+
+.header-close-btn:hover,
+.header-close-btn:focus {
+  stroke: aquamarine;
+}
+
+.modal-menu-nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/*-----------------------------Modal Help--------------------------- */
+
+.modal-help {
+  position: fixed;
+  top: 0;
+  left: 0;
+  /* left: 50%;
+  transform: translateX(-50%); */
+  width: 100%;
+  height: 100%;
+  padding: 100px;
+  background: rgba(30, 30, 30, 0.97);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.45);
+  line-height: 1.5;
+
+  animation: helpFade 500ms ease;
+  overflow-y: auto;
+
+  z-index: 99;
+}
+
+.modal-help::-webkit-scrollbar {
+  width: 10px;
+}
+
+.modal-help::-webkit-scrollbar-thumb {
+  background: #9ca3af;
+  border-radius: 20px;
 }
 
 @keyframes helpFade {
@@ -252,8 +362,8 @@ img {
 
 .modal-close-btn {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 20px;
+  right: 20px;
   width: 28px;
   height: 28px;
   border: none;
@@ -274,15 +384,25 @@ img {
   color: aquamarine;
 }
 
+@media screen and (min-width: 768px) {
+  .modal-help {
+    top: 20px;
+    left: unset;
+    right: 20px;
+    width: 320px;
+    padding: 20px;
+  }
+}
+
 /*-------------------------Modal Description--------------------------- */
 
 .modal-description {
   position: fixed;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 720px;
-  max-height: 95vh;
+  top: 0px;
+  left: 0%;
+
+  width: 100%;
+  max-height: 100%;
   overflow-y: auto;
   padding: 28px;
   border-radius: 16px;
@@ -342,14 +462,24 @@ img {
   color: rgba(255, 255, 255, 0.45);
 }
 
+@media screen and (min-width: 768px) {
+  .modal-description {
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 720px;
+    max-height: 95vh;
+  }
+}
+
 /*-------------------------Modal Settings-------------------------- */
 .modal-settings {
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 560px;
-  padding: 28px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 100px 50px;
   border-radius: 16px;
   background: rgba(28, 28, 28, 0.8);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -419,14 +549,27 @@ img {
   cursor: pointer;
 }
 
+@media screen and (min-width: 768px) {
+  .modal-settings {
+    top: unset;
+    left: unset;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 560px;
+    max-height: 500px;
+    padding: 28px;
+  }
+}
+
 /*-------------------------How to solve-------------------------- */
 .modal-guide {
   position: fixed;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 900px;
-  height: 90vh;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
   background: rgba(28, 28, 28, 0.8);
   border-radius: 20px;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
@@ -555,25 +698,47 @@ img {
 .guide-page .main-text {
   margin-bottom: 12px;
 }
+
+@media screen and (min-width: 768px) {
+  .modal-guide {
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 768px;
+    height: 90vh;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .modal-guide {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 900px;
+    height: 90vh;
+  }
+}
+
 /* -----------------------Cube------------------------ */
 .cube-guide {
   position: relative;
-  width: 120px;
-  height: 230px;
+  width: 80px;
+  height: 120px;
   margin: 0 auto 40px;
 }
 
 .face {
   position: absolute;
   display: grid;
-  grid-template-columns: repeat(3, 28px);
-  grid-template-rows: repeat(3, 28px);
+  grid-template-columns: repeat(3, 18px);
+  grid-template-rows: repeat(3, 18px);
   gap: 2px;
 }
 
 .sticker {
-  width: 28px;
-  height: 28px;
+  width: 18px;
+  height: 18px;
   background: #808080;
   border: 2px solid #2f2f2f;
   border-radius: 3px;
@@ -583,30 +748,56 @@ img {
 .up {
   left: 0;
   top: 0;
-  transform: skew(-40deg, 11deg) scaleY(0.5);
+  transform: skew(-40deg, 10deg) scaleY(0.5);
   transform-origin: bottom left;
 }
 
 .front {
   left: 0;
-  top: 90px;
+  top: 60px;
 
   transform: skewY(10deg);
   transform-origin: top left;
 }
 
 .right {
-  left: 90px;
-  top: 105px;
+  left: 60px;
+  top: 70px;
   transform: skewY(-50deg) scaleX(0.43);
   transform-origin: top left;
 }
 
+@media screen and (min-width: 768px) {
+  .cube-guide {
+    width: 120px;
+    height: 230px;
+  }
+
+  .face {
+    grid-template-columns: repeat(3, 28px);
+    grid-template-rows: repeat(3, 28px);
+  }
+
+  .sticker {
+    width: 28px;
+    height: 28px;
+  }
+
+  .front {
+    top: 90px;
+  }
+
+  .right {
+    left: 90px;
+    top: 105px;
+  }
+}
+
 .cube-label {
   position: absolute;
-  bottom: 0;
-  left: 60px;
-  transform: translateX(-50%);
+  bottom: -40px;
+  left: 0;
+  transform: translateY(-50%);
   font-family: monospace;
   font-size: 16px;
   font-weight: 600;
@@ -627,9 +818,9 @@ img {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 80px;
-  height: 42px;
-  padding: 0 30px 0 16px;
+  min-width: 60px;
+  height: 21px;
+  padding: 0 8px;
   background: #4a90e2;
   color: #fff;
   font-family: monospace;
@@ -638,13 +829,24 @@ img {
   border-radius: 6px 0 0 6px;
 }
 
+.formula-arrow::after {
+  content: '';
+  position: absolute;
+  right: -22px;
+  width: 0;
+  height: 0;
+  border-top: 21px solid transparent;
+  border-bottom: 21px solid transparent;
+  border-left: 24px solid #4a90e2;
+}
+
 .formula2-arrow {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 80px;
-  height: 60px;
+  width: 62px;
+  height: 50px;
   padding: 0 30px 0 26px;
   background: #4a90e2;
   color: #fff;
@@ -658,7 +860,7 @@ img {
   content: '';
   position: absolute;
   top: 50%;
-  right: -24px;
+  right: -22px;
   transform: translateY(-50%);
   width: 0;
   height: 0;
@@ -667,15 +869,24 @@ img {
   border-left: 24px solid #4a90e2;
 }
 
-.formula-arrow::after {
-  content: '';
-  position: absolute;
-  right: -24px;
-  width: 0;
-  height: 0;
-  border-top: 21px solid transparent;
-  border-bottom: 21px solid transparent;
-  border-left: 24px solid #4a90e2;
+.span-arrow {
+  font-size: 12px;
+}
+
+@media screen and (min-width: 768px) {
+  .span-arrow {
+    font-size: 18px;
+  }
+  .formula-arrow {
+    min-width: 80px;
+    height: 34px;
+    padding: 0 30px 0 16px;
+  }
+
+  .formula2-arrow {
+    width: 80px;
+    height: 52px;
+  }
 }
 
 .cube-row-arrow {
@@ -819,5 +1030,14 @@ img {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  right: 100px;
+  right: 4px;
+}
+
+@media screen and (min-width: 768px) {
+  .solve-list {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 60px;
+  }
 }
